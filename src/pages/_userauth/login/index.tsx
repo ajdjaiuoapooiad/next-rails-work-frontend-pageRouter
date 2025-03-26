@@ -24,7 +24,7 @@ export default function Login() {
 
       if (response.ok) {
         // ログイン成功時の処理
-        router.push('/dashboard');
+        router.push('/jobs');
       } else {
         // ログイン失敗時の処理
         const data: LoginResponse = await response.json();
