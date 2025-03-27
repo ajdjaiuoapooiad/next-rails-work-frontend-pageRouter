@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router'; // useRouter をインポート
 
 interface Job {
   id: number;
@@ -16,6 +17,7 @@ export default function Jobs() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter(); // useRouter を初期化
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -36,6 +38,27 @@ export default function Jobs() {
 
     fetchJobs();
   }, []);
+
+  const handleDelete = async (id: number) => {
+    try {
+      const token = localStorage.getItem('authToken');
+      const response = await fetch(`http://localhost:3001/api/v1/jobs/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || '求人情報の削除に失敗しました');
+      }
+
+      setJobs(jobs.filter((job) => job.id !== id));
+    } catch (err: any) {
+      setError(err.message || '求人情報の削除中にエラーが発生しました');
+    }
+  };
 
   if (loading) {
     return (
@@ -74,6 +97,14 @@ export default function Jobs() {
             <p className="text-gray-800 text-sm">
               {job.description.substring(0, 120)}...
             </p>
+            <div className="mt-4 flex justify-end space-x-2">
+              <Link href={`/jobs/edit/${job.id}`} className="px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white rounded-md text-sm">
+                編集
+              </Link>
+              <button onClick={() => handleDelete(job.id)} className="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded-md text-sm">
+                削除
+              </button>
+            </div>
           </div>
         ))}
       </div>
