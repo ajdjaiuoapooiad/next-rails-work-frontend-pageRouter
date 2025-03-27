@@ -1,4 +1,4 @@
-import { useState, React,ChangeEvent, FormEvent } from 'react';
+import { useState, React, ChangeEvent, FormEvent } from 'react';
 
 interface ProfileFormProps {
   initialProfile?: { introduction: string; skills: string; company_name: string; industry: string };
@@ -13,11 +13,15 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialProfile, onSubmit, onE
   const [industry, setIndustry] = useState(initialProfile?.industry || '');
   const [error, setError] = useState<string | null>(null);
 
+  const handleCompanyNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setCompanyName(e.target.value);
+  };
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!introduction || !skills || !companyName || !industry) {
-      setError("すべてのフィールドを入力してください。");
-      if (onError) onError("すべてのフィールドを入力してください。");
+      setError('すべてのフィールドを入力してください。');
+      if (onError) onError('すべてのフィールドを入力してください。');
       return;
     }
     setError(null);
@@ -27,7 +31,9 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialProfile, onSubmit, onE
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label htmlFor="introduction" className="block text-sm font-medium text-gray-700">自己紹介</label>
+        <label htmlFor="introduction" className="block text-sm font-medium text-gray-700">
+          自己紹介
+        </label>
         <textarea
           id="introduction"
           value={introduction}
@@ -37,7 +43,9 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialProfile, onSubmit, onE
         />
       </div>
       <div>
-        <label htmlFor="skills" className="block text-sm font-medium text-gray-700">スキル</label>
+        <label htmlFor="skills" className="block text-sm font-medium text-gray-700">
+          スキル
+        </label>
         <textarea
           id="skills"
           value={skills}
@@ -47,18 +55,22 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialProfile, onSubmit, onE
         />
       </div>
       <div>
-        <label htmlFor="companyName" className="block text-sm font-medium text-gray-700">会社名</label>
+        <label htmlFor="companyName" className="block text-sm font-medium text-gray-700">
+          会社名
+        </label>
         <input
           type="text"
           id="companyName"
           value={companyName}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => setCompanyName(e.target.value)}
+          onChange={handleCompanyNameChange} // 修正: 専用のハンドラを使用
           placeholder="会社名"
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
         />
       </div>
       <div>
-        <label htmlFor="industry" className="block text-sm font-medium text-gray-700">業界</label>
+        <label htmlFor="industry" className="block text-sm font-medium text-gray-700">
+          業界
+        </label>
         <input
           type="text"
           id="industry"
