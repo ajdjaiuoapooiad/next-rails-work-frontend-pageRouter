@@ -4,6 +4,11 @@ import axios, { AxiosError } from 'axios';
 import MessageForm from '../../components/MessageForm';
 import { Message } from '@/utils/types';
 
+interface User {
+  id: number;
+  name: string;
+}
+
 export default function Messages() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -64,7 +69,7 @@ export default function Messages() {
     const fetchUsers = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const response = await axios.get<{ id: number, name: string }[]>('http://localhost:3001/api/v1/users', {
+        const response = await axios.get<User[]>('http://localhost:3001/api/v1/users', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -146,7 +151,10 @@ export default function Messages() {
                 );
               })}
             </div>
-            <MessageForm onMessageSent={() => setRefresh(true)} />
+            <MessageForm
+              onMessageSent={() => setRefresh(true)}
+              receiverId={selectedConversation ? groupedMessages[selectedConversation].find(message => message.sender_id !== currentUser.id)?.sender_id : null}
+            />
           </div>
         ) : (
           <div className="bg-white rounded-lg shadow-md p-6">
