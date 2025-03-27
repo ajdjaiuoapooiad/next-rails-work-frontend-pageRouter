@@ -7,49 +7,62 @@ interface User {
 }
 
 const Navbar = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [userId, setUserId] = useState<number | null>(null);
+
+  useEffect(() => {
+    // localStorageからauthTokenを取得し、ログイン状態を確認
+    const token = localStorage.getItem('authToken');
+    setIsLoggedIn(!!token); // トークンが存在すればログイン状態をtrueに設定
+
+    // localStorageからuserIdを取得
+    const id = localStorage.getItem('userId');
+    setUserId(id ? parseInt(id) : null);
+  }, []);
 
   return (
     <nav className="bg-gradient-to-r from-blue-500 to-indigo-600 shadow-md">
-  <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-    <Link href="/jobs" className="text-2xl font-extrabold text-white tracking-wide">
-      Wantedly風
-    </Link>
-    <div className="flex items-center space-x-6">
-      <Link
-        href="/jobs"
-        className="text-gray-200 hover:text-white transition-colors duration-300"
-      >
-        求人一覧
-      </Link>
-      <Link
-        href="/jobs/create"
-        className="text-gray-200 hover:text-white transition-colors duration-300"
-      >
-        求人作成
-      </Link>
-      <Link
-        href="/messages"
-        className="text-gray-200 hover:text-white transition-colors duration-300"
-      >
-        通知
-      </Link>
-      <Link
-        href="/users/3/profile"
-        className="text-gray-200 hover:text-white transition-colors duration-300"
-      >
-        プロフィール
-      </Link>
-
-        <Link
-          href="/users/login"
-          className="px-5 py-2 bg-white text-indigo-600 rounded-full font-semibold hover:bg-indigo-100 transition-colors duration-300"
-        >
-          ログイン
+      <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+        <Link href="/jobs" className="text-2xl font-extrabold text-white tracking-wide">
+          Wantedly風
         </Link>
-
-    </div>
-  </div>
-</nav>
+        <div className="flex items-center space-x-6">
+          <Link
+            href="/jobs"
+            className="text-gray-200 hover:text-white transition-colors duration-300"
+          >
+            求人一覧
+          </Link>
+          <Link
+            href="/jobs/create"
+            className="text-gray-200 hover:text-white transition-colors duration-300"
+          >
+            求人作成
+          </Link>
+          <Link
+            href="/messages"
+            className="text-gray-200 hover:text-white transition-colors duration-300"
+          >
+            通知
+          </Link>
+          {isLoggedIn && userId ? ( // userIdがnullでないことも確認
+            <Link
+              href={`/users/${userId}/profile`} // ユーザーIDをプロフィールリンクに含める
+              className="text-gray-200 hover:text-white transition-colors duration-300"
+            >
+              プロフィール
+            </Link>
+          ) : (
+            <Link
+              href="/users/login" // ログインしていない場合はログインボタンを表示
+              className="px-5 py-2 bg-white text-indigo-600 rounded-full font-semibold hover:bg-indigo-100 transition-colors duration-300"
+            >
+              ログイン
+            </Link>
+          )}
+        </div>
+      </div>
+    </nav>
   );
 };
 
