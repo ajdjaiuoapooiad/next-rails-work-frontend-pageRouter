@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 interface User {
   id: number;
@@ -9,6 +10,7 @@ interface User {
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [userId, setUserId] = useState<number | null>(null);
+  const [username, setUsername] = useState<string | null>(null);
 
   useEffect(() => {
     // localStorageからauthTokenを取得し、ログイン状態を確認
@@ -17,8 +19,24 @@ const Navbar = () => {
 
     // localStorageからuserIdを取得
     const id = localStorage.getItem('userId');
-    setUserId(id ? parseInt(id) : null);
+    if (id) {
+      setUserId(parseInt(id));
+    }
   }, []);
+
+  useEffect(() => {
+    // userIdが存在する場合、ユーザー名を取得
+    if (userId) {
+      axios
+        .get(`http://localhost:3001/api/v1/users/show_by_id/${userId}`)
+        .then((response) => {
+          setUsername(response.data.name);
+        })
+        .catch((error) => {
+          console.error('ユーザー名の取得に失敗しました:', error);
+        });
+    }
+  }, [userId]);
 
   return (
     <nav className="bg-gradient-to-r from-blue-500 to-indigo-600 shadow-md">
@@ -45,16 +63,16 @@ const Navbar = () => {
           >
             通知
           </Link>
-          {isLoggedIn && userId ? ( // userIdがnullでないことも確認
+          {isLoggedIn && userId && username ? ( // usernameがnullでないことも確認
             <Link
-              href={`/users/${userId}/profile`} // ユーザーIDをプロフィールリンクに含める
+              href={`/users/${userId}/profile`}
               className="text-gray-200 hover:text-white transition-colors duration-300"
             >
-              プロフィール
+              {username}
             </Link>
           ) : (
             <Link
-              href="/users/login" // ログインしていない場合はログインボタンを表示
+              href="/users/login"
               className="px-5 py-2 bg-white text-indigo-600 rounded-full font-semibold hover:bg-indigo-100 transition-colors duration-300"
             >
               ログイン
