@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 interface LoginResponse {
+  token?: string;
   message: string;
 }
 
@@ -12,8 +13,7 @@ export default async function handler(
     const { email, password } = req.body;
 
     try {
-      // 完成しているAPIを呼び出す
-      const apiResponse = await fetch('http://localhost:3001/api/v1/login', {
+      const apiResponse = await fetch(process.env.RAILS_API_LOGIN_URL || 'http://localhost:3001/api/v1/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -22,13 +22,13 @@ export default async function handler(
       });
 
       if (apiResponse.ok) {
-        // APIからのレスポンスをそのまま返す
-        const data = await apiResponse.json();
+        const data: LoginResponse = await apiResponse.json();
         res.status(200).json(data);
       } else {
-        res.status(401).json({ message: 'ログイン失敗' });
+        const errorData: LoginResponse = await apiResponse.json();
+        res.status(apiResponse.status).json(errorData);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('APIエラー:', error);
       res.status(500).json({ message: 'サーバーエラー' });
     }
