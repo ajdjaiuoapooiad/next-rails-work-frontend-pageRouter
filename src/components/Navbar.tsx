@@ -31,6 +31,12 @@ const Navbar = () => {
         href="/users/3/profile"
         className="text-gray-200 hover:text-white transition-colors duration-300"
       >
+        通知
+      </Link>
+      <Link
+        href="/users/3/profile"
+        className="text-gray-200 hover:text-white transition-colors duration-300"
+      >
         プロフィール
       </Link>
 
