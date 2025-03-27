@@ -1,16 +1,25 @@
 import { useState, useEffect } from 'react';
 import axios, { AxiosError } from 'axios';
-import { Message } from '../../types/message';
+
 import MessageForm from '../../components/MessageForm';
+import { Message } from '@/utils/types';
 
 export default function Messages() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [groupedMessages, setGroupedMessages] = useState<{[key: string]: Message[]}>({}); // キーをstringに変更
-  const [selectedConversation, setSelectedConversation] = useState<string | null>(null); // 会話IDをstringで管理
+  const [groupedMessages, setGroupedMessages] = useState<{[key: string]: Message[]}>({});
+  const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
   const [refresh, setRefresh] = useState<boolean>(false);
-  const currentUser = { id: 3 }; // ダミーのcurrentUser
+  const [currentUser, setCurrentUser] = useState<{ id: number | null }>({ id: null });
+
+  useEffect(() => {
+    // クライアントサイドでのみlocalStorageにアクセス
+    if (typeof window !== 'undefined') {
+      const userId = localStorage.getItem('userId');
+      setCurrentUser({ id: userId ? parseInt(userId) : null });
+    }
+  }, []); // 初回レンダリング時のみ実行
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -40,7 +49,7 @@ export default function Messages() {
 
   useEffect(() => {
     const grouped: {[key: string]: Message[]} = messages.reduce((acc, message) => {
-      const conversationId = [Math.min(message.sender_id, message.receiver_id), Math.max(message.sender_id, message.receiver_id)].join('-'); // 会話IDを作成
+      const conversationId = [Math.min(message.sender_id, message.receiver_id), Math.max(message.sender_id, message.receiver_id)].join('-');
       if (!acc[conversationId]) {
         acc[conversationId] = [];
       }

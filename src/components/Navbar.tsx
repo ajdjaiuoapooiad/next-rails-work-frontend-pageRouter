@@ -28,7 +28,7 @@ const Navbar = () => {
         求人作成
       </Link>
       <Link
-        href="/users/3/profile"
+        href="/messages"
         className="text-gray-200 hover:text-white transition-colors duration-300"
       >
         通知

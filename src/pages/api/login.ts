@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 interface LoginResponse {
   token?: string;
   message: string;
+  user?: { id: number }; // ユーザーIDを追加
 }
 
 export default async function handler(

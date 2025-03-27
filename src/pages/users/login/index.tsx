@@ -4,17 +4,18 @@ import { useRouter } from 'next/router';
 interface LoginResponse {
   token?: string;
   message: string;
+  user?: { id: number }; // ユーザーIDを追加
 }
 
 export default function Login() {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [error, setError] = useState<string | null>(null); // エラーメッセージ用ステート
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null); // エラーメッセージをクリア
+    setError(null);
 
     try {
       const response = await fetch('/api/login', {
@@ -28,7 +29,10 @@ export default function Login() {
       if (response.ok) {
         const data: LoginResponse = await response.json();
         if (data.token) {
-          localStorage.setItem('authToken', data.token); // トークンを保存
+          localStorage.setItem('authToken', data.token);
+          if (data.user && data.user.id) {
+            localStorage.setItem('userId', data.user.id.toString()); // ユーザーIDをlocalStorageに保存
+          }
         }
         router.push('/jobs');
       } else {
@@ -63,4 +67,3 @@ export default function Login() {
     </div>
   );
 }
-
