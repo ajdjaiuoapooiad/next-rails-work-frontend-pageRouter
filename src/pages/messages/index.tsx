@@ -12,6 +12,7 @@ export default function Messages() {
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
   const [refresh, setRefresh] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<{ id: number | null }>({ id: null });
+  const [users, setUsers] = useState<{[key: number]: string}>({});
 
   useEffect(() => {
     // クライアントサイドでのみlocalStorageにアクセス
@@ -19,7 +20,7 @@ export default function Messages() {
       const userId = localStorage.getItem('userId');
       setCurrentUser({ id: userId ? parseInt(userId) : null });
     }
-  }, []); // 初回レンダリング時のみ実行
+  }, []);
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -59,6 +60,27 @@ export default function Messages() {
     setGroupedMessages(grouped);
   }, [messages]);
 
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const token = localStorage.getItem('authToken');
+        const response = await axios.get<{ id: number, name: string }[]>('http://localhost:3001/api/v1/users', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const usersMap: {[key: number]: string} = {};
+        response.data.forEach(user => {
+          usersMap[user.id] = user.name;
+        });
+        setUsers(usersMap);
+      } catch (err) {
+        console.error('ユーザーの取得に失敗しました。', err);
+      }
+    };
+    fetchUsers();
+  }, []);
+
   const formatMessagesForConversation = (messages: Message[]) => {
     const sortedMessages = messages.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
     return sortedMessages.map((message) => ({
@@ -74,36 +96,49 @@ export default function Messages() {
   if (error) return <p>エラー: {error}</p>;
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen bg-gray-100">
       {/* サイドバー */}
-      <aside className="w-1/4 border-r p-4">
+      <aside className="w-1/4 border-r p-4 bg-white shadow-md">
         <h2 className="text-lg font-semibold mb-4">会話一覧</h2>
         <ul className="space-y-2">
-          {Object.keys(groupedMessages).map((conversationId) => (
-            <li
-              key={conversationId}
-              className={`cursor-pointer ${selectedConversation === conversationId ? 'bg-gray-100' : ''}`}
-              onClick={() => setSelectedConversation(conversationId)}
-            >
-              <p>会話ID: {conversationId}</p>
-              <p>メッセージ数: {groupedMessages[conversationId].length}</p>
-            </li>
-          ))}
+          {Object.keys(groupedMessages).map((conversationId) => {
+            const conversationMessages = groupedMessages[conversationId];
+            const otherUserId = conversationMessages[0].sender_id === currentUser.id ? conversationMessages[0].receiver_id : conversationMessages[0].sender_id;
+            const otherUserName = users[otherUserId] || '不明なユーザー';
+
+            return (
+              <li
+                key={conversationId}
+                className={`cursor-pointer p-3 rounded-lg hover:bg-gray-100 ${selectedConversation === conversationId ? 'bg-blue-100' : ''}`}
+                onClick={() => setSelectedConversation(conversationId)}
+              >
+                <div className="flex items-center space-x-3">
+                  <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
+                    <span className="font-semibold text-lg">{otherUserName.charAt(0).toUpperCase()}</span>
+                  </div>
+                  <div>
+                    <p className="font-semibold">{otherUserName}</p>
+                    <p className="text-sm text-gray-500">メッセージ数: {conversationMessages.length}</p>
+                  </div>
+                </div>
+              </li>
+            );
+          })}
         </ul>
       </aside>
 
       {/* メインコンテンツ */}
       <main className="w-3/4 p-4">
         {selectedConversation ? (
-          <div>
+          <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-lg font-semibold mb-4">メッセージ詳細</h2>
             <div className="space-y-4">
               {formatMessagesForConversation(groupedMessages[selectedConversation]).map((message, index, array) => {
                 const isFirstMessage = index === 0 || array[index - 1].senderId !== message.senderId;
                 return (
                   <div key={message.createdAt} className={`flex ${message.isCurrentUser ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`p-3 rounded-lg ${message.isCurrentUser ? 'bg-blue-100' : 'bg-gray-100'}`}>
-                      {isFirstMessage && <p className="text-sm font-semibold">{message.isCurrentUser ? 'あなた' : '相手'}</p>}
+                    <div className={`p-3 rounded-lg ${message.isCurrentUser ? 'bg-blue-100' : 'bg-gray-100'} max-w-2/3`}>
+                      {isFirstMessage && <p className="text-sm font-semibold">{message.isCurrentUser ? 'あなた' : users[message.senderId] || '不明なユーザー'}</p>}
                       <p>{message.content}</p>
                       <p className="text-sm text-gray-500">{new Date(message.createdAt).toLocaleString()}</p>
                     </div>
@@ -114,7 +149,9 @@ export default function Messages() {
             <MessageForm onMessageSent={() => setRefresh(true)} />
           </div>
         ) : (
-          <p>会話を選択してください。</p>
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <p>会話を選択してください。</p>
+          </div>
         )}
       </main>
     </div>
