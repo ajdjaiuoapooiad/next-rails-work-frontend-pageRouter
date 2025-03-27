@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
 
 interface User {
   id: number;
@@ -8,20 +7,16 @@ interface User {
   user_type: number;
 }
 
-export default function UserDetail() {
-  const router = useRouter();
-  const { id } = router.query;
-  const [user, setUser] = useState<User | null>(null);
+export default function UserList() {
+  const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!id) return;
-
-    const fetchUser = async () => {
+    const fetchUsers = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const response = await fetch(`http://localhost:3001/api/v1/users/${id}`, {
+        const response = await fetch('http://localhost:3001/api/v1/users', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -29,8 +24,8 @@ export default function UserDetail() {
         if (!response.ok) {
           throw new Error('ユーザー情報の取得に失敗しました');
         }
-        const data: User = await response.json();
-        setUser(data);
+        const data: User[] = await response.json();
+        setUsers(data);
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -38,28 +33,35 @@ export default function UserDetail() {
       }
     };
 
-    fetchUser();
-  }, [id]);
+    fetchUsers();
+  }, []);
 
   if (loading) {
-    return <p>ロード中...</p>;
+    return <p className="text-center mt-8">ロード中...</p>;
   }
 
   if (error) {
-    return <p>エラー: {error}</p>;
-  }
-
-  if (!user) {
-    return <p>ユーザーが見つかりません</p>;
+    return <p className="text-center mt-8 text-red-500">エラー: {error}</p>;
   }
 
   return (
-    <div>
-      <h1>ユーザー詳細</h1>
-      <p>ID: {user.id}</p>
-      <p>名前: {user.name}</p>
-      <p>メールアドレス: {user.email}</p>
-      <p>ユーザータイプ: {user.user_type}</p>
+    <div className="container mx-auto p-4">
+      <h1 className="text-3xl font-bold mb-6">ユーザー一覧</h1>
+      <ul className="space-y-4">
+        {users.map((user) => (
+          <li key={user.id} className="border p-4 rounded-md shadow-sm">
+            <p>
+              <strong>名前:</strong> {user.name}
+            </p>
+            <p>
+              <strong>メールアドレス:</strong> {user.email}
+            </p>
+            <p>
+              <strong>ユーザータイプ:</strong> {user.user_type === 0 ? '学生' : '企業'}
+            </p>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

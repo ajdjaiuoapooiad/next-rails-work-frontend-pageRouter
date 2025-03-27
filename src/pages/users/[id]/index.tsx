@@ -42,24 +42,39 @@ export default function UserDetail() {
   }, [id]);
 
   if (loading) {
-    return <p>ロード中...</p>;
+    return <p className="text-center mt-8">ロード中...</p>;
   }
 
   if (error) {
-    return <p>エラー: {error}</p>;
+    return <p className="text-center mt-8 text-red-500">エラー: {error}</p>;
   }
 
   if (!user) {
-    return <p>ユーザーが見つかりません</p>;
+    return <p className="text-center mt-8">ユーザーが見つかりません</p>;
   }
 
   return (
-    <div>
-      <h1>ユーザー詳細</h1>
-      <p>ID: {user.id}</p>
-      <p>名前: {user.name}</p>
-      <p>メールアドレス: {user.email}</p>
-      <p>ユーザータイプ: {user.user_type}</p>
+    <div className="container mx-auto p-4">
+      <h1 className="text-3xl font-bold mb-6">ユーザー詳細</h1>
+      <div className="border p-4 rounded-md shadow-sm">
+        <p>
+          <strong>ID:</strong> {user.id}
+        </p>
+        <p>
+          <strong>名前:</strong> {user.name}
+        </p>
+        <p>
+          <strong>メールアドレス:</strong> {user.email}
+        </p>
+        <p>
+          <strong>ユーザータイプ:</strong> {user.user_type === 0 ? '学生' : '企業'}
+        </p>
+      </div>
+      <div className="mt-4">
+        <button className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+          削除
+        </button>
+      </div>
     </div>
   );
 }
