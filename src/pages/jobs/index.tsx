@@ -40,7 +40,7 @@ export default function Jobs() {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500"></div>
       </div>
     );
   }
@@ -48,24 +48,32 @@ export default function Jobs() {
   if (error) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <p className="text-red-500">エラー: {error}</p>
+        <p className="text-red-600 font-semibold text-lg">エラー: {error}</p>
       </div>
     );
   }
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">求人一覧</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <h1 className="text-3xl font-bold mb-6 text-gray-800">求人一覧</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {jobs.map((job) => (
-          <div key={job.id} className="bg-white rounded-lg shadow p-4">
+          <div key={job.id} className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300">
             <Link href={`/jobs/${job.id}`}>
-              <h2 className="text-xl font-semibold mb-2 hover:underline cursor-pointer">{job.title}</h2>
+              <h2 className="text-xl font-semibold mb-3 text-blue-600 hover:underline cursor-pointer">{job.title}</h2>
             </Link>
-            <p className="text-gray-600 mb-1">場所: {job.location}</p>
-            <p className="text-gray-600 mb-1">給与: {job.salary}</p>
-            <p className="text-gray-600 mb-1">雇用形態: {job.employment_type}</p>
-            <p className="text-gray-700">{job.description.substring(0, 100)}...</p>
+            <p className="text-gray-700 mb-2">
+              <span className="font-semibold">場所:</span> {job.location}
+            </p>
+            <p className="text-gray-700 mb-2">
+              <span className="font-semibold">給与:</span> {job.salary}
+            </p>
+            <p className="text-gray-700 mb-2">
+              <span className="font-semibold">雇用形態:</span> {job.employment_type}
+            </p>
+            <p className="text-gray-800 text-sm">
+              {job.description.substring(0, 120)}...
+            </p>
           </div>
         ))}
       </div>
