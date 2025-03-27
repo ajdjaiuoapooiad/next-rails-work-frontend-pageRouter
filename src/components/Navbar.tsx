@@ -23,20 +23,42 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className="bg-white shadow">
-      <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-        <Link href="/jobs" className="text-xl font-bold text-blue-600">Wantedly風</Link>
-        <div className="flex items-center space-x-4">
-          <Link href="/jobs" className="text-gray-700 hover:text-blue-600">求人一覧</Link>
-          <Link href="/jobs/create" className="text-gray-700 hover:text-blue-600">求人作成</Link>
-          {currentUser ? (
-            <Link href={`/users/${currentUser.id}/profile/1`} className="text-gray-700 hover:text-blue-600">プロフィール</Link>
-          ) : (
-            <Link href="/users/login" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">ログイン</Link>
-          )}
-        </div>
-      </div>
-    </nav>
+    <nav className="bg-gradient-to-r from-blue-500 to-indigo-600 shadow-md">
+  <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+    <Link href="/jobs" className="text-2xl font-extrabold text-white tracking-wide">
+      Wantedly風
+    </Link>
+    <div className="flex items-center space-x-6">
+      <Link
+        href="/jobs"
+        className="text-gray-200 hover:text-white transition-colors duration-300"
+      >
+        求人一覧
+      </Link>
+      <Link
+        href="/jobs/create"
+        className="text-gray-200 hover:text-white transition-colors duration-300"
+      >
+        求人作成
+      </Link>
+      {currentUser ? (
+        <Link
+          href={`/users/${currentUser.id}/profile/1`}
+          className="text-gray-200 hover:text-white transition-colors duration-300"
+        >
+          プロフィール
+        </Link>
+      ) : (
+        <Link
+          href="/users/login"
+          className="px-5 py-2 bg-white text-indigo-600 rounded-full font-semibold hover:bg-indigo-100 transition-colors duration-300"
+        >
+          ログイン
+        </Link>
+      )}
+    </div>
+  </div>
+</nav>
   );
 };
 
