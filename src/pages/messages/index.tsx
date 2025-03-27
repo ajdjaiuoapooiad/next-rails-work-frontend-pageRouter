@@ -7,10 +7,10 @@ export default function Messages() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [groupedMessages, setGroupedMessages] = useState<{[key: number]: Message[]}>({});
-  const [selectedReceiver, setSelectedReceiver] = useState<number | null>(null);
+  const [groupedMessages, setGroupedMessages] = useState<{[key: string]: Message[]}>({}); // キーをstringに変更
+  const [selectedConversation, setSelectedConversation] = useState<string | null>(null); // 会話IDをstringで管理
   const [refresh, setRefresh] = useState<boolean>(false);
-  const currentUser = { id: 1 }; // ダミーのcurrentUser
+  const currentUser = { id: 3 }; // ダミーのcurrentUser
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -39,12 +39,12 @@ export default function Messages() {
   }, [refresh]);
 
   useEffect(() => {
-    const grouped: {[key: number]: Message[]} = messages.reduce((acc, message) => {
-      const receiverId = message.receiver_id;
-      if (!acc[receiverId]) {
-        acc[receiverId] = [];
+    const grouped: {[key: string]: Message[]} = messages.reduce((acc, message) => {
+      const conversationId = [Math.min(message.sender_id, message.receiver_id), Math.max(message.sender_id, message.receiver_id)].join('-'); // 会話IDを作成
+      if (!acc[conversationId]) {
+        acc[conversationId] = [];
       }
-      acc[receiverId].push(message);
+      acc[conversationId].push(message);
       return acc;
     }, {});
     setGroupedMessages(grouped);
@@ -56,6 +56,8 @@ export default function Messages() {
       senderId: message.sender_id,
       content: message.content,
       createdAt: message.created_at,
+      isCurrentUser: message.sender_id === currentUser.id,
+      isFirstMessage: false,
     }));
   };
 
@@ -66,16 +68,16 @@ export default function Messages() {
     <div className="flex h-screen">
       {/* サイドバー */}
       <aside className="w-1/4 border-r p-4">
-        <h2 className="text-lg font-semibold mb-4">受信者一覧</h2>
+        <h2 className="text-lg font-semibold mb-4">会話一覧</h2>
         <ul className="space-y-2">
-          {Object.keys(groupedMessages).map((receiverId) => (
+          {Object.keys(groupedMessages).map((conversationId) => (
             <li
-              key={receiverId}
-              className={`cursor-pointer ${selectedReceiver === parseInt(receiverId) ? 'bg-gray-100' : ''}`}
-              onClick={() => setSelectedReceiver(parseInt(receiverId))}
+              key={conversationId}
+              className={`cursor-pointer ${selectedConversation === conversationId ? 'bg-gray-100' : ''}`}
+              onClick={() => setSelectedConversation(conversationId)}
             >
-              <p>受信者ID: {receiverId}</p>
-              <p>メッセージ数: {groupedMessages[parseInt(receiverId)].length}</p>
+              <p>会話ID: {conversationId}</p>
+              <p>メッセージ数: {groupedMessages[conversationId].length}</p>
             </li>
           ))}
         </ul>
@@ -83,24 +85,28 @@ export default function Messages() {
 
       {/* メインコンテンツ */}
       <main className="w-3/4 p-4">
-        {selectedReceiver ? (
+        {selectedConversation ? (
           <div>
             <h2 className="text-lg font-semibold mb-4">メッセージ詳細</h2>
             <div className="space-y-4">
-              {formatMessagesForConversation(groupedMessages[selectedReceiver]).map((message) => (
-                <div key={message.createdAt} className={`flex ${message.senderId === currentUser.id ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`p-3 rounded-lg ${message.senderId === currentUser.id ? 'bg-blue-100' : 'bg-gray-100'}`}>
-                    <p>{message.content}</p>
-                    <p className="text-sm text-gray-500">{new Date(message.createdAt).toLocaleString()}</p>
+              {formatMessagesForConversation(groupedMessages[selectedConversation]).map((message, index, array) => {
+                const isFirstMessage = index === 0 || array[index - 1].senderId !== message.senderId;
+                return (
+                  <div key={message.createdAt} className={`flex ${message.isCurrentUser ? 'justify-end' : 'justify-start'}`}>
+                    <div className={`p-3 rounded-lg ${message.isCurrentUser ? 'bg-blue-100' : 'bg-gray-100'}`}>
+                      {isFirstMessage && <p className="text-sm font-semibold">{message.isCurrentUser ? 'あなた' : '相手'}</p>}
+                      <p>{message.content}</p>
+                      <p className="text-sm text-gray-500">{new Date(message.createdAt).toLocaleString()}</p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
+            <MessageForm onMessageSent={() => setRefresh(true)} />
           </div>
         ) : (
-          <p>受信者を選択してください。</p>
+          <p>会話を選択してください。</p>
         )}
-        <MessageForm onMessageSent={() => setRefresh(true)} />
       </main>
     </div>
   );
