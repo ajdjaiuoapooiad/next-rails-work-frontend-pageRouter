@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 
 interface Job {
   id: number;
@@ -58,6 +59,12 @@ export default function Jobs() {
 
   return (
     <div className="container mx-auto p-4">
+      <Head>
+        <title>求人一覧ページ</title>
+        <link rel="icon" href="/images/logo2.svg" className="w-10 h-10"  />
+      </Head>
+
+
       <h1 className="text-3xl font-bold mb-6 text-gray-800">求人一覧</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {jobs.map((job) => (

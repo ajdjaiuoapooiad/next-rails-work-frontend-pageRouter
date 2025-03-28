@@ -9,19 +9,7 @@ export default function Home() {
         <link rel="icon" href="/images/logo2.svg" className="w-10 h-10"  />
       </Head>
 
-      {/* ヘッダー */}
-      <header className="bg-white shadow-md">
-        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <Link href="/" className="text-2xl font-bold text-indigo-600">
-            インターンマッチング
-          </Link>
-          <nav className="flex items-center space-x-4">
-            <Link href="/jobs" className="text-gray-600 hover:text-indigo-600">求人一覧</Link>
-            <Link href="/login" className="text-gray-600 hover:text-indigo-600">ログイン</Link>
-            <Link href="/register" className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">登録</Link>
-          </nav>
-        </div>
-      </header>
+   
 
       {/* ヒーローセクション */}
       <section className="bg-gray-100 py-20">
@@ -37,8 +25,8 @@ export default function Home() {
             <button className="bg-indigo-600 text-white py-2 px-4 rounded-r-md">検索</button>
           </div>
           <div className="flex justify-center space-x-4">
-            <Link href="/register" className="bg-indigo-600 text-white py-3 px-6 rounded hover:bg-indigo-700">インターン生の方はこちら</Link>
-            <Link href="/register" className="bg-teal-500 text-white py-3 px-6 rounded hover:bg-teal-600">企業の方はこちら</Link>
+            <Link href="/users/register" className="bg-indigo-600 text-white py-3 px-6 rounded hover:bg-indigo-700">インターン生の方はこちら</Link>
+            <Link href="/users/register" className="bg-teal-500 text-white py-3 px-6 rounded hover:bg-teal-600">企業の方はこちら</Link>
           </div>
         </div>
       </section>
