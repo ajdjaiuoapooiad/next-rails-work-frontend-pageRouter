@@ -80,8 +80,8 @@ const Navbar = () => {
                 className="flex items-center space-x-2 text-gray-200 hover:text-white transition-colors duration-300"
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               >
-                <div className="rounded-full h-8 w-8 bg-gray-300 flex items-center justify-center">
-                  <span className="text-lg font-semibold text-gray-700">{username.charAt(0).toUpperCase()}</span>
+                <div className="rounded-full h-10 w-10 bg-gray-300 flex items-center justify-center overflow-hidden">
+                  <img src={'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png'} alt="User Icon" className="h-full w-full object-cover" />
                 </div>
                 <ChevronDownIcon className={`h-4 w-4 ${isDropdownOpen ? 'transform rotate-180' : ''}`} /> {/* アイコンを追加 */}
               </button>
