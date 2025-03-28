@@ -6,7 +6,7 @@ interface User {
   id: number;
   name: string;
   email: string;
-  user_type: number;
+  user_type: string; // user_typeをstringに変更
 }
 
 export default function UserDetail() {
@@ -73,6 +73,9 @@ export default function UserDetail() {
     return <p className="text-center mt-8">ユーザーが見つかりません</p>;
   }
 
+  // user_type を文字列で表示
+  const userTypeString = user.user_type === 'student' ? '学生' : user.user_type === 'company' ? '企業' : '不明';
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-6">ユーザー詳細</h1>
@@ -87,7 +90,7 @@ export default function UserDetail() {
           <strong>メールアドレス:</strong> {user.email}
         </p>
         <p>
-          <strong>ユーザータイプ:</strong> {user.user_type === 0 ? '学生' : '企業'}
+          <strong>ユーザータイプ:</strong> {userTypeString}
         </p>
       </div>
       <div className="mt-4 flex justify-end">

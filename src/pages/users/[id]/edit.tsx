@@ -5,7 +5,7 @@ interface User {
   id: number;
   name: string;
   email: string;
-  user_type: number;
+  user_type: string; // user_type を文字列で受け取る
 }
 
 export default function UserEdit() {
@@ -16,7 +16,7 @@ export default function UserEdit() {
   const [error, setError] = useState<string | null>(null);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [userType, setUserType] = useState<number>(0);
+  const [userType, setUserType] = useState<string>('student'); // userType を文字列で管理
 
   useEffect(() => {
     if (!id) return;
@@ -60,7 +60,7 @@ export default function UserEdit() {
         body: JSON.stringify({
           name,
           email,
-          user_type: userType,
+          user_type: userType === 'student' ? 0 : 1, // 数値に変換して送信
         }),
       });
       if (!response.ok) {
@@ -110,12 +110,12 @@ export default function UserEdit() {
         <div>
           <label className="block text-sm font-medium text-gray-700">ユーザータイプ</label>
           <select
-            value={userType.toString()} // 修正: userType を文字列に変換
-            onChange={(e) => setUserType(parseInt(e.target.value))}
+            value={userType} // 文字列で管理
+            onChange={(e) => setUserType(e.target.value)}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
           >
-            <option value="0">学生</option>
-            <option value="1">企業</option>
+            <option value="student">学生</option>
+            <option value="company">企業</option>
           </select>
         </div>
         <button
