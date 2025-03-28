@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { ChevronDownIcon } from '@heroicons/react/solid'// アイコンをインポート
 
 interface User {
   id: number;
@@ -82,12 +83,13 @@ const Navbar = () => {
                 <div className="rounded-full h-8 w-8 bg-gray-300 flex items-center justify-center">
                   <span className="text-lg font-semibold text-gray-700">{username.charAt(0).toUpperCase()}</span>
                 </div>
+                <ChevronDownIcon className={`h-4 w-4 ${isDropdownOpen ? 'transform rotate-180' : ''}`} /> {/* アイコンを追加 */}
               </button>
               {isDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
                   <Link
                     href={`/users/${userId}/profile`}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-t-md" // rounded-t-md を追加
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-t-md"
                   >
                     プロフィール
                   </Link>
@@ -111,7 +113,7 @@ const Navbar = () => {
                   </Link>
                   <button
                     onClick={handleLogout}
-                    className="block w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-gray-100 rounded-b-md" // rounded-b-md を追加
+                    className="block w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-gray-100 rounded-b-md"
                   >
                     ログアウト
                   </button>
