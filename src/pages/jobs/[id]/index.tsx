@@ -96,40 +96,44 @@ export default function JobDetail() {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded shadow-md w-4/5 max-w-4xl">
-        <h1 className="text-3xl font-bold mb-6">{job.title}</h1>
-        <div className="flex justify-center mb-6">
+      <div className="bg-white p-8 rounded shadow-md w-9/10 max-w-6xl">
+        <h1 className="text-3xl font-bold mb-6 text-center">{job.title}</h1>
+        <div className="flex justify-center mb-8">
           <img
             src={'https://images.wantedly.com/i/jtLvrG6?w=800&format=jpeg'}
             alt="Job Image"
-            className="rounded-md max-w-full h-auto"
-            style={{ maxHeight: '400px' }}
+            className="rounded-md w-full"
+            style={{ height: '400px', objectFit: 'cover' }}
           />
         </div>
-        <div className="mb-6">
+        <div className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">私たちのストーリー</h2>
-          <p className="text-gray-700" style={{ whiteSpace: 'pre-line' }}>
+          <p className="text-gray-700 leading-relaxed" style={{ whiteSpace: 'pre-line' }}>
             {/* 企業のストーリーや社員の想いを記述 */}
           </p>
         </div>
-        <div className="mb-6">
+        <div className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">業務内容</h2>
-          <p className="text-gray-700" style={{ whiteSpace: 'pre-line' }}>
+          <p className="text-gray-700 leading-relaxed" style={{ whiteSpace: 'pre-line' }}>
             {job.description}
           </p>
         </div>
-        <div className="mb-6">
-          <h2 className="text-2xl font-semibold mb-4">応募要件</h2>
-          <p className="text-gray-700" style={{ whiteSpace: 'pre-line' }}>
-            {job.requirements}
-          </p>
-        </div>
-        <div className="mb-6">
-          <h2 className="text-2xl font-semibold mb-4">福利厚生</h2>
-          <p className="text-gray-700" style={{ whiteSpace: 'pre-line' }}>
-            {job.benefits}
-          </p>
-        </div>
+        {job.requirements && job.requirements.trim() && (
+          <div className="mb-8">
+            <h2 className="text-2xl font-semibold mb-4">応募要件</h2>
+            <p className="text-gray-700 leading-relaxed" style={{ whiteSpace: 'pre-line' }}>
+              {job.requirements}
+            </p>
+          </div>
+        )}
+        {job.benefits && job.benefits.trim() && (
+          <div className="mb-8">
+            <h2 className="text-2xl font-semibold mb-4">福利厚生</h2>
+            <p className="text-gray-700 leading-relaxed" style={{ whiteSpace: 'pre-line' }}>
+              {job.benefits}
+            </p>
+          </div>
+        )}
         <div className="flex justify-center">
           <button
             onClick={handleInquiry}

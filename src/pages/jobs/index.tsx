@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/router'; // useRouter をインポート
+import { useRouter } from 'next/router';
 
 interface Job {
   id: number;
@@ -8,6 +8,7 @@ interface Job {
   description: string;
   location: string;
   salary: number;
+  company_id: number;
   requirements: string;
   benefits: string;
   employment_type: string;
@@ -17,7 +18,7 @@ export default function Jobs() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter(); // useRouter を初期化
+  const router = useRouter();
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -45,7 +46,7 @@ export default function Jobs() {
       const response = await fetch(`http://localhost:3001/api/v1/jobs/${id}`, {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -81,27 +82,48 @@ export default function Jobs() {
       <h1 className="text-3xl font-bold mb-6 text-gray-800">求人一覧</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {jobs.map((job) => (
-          <div key={job.id} className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300">
+          <div
+            key={job.id}
+            className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300"
+          >
             <Link href={`/jobs/${job.id}`}>
-              <h2 className="text-xl font-semibold mb-3 text-blue-600 hover:underline cursor-pointer">{job.title}</h2>
+              <h2 className="text-xl font-semibold mb-3 text-blue-600 hover:underline cursor-pointer">
+                {job.title}
+              </h2>
             </Link>
-            <p className="text-gray-700 mb-2">
-              <span className="font-semibold">場所:</span> {job.location}
-            </p>
-            <p className="text-gray-700 mb-2">
-              <span className="font-semibold">給与:</span> {job.salary}
-            </p>
-            <p className="text-gray-700 mb-2">
-              <span className="font-semibold">雇用形態:</span> {job.employment_type}
-            </p>
-            <p className="text-gray-800 text-sm">
-              {job.description.substring(0, 120)}...
-            </p>
+            {job.location && (
+              <p className="text-gray-700 mb-2">
+                <span className="font-semibold">場所:</span> {job.location}
+              </p>
+            )}
+            {job.salary && (
+              <p className="text-gray-700 mb-2">
+                <span className="font-semibold">時給:</span> {job.salary} 円
+              </p>
+            )}
+            {job.employment_type && (
+              <p className="text-gray-700 mb-2">
+                <span className="font-semibold">雇用形態:</span> {job.employment_type}
+              </p>
+            )}
+            {job.description && (
+              <p className="text-gray-800 text-sm">
+                {job.description.length > 120
+                  ? `${job.description.substring(0, 120)}...`
+                  : job.description}
+              </p>
+            )}
             <div className="mt-4 flex justify-end space-x-2">
-              <Link href={`/jobs/edit/${job.id}`} className="px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white rounded-md text-sm">
+              <Link
+                href={`/jobs/edit/${job.id}`}
+                className="px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-white rounded-md text-sm"
+              >
                 編集
               </Link>
-              <button onClick={() => handleDelete(job.id)} className="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded-md text-sm">
+              <button
+                onClick={() => handleDelete(job.id)}
+                className="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded-md text-sm"
+              >
                 削除
               </button>
             </div>
@@ -111,4 +133,3 @@ export default function Jobs() {
     </div>
   );
 }
-
