@@ -14,9 +14,9 @@ export default function UserEdit() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [name, setName] = useState(''); // 初期状態を空の文字列に変更
-  const [email, setEmail] = useState(''); // 初期状態を空の文字列に変更
-  const [userType, setUserType] = useState(0);
+  const [name, setName] = useState(''); // 初期値を空の文字列に設定
+  const [email, setEmail] = useState(''); // 初期値を空の文字列に設定
+  const [userType, setUserType] = useState<number>(0);
 
   useEffect(() => {
     if (!id) return;
@@ -60,7 +60,7 @@ export default function UserEdit() {
         body: JSON.stringify({
           name,
           email,
-          user_type: parseInt(userType.toString()),
+          user_type: userType,
         }),
       });
       if (!response.ok) {
@@ -99,7 +99,10 @@ export default function UserEdit() {
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700">ユーザータイプ</label>
-          <input type="number" value={userType} onChange={(e) => setUserType(parseInt(e.target.value))} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
+          <select value={userType} onChange={(e) => setUserType(parseInt(e.target.value))} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+            <option value={0}>学生</option>
+            <option value={1}>企業</option>
+          </select>
         </div>
         <button type="submit" className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">更新</button>
       </form>

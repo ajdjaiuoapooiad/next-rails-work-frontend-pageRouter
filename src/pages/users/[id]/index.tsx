@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Link from 'next/link'; // Linkをimport
 
 interface User {
   id: number;
@@ -41,6 +42,25 @@ export default function UserDetail() {
     fetchUser();
   }, [id]);
 
+  const handleDelete = async () => {
+    try {
+      const token = localStorage.getItem('authToken');
+      const response = await fetch(`http://localhost:3001/api/v1/users/${id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error('ユーザー情報の削除に失敗しました');
+      }
+
+      router.push('/users');
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
+
   if (loading) {
     return <p className="text-center mt-8">ロード中...</p>;
   }
@@ -70,8 +90,13 @@ export default function UserDetail() {
           <strong>ユーザータイプ:</strong> {user.user_type === 0 ? '学生' : '企業'}
         </p>
       </div>
-      <div className="mt-4">
-        <button className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+      <div className="mt-4 flex justify-end">
+        <Link href={`/users/${user.id}/edit`}> {/* Linkを使用して編集ページへのリンクを作成 */}
+          <button className="px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 mr-2">
+            編集
+          </button>
+        </Link>
+        <button onClick={handleDelete} className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
           削除
         </button>
       </div>
