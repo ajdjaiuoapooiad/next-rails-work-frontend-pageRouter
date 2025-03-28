@@ -1,16 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import axios from 'axios'; // axios をインポート
+import axios from 'axios';
 
 interface Job {
   id: number;
   title: string;
   description: string;
   location: string;
+  salary: number;
+  company_id: number;
   requirements: string;
   benefits: string;
+  employment_type: string;
   image_url: string;
-  company_id: number; // 企業のIDを追加
 }
 
 export default function JobDetail() {
@@ -93,16 +95,50 @@ export default function JobDetail() {
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">{job.title}</h1>
-      {job.image_url && <img src={job.image_url} alt="Job Image" className="mb-4 rounded-md" />}
-      <p className="text-gray-600 mb-2">場所: {job.location}</p>
-      <p className="text-gray-700 mb-2" style={{ whiteSpace: 'pre-line' }}>{job.description}</p> {/* 改行を反映 */}
-      <h2 className="text-lg font-semibold mb-2">応募要件</h2>
-      <p className="text-gray-700 mb-2" style={{ whiteSpace: 'pre-line' }}>{job.requirements}</p> {/* 改行を反映 */}
-      <button onClick={handleInquiry} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        話を聞いてみる
-      </button>
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+      <div className="bg-white p-8 rounded shadow-md w-4/5 max-w-4xl">
+        <h1 className="text-3xl font-bold mb-6">{job.title}</h1>
+        <div className="flex justify-center mb-6">
+          <img
+            src={'https://images.wantedly.com/i/jtLvrG6?w=800&format=jpeg'}
+            alt="Job Image"
+            className="rounded-md max-w-full h-auto"
+            style={{ maxHeight: '400px' }}
+          />
+        </div>
+        <div className="mb-6">
+          <h2 className="text-2xl font-semibold mb-4">私たちのストーリー</h2>
+          <p className="text-gray-700" style={{ whiteSpace: 'pre-line' }}>
+            {/* 企業のストーリーや社員の想いを記述 */}
+          </p>
+        </div>
+        <div className="mb-6">
+          <h2 className="text-2xl font-semibold mb-4">業務内容</h2>
+          <p className="text-gray-700" style={{ whiteSpace: 'pre-line' }}>
+            {job.description}
+          </p>
+        </div>
+        <div className="mb-6">
+          <h2 className="text-2xl font-semibold mb-4">応募要件</h2>
+          <p className="text-gray-700" style={{ whiteSpace: 'pre-line' }}>
+            {job.requirements}
+          </p>
+        </div>
+        <div className="mb-6">
+          <h2 className="text-2xl font-semibold mb-4">福利厚生</h2>
+          <p className="text-gray-700" style={{ whiteSpace: 'pre-line' }}>
+            {job.benefits}
+          </p>
+        </div>
+        <div className="flex justify-center">
+          <button
+            onClick={handleInquiry}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full text-lg"
+          >
+            話を聞いてみる
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
