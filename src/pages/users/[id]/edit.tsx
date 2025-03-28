@@ -66,7 +66,7 @@ export default function UserEdit() {
       if (!response.ok) {
         throw new Error('ユーザーの更新に失敗しました');
       }
-      router.push('/users');
+      router.push(`/users/${id}`);
     } catch (err: any) {
       setError(err.message);
     }
@@ -91,20 +91,39 @@ export default function UserEdit() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700">名前</label>
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+          />
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700">メールアドレス</label>
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+          />
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700">ユーザータイプ</label>
-          <select value={userType !== null ? userType.toString() : '0'} onChange={(e) => setUserType(parseInt(e.target.value))} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+          <select
+            value={userType.toString()} // 修正: userType を文字列に変換
+            onChange={(e) => setUserType(parseInt(e.target.value))}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+          >
             <option value="0">学生</option>
             <option value="1">企業</option>
           </select>
         </div>
-        <button type="submit" className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">更新</button>
+        <button
+          type="submit"
+          className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+        >
+          更新
+        </button>
       </form>
     </div>
   );

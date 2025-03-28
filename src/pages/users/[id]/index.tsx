@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import Link from 'next/link'; // Linkをimport
+import Link from 'next/link';
 
 interface User {
   id: number;
@@ -91,7 +91,7 @@ export default function UserDetail() {
         </p>
       </div>
       <div className="mt-4 flex justify-end">
-        <Link href={`/users/${user.id}/edit`}> {/* Linkを使用して編集ページへのリンクを作成 */}
+        <Link href={`/users/${user.id}/edit`}>
           <button className="px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 mr-2">
             編集
           </button>
