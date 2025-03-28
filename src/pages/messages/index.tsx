@@ -20,7 +20,6 @@ export default function Messages() {
   const [users, setUsers] = useState<{[key: number]: string}>({});
 
   useEffect(() => {
-    // クライアントサイドでのみlocalStorageにアクセス
     if (typeof window !== 'undefined') {
       const userId = localStorage.getItem('userId');
       setCurrentUser({ id: userId ? parseInt(userId) : null });
@@ -49,7 +48,6 @@ export default function Messages() {
         setRefresh(false);
       }
     };
-
     fetchMessages();
   }, [refresh]);
 
@@ -102,7 +100,6 @@ export default function Messages() {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      {/* サイドバー */}
       <aside className="w-1/4 border-r p-4 bg-white shadow-md">
         <h2 className="text-lg font-semibold mb-4">会話一覧</h2>
         <ul className="space-y-2">
@@ -132,7 +129,6 @@ export default function Messages() {
         </ul>
       </aside>
 
-      {/* メインコンテンツ */}
       <main className="w-3/4 p-4">
         {selectedConversation ? (
           <div className="bg-white rounded-lg shadow-md p-6">
@@ -142,10 +138,10 @@ export default function Messages() {
                 const isFirstMessage = index === 0 || array[index - 1].senderId !== message.senderId;
                 return (
                   <div key={message.createdAt} className={`flex ${message.isCurrentUser ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`p-3 rounded-lg ${message.isCurrentUser ? 'bg-blue-100' : 'bg-gray-100'} max-w-2/3`}>
+                    <div className={`p-4 rounded-lg ${message.isCurrentUser ? 'bg-blue-100' : 'bg-gray-50'} w-1/2`}>
                       {isFirstMessage && <p className="text-sm font-semibold">{message.isCurrentUser ? 'あなた' : users[message.senderId] || '不明なユーザー'}</p>}
-                      <p>{message.content}</p>
-                      <p className="text-sm text-gray-500">{new Date(message.createdAt).toLocaleString()}</p>
+                      <p className="text-base leading-relaxed">{message.content}</p> {/* text-base に変更、leading-relaxed を追加 */}
+                      <p className="text-xs text-gray-400">{new Date(message.createdAt).toLocaleString()}</p>
                     </div>
                   </div>
                 );
