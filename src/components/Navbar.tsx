@@ -87,13 +87,31 @@ const Navbar = () => {
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
                   <Link
                     href={`/users/${userId}/profile`}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-t-md" // rounded-t-md を追加
                   >
                     プロフィール
                   </Link>
+                  <Link
+                    href={`/users/${userId}/profile`}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    ユーザー情報
+                  </Link>
+                  <Link
+                    href={`/users/${userId}/profile`}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    応募した企業
+                  </Link>
+                  <Link
+                    href={`/users/${userId}/profile`}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    いいねした求人
+                  </Link>
                   <button
                     onClick={handleLogout}
-                    className="block w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-gray-100"
+                    className="block w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-gray-100 rounded-b-md" // rounded-b-md を追加
                   >
                     ログアウト
                   </button>
