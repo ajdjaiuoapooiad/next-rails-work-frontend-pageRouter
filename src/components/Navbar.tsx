@@ -73,6 +73,11 @@ const Navbar = () => {
                   className="flex items-center space-x-2 text-gray-200 hover:text-white transition-colors duration-300"
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 >
+                  {username && ( // username が存在する場合のみ表示
+                    <p className="text-white  ">
+                      {username.length > 5 ? `${username.substring(0, 5)}...` : username}
+                    </p>
+                  )}
                   <div className="rounded-full h-10 w-10 bg-gray-300 flex items-center justify-center overflow-hidden">
                     <img
                       src={'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png'}
