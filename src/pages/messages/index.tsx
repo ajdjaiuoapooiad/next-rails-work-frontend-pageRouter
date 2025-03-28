@@ -115,8 +115,12 @@ export default function Messages() {
                 onClick={() => setSelectedConversation(conversationId)}
               >
                 <div className="flex items-center space-x-3">
-                  <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
-                    <span className="font-semibold text-lg">{otherUserName.charAt(0).toUpperCase()}</span>
+                  <div className="flex-shrink-0 h-12 w-12 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden">
+                    <img
+                      src={'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png'} // otherUserIconが存在しない場合はデフォルトのアイコンを表示
+                      alt={`${otherUserName}のアイコン`}
+                      className="h-full w-full object-cover"
+                    />
                   </div>
                   <div>
                     <p className="font-semibold">{otherUserName}</p>
