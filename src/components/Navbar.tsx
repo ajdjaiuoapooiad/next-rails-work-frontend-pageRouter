@@ -94,7 +94,7 @@ const Navbar = () => {
                     プロフィール
                   </Link>
                   <Link
-                    href={`/users/${userId}/profile`}
+                    href={`/users/${userId}`}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
                     ユーザー情報
