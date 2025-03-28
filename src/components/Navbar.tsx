@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { ChevronDownIcon } from '@heroicons/react/solid';
-import { useRouter } from 'next/router'; // useRouter をインポート
+import { useRouter } from 'next/router';
 
 interface User {
   id: number;
@@ -15,7 +15,7 @@ const Navbar = () => {
   const [username, setUsername] = useState<string | null>(null);
   const [userType, setUserType] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
-  const router = useRouter(); // useRouter を初期化
+  const router = useRouter();
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -48,14 +48,15 @@ const Navbar = () => {
     setUsername(null);
     setUserType(null);
     setIsDropdownOpen(false);
-    router.push('/jobs'); // ログアウト後に求人一覧ページへ遷移
+    router.push('/jobs');
   };
 
   return (
-    <nav className="bg-gradient-to-r from-blue-500 to-indigo-600 shadow-md">
+    <nav className="bg-gradient-to-r from-cyan-500 to-indigo-600 shadow-md">
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-        <Link href="/jobs" className="text-2xl font-extrabold text-white tracking-wide">
-          Wantedly風
+        <Link href="/jobs" className="text-2xl font-extrabold text-white tracking-wide flex items-center"> {/* flexを追加 */}
+          <img src="/images/logo2.svg" className="w-10 h-10 mr-2" alt="ロゴ" /> {/* mr-2でアイコンと文字の間にスペースを追加 */}
+          インターンマッチングアプリ
         </Link>
         <div className="flex items-center space-x-6">
           <Link href="/jobs" className="text-gray-200 hover:text-white transition-colors duration-300">
@@ -120,7 +121,7 @@ const Navbar = () => {
                     {userType === 'company' && (
                       <>
                         <Link
-                          href={'/users/jobs'} // 募集した求人一覧ページへのリンク
+                          href={'/users/jobs'}
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         >
                           募集した求人
