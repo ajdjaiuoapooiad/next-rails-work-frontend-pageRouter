@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios, { AxiosError } from 'axios';
+import { Button } from './ui/button';
 
 interface MessageFormProps {
   onMessageSent: () => void;
@@ -51,9 +52,9 @@ export default function MessageForm({ onMessageSent, receiverId }: MessageFormPr
           className="border p-2 w-full"
         />
       </div>
-      <button type="submit" className="bg-blue-500 text-white p-2">
+      <Button type="submit" className="bg-blue-500 text-white p-2">
         送信
-      </button>
+      </Button>
     </form>
   );
 }

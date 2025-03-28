@@ -11,6 +11,7 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [userId, setUserId] = useState<number | null>(null);
   const [username, setUsername] = useState<string | null>(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false); // ドロップダウンの開閉状態
 
   useEffect(() => {
     // localStorageからauthTokenを取得し、ログイン状態を確認
@@ -38,6 +39,15 @@ const Navbar = () => {
     }
   }, [userId]);
 
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('userId');
+    setIsLoggedIn(false);
+    setUserId(null);
+    setUsername(null);
+    setIsDropdownOpen(false); // ドロップダウンを閉じる
+  };
+
   return (
     <nav className="bg-gradient-to-r from-blue-500 to-indigo-600 shadow-md">
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
@@ -63,13 +73,33 @@ const Navbar = () => {
           >
             通知
           </Link>
-          {isLoggedIn && userId && username ? ( // usernameがnullでないことも確認
-            <Link
-              href={`/users/${userId}/profile`}
-              className="text-gray-200 hover:text-white transition-colors duration-300"
-            >
-              {username}
-            </Link>
+          {isLoggedIn && userId && username ? (
+            <div className="relative">
+              <button
+                className="flex items-center space-x-2 text-gray-200 hover:text-white transition-colors duration-300"
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              >
+                <div className="rounded-full h-8 w-8 bg-gray-300 flex items-center justify-center">
+                  <span className="text-lg font-semibold text-gray-700">{username.charAt(0).toUpperCase()}</span>
+                </div>
+              </button>
+              {isDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
+                  <Link
+                    href={`/users/${userId}/profile`}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    プロフィール
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full text-left px-4 py-2 text-sm text-red-700 hover:bg-gray-100"
+                  >
+                    ログアウト
+                  </button>
+                </div>
+              )}
+            </div>
           ) : (
             <Link
               href="/users/login"
