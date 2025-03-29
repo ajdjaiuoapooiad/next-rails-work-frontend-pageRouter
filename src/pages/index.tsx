@@ -112,7 +112,7 @@ export default function Home() {
         </div>
       </section>
       {/* コンテンツセクション (インターン生向け) */}
-      <section className="py-16">
+      <section className="bg-gray-100 py-16">
         <div className="container mx-auto px-6">
           <h2 className="text-3xl font-bold text-indigo-600 mb-8">インターン生向け</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -157,7 +157,7 @@ export default function Home() {
       </section>
 
       {/* コンテンツセクション (企業向け) */}
-      <section className="bg-gray-100 py-16">
+      <section className="bg-gray-100 py-16 mt-5">
         <div className="container mx-auto px-6">
           <h2 className="text-3xl font-bold text-indigo-600 mb-8">企業向け</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -202,7 +202,7 @@ export default function Home() {
       </section>
 
       {/* Q&Aセクション */}
-      <section className="py-16 bg-gray-100">
+      <section className="py-16 bg-gray-100 mt-5">
         <div className="container mx-auto px-6">
           <h2 className="text-3xl font-bold text-indigo-600 mb-8 text-center">よくある質問</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
