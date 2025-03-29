@@ -29,10 +29,16 @@ export default function Home() {
     },
   ];
 
+  const nextSlide = () => {
+    setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prevSlide) => (prevSlide - 1 + slides.length) % slides.length);
+  };
+
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
-    }, 5000); // 5秒ごとにスライドを切り替え
+    const interval = setInterval(nextSlide, 5000); // 5秒ごとにスライドを切り替え
 
     return () => clearInterval(interval); // コンポーネントのアンマウント時にintervalをクリア
   }, [slides.length]);
@@ -79,8 +85,8 @@ export default function Home() {
                 >
                   <div className="w-4/5 bg-white rounded-lg shadow-md p-6" style={{ maxWidth: '800px' }}> {/* スライドの最大幅を設定 */}
                     <img src={slide.image} alt={`スライド${index + 1}`} className="w-full h-96 object-cover mb-4" />
-                    <h3 className="text-xl font-bold mb-2">{slide.title}</h3>
-                    <p className="text-gray-600">{slide.description}</p>
+                    <h3 className="text-xl font-bold mb-2">{slide.description}</h3>
+                    <p className="text-gray-600">{slide.title}</p>
                   </div>
                 </div>
               ))}
@@ -96,6 +102,11 @@ export default function Home() {
                   onClick={() => setCurrentSlide(index)}
                 />
               ))}
+            </div>
+            {/* スライドの横ボタン */}
+            <div className="absolute top-1/2 transform -translate-y-1/2 w-full flex justify-between px-4">
+              <button className="bg-gray-300 rounded-full p-2" onClick={prevSlide}>＜</button>
+              <button className="bg-gray-300 rounded-full p-2" onClick={nextSlide}>＞</button>
             </div>
           </div>
         </div>
