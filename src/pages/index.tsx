@@ -18,14 +18,14 @@ export default function Home() {
       description: '世界を舞台に挑戦するバックエンドエンジニア募集！',
     },
     {
-      image: 'https://images.wantedly.com/i/5HHeGHt?w=1960&format=jpeg',
-      title: '株式会社B',
-      description: 'マーケティングインターン',
+      image: 'https://images.wantedly.com/i/wT8F563?w=1960&format=jpeg',
+      title: '株式会社Vitalize',
+      description: '0からの挑戦！安定した環境で開発スキルを磨けるフルスタックエンジニア募集！',
     },
     {
-      image: 'https://images.wantedly.com/i/5HHeGHt?w=1960&format=jpeg',
-      title: '株式会社C',
-      description: '営業アシスタント募集',
+      image: 'https://images.wantedly.com/i/NzinGEF?w=1960&format=jpeg',
+      title: 'ちゅらデータ株式会社',
+      description: '26卒｜AI・最先端領域で爆速で成長したいサイエンティスト・エンジニア募集',
     },
   ];
 
@@ -49,6 +49,10 @@ export default function Home() {
         <title>インターンマッチングアプリ</title>
         <link rel="icon" href="/images/logo2.svg" />
       </Head>
+
+
+
+
 
       {/* ヒーローセクション */}
       <section
@@ -107,8 +111,8 @@ export default function Home() {
                 >
                   <div className="w-4/5 bg-white rounded-lg shadow-md p-6" style={{ maxWidth: '800px' }}>
                     <img src={slide.image} alt={`スライド${index + 1}`} className="w-full h-96 object-cover rounded-md mb-4" />
-                    <h3 className="text-xl font-semibold mb-2">{slide.title}</h3>
-                    <p className="text-gray-700">{slide.description}</p>
+                    <h3 className="text-xl font-semibold mb-2">{slide.description}</h3>
+                    <p className="text-gray-700">{slide.title}</p>
                   </div>
                 </div>
               ))}
