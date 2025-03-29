@@ -51,21 +51,43 @@ export default function Home() {
       </Head>
 
       {/* ヒーローセクション */}
-      <section className="bg-gradient-to-r from-indigo-200 to-purple-200 py-20">
-        <div className="container mx-auto px-6 text-center">
-          <h1 className="text-4xl font-bold text-indigo-700 mb-4">
+      <section
+        className="relative h-screen flex items-center justify-center text-center text-white"
+        style={{
+          backgroundImage: `url(https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8JUU5JUEyJUE4JUU2JTk5JUFGJUU4JTgzJThDJUU2JTk5JUFGfGVufDB8fDB8fHww)`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        <div className="absolute inset-0 bg-black opacity-50"></div> {/* 背景画像のオーバーレイ */}
+        <div className="relative z-10 p-6"> {/* z-index を使用してテキストを前面に表示 */}
+          <h1 className="text-4xl font-bold mb-4">
             未来を切り拓く、インターンシップ
           </h1>
-          <p className="text-lg text-gray-700 mb-8">
+          <p className="text-lg text-gray-200 mb-8">
             インターン生と企業を繋ぎ、新たな可能性を広げます。
           </p>
           <div className="flex justify-center mb-8">
-            <input type="text" placeholder="キーワードで検索" className="border border-gray-300 rounded-l-md py-3 px-4 w-full md:w-1/2 focus:ring focus:ring-indigo-200" />
+            <input
+              type="text"
+              placeholder="キーワードで検索"
+              className="border border-gray-300 rounded-l-md py-3 px-4 w-full md:w-1/2 focus:ring focus:ring-indigo-200 text-black" // テキストの色を黒に変更
+            />
             <button className="bg-indigo-600 text-white py-3 px-6 rounded-r-md hover:bg-indigo-700">検索</button>
           </div>
           <div className="flex justify-center space-x-4">
-            <Link href="/users/register" className="bg-indigo-600 text-white py-3 px-6 rounded hover:bg-indigo-700 transition duration-300">インターン生の方はこちら</Link>
-            <Link href="/users/register" className="bg-teal-500 text-white py-3 px-6 rounded hover:bg-teal-600 transition duration-300">企業の方はこちら</Link>
+            <Link
+              href="/users/register"
+              className="bg-indigo-600 text-white py-3 px-6 rounded hover:bg-indigo-700 transition duration-300"
+            >
+              インターン生の方はこちら
+            </Link>
+            <Link
+              href="/users/register"
+              className="bg-teal-500 text-white py-3 px-6 rounded hover:bg-teal-600 transition duration-300"
+            >
+              企業の方はこちら
+            </Link>
           </div>
         </div>
       </section>
