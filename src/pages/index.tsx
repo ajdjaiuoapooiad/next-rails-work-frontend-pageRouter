@@ -14,8 +14,8 @@ export default function Home() {
   const slides: Slide[] = [
     {
       image: 'https://images.wantedly.com/i/5HHeGHt?w=1960&format=jpeg',
-      title: '株式会社A',
-      description: 'Webエンジニア募集',
+      title: '株式会社ネイティブキャンプ',
+      description: '世界を舞台に挑戦するバックエンドエンジニア募集！',
     },
     {
       image: 'https://images.wantedly.com/i/5HHeGHt?w=1960&format=jpeg',
@@ -32,7 +32,7 @@ export default function Home() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
-    }, 3000); // 3秒ごとにスライドを切り替え
+    }, 5000); // 5秒ごとにスライドを切り替え
 
     return () => clearInterval(interval); // コンポーネントのアンマウント時にintervalをクリア
   }, [slides.length]);
@@ -77,7 +77,7 @@ export default function Home() {
                   className="w-full flex-shrink-0 flex justify-center items-center"
                   style={{ width: '100%' }} // スライドの幅を親要素の幅に設定
                 >
-                  <div className="w-4/5 bg-white rounded-lg shadow-md p-6">
+                  <div className="w-4/5 bg-white rounded-lg shadow-md p-6" style={{ maxWidth: '800px' }}> {/* スライドの最大幅を設定 */}
                     <img src={slide.image} alt={`スライド${index + 1}`} className="w-full h-96 object-cover mb-4" />
                     <h3 className="text-xl font-bold mb-2">{slide.title}</h3>
                     <p className="text-gray-600">{slide.description}</p>
@@ -85,10 +85,21 @@ export default function Home() {
                 </div>
               ))}
             </div>
+            {/* スライドの点表示 */}
+            <div className="flex justify-center mt-4">
+              {slides.map((_, index) => (
+                <button
+                  key={index}
+                  className={`h-3 w-3 rounded-full mx-1 ${
+                    index === currentSlide ? 'bg-indigo-600' : 'bg-gray-300'
+                  }`}
+                  onClick={() => setCurrentSlide(index)}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>
-
       {/* コンテンツセクション (インターン生向け) */}
       <section className="py-16">
         <div className="container mx-auto px-6">
