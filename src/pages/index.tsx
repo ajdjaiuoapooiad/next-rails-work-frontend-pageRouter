@@ -41,7 +41,7 @@ export default function Home() {
               <Link href="/jobs" className="text-indigo-600 hover:underline">求人一覧を見る</Link>
             </div>
             <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center justify-center">
-              <img src="/images/experience.svg" alt="体験談画像" className="" width="200" height="150" />
+              <img src="/images/hero.svg" alt="体験談画像" className="" width="200" height="150" />
               <h3 className="text-xl font-bold mb-4">インターン体験談</h3>
               <p>実際にインターンシップに参加した先輩の声を聞いてみよう。</p>
               <Link href="/experiences" className="text-indigo-600 hover:underline">体験談を読む</Link>
@@ -80,13 +80,13 @@ export default function Home() {
           <h2 className="text-3xl font-bold text-indigo-600 mb-8">企業向け</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center justify-center">
-              <img src="/images/merit.svg" alt="メリット画像" className="" width="200" height="150" />
+              <img src="/images/hero.svg" alt="メリット画像" className="" width="200" height="150" />
               <h3 className="text-xl font-bold mb-4">求人掲載のメリット</h3>
               <p>優秀なインターン生をスカウトし、企業の成長を加速させましょう。</p>
               <Link href="/merits" className="text-indigo-600 hover:underline">メリットを見る</Link>
             </div>
             <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center justify-center">
-              <img src="/images/case.svg" alt="導入事例画像" className="" width="200" height="150" />
+              <img src="/images/hero.svg" alt="導入事例画像" className="" width="200" height="150" />
               <h3 className="text-xl font-bold mb-4">導入事例</h3>
               <p>実際にインターン生を採用した企業の事例をご紹介します。</p>
               <Link href="/cases" className="text-indigo-600 hover:underline">事例を見る</Link>
@@ -135,7 +135,7 @@ export default function Home() {
               <p>インターン生が企業の活性化に貢献してくれました。</p>
             </div>
             <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center justify-center">
-              <img src="/images/success3.svg" alt="成功事例3" className="" width="200" height="150" />
+              <img src="/images/hero.svg" alt="成功事例3" className="" width="200" height="150" />
               <h3 className="text-xl font-bold mb-4">事例3</h3>
               <p>インターンシップがきっかけで、新卒採用に繋がりました。</p>
             </div>
