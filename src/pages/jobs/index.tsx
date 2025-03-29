@@ -24,7 +24,11 @@ export default function Jobs() {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/v1/jobs');
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        if (!apiUrl) {
+          throw new Error('API URLが設定されていません。');
+        }
+        const response = await fetch(`${apiUrl}/jobs`);
         if (!response.ok) {
           const errorData = await response.json();
           throw new Error(errorData.message || '求人情報の取得に失敗しました');
@@ -61,9 +65,8 @@ export default function Jobs() {
     <div className="container mx-auto p-4">
       <Head>
         <title>求人一覧ページ</title>
-        <link rel="icon" href="/images/logo2.svg"  />
+        <link rel="icon" href="/images/logo2.svg" />
       </Head>
-
 
       <h1 className="text-3xl font-bold mb-6 text-gray-800">求人一覧</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -27,7 +27,11 @@ export default function JobDetail() {
 
     const fetchJob = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/api/v1/jobs/${id}`);
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        if (!apiUrl) {
+          throw new Error('API URLが設定されていません。');
+        }
+        const response = await fetch(`${apiUrl}/jobs/${id}`);
         if (!response.ok) {
           const errorData = await response.json();
           throw new Error(errorData.message || '求人情報の取得に失敗しました');
@@ -55,8 +59,13 @@ export default function JobDetail() {
         return;
       }
 
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      if (!apiUrl) {
+        throw new Error('API URLが設定されていません。');
+      }
+
       await axios.post(
-        'http://localhost:3001/api/v1/messages',
+        `${apiUrl}/messages`,
         {
           sender_id: parseInt(userId),
           receiver_id: job.company_id,
