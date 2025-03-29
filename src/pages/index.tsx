@@ -153,7 +153,7 @@ export default function Home() {
               <img src="/images/hero.svg" alt="体験談画像" className="" width="200" height="150" />
               <h3 className="text-xl font-semibold mb-4">インターン体験談</h3>
               <p className="text-gray-700">実際にインターンシップに参加した先輩の声を聞いてみよう。</p>
-              <Link href="/experiences" className="text-indigo-600 hover:underline">体験談を読む</Link>
+              <Link href="/jobs" className="text-indigo-600 hover:underline">体験談を読む</Link>
             </div>
           </div>
           <div className="mt-8 text-center">
@@ -192,13 +192,13 @@ export default function Home() {
               <img src="/images/hero4.svg" alt="メリット画像" className="" width="200" height="150" />
               <h3 className="text-xl font-semibold mb-4">求人掲載のメリット</h3>
               <p className="text-gray-700">優秀なインターン生をスカウトし、企業の成長を加速させましょう。</p>
-              <Link href="/merits" className="text-indigo-600 hover:underline">メリットを見る</Link>
+              <Link href="/jobs" className="text-indigo-600 hover:underline">メリットを見る</Link>
             </div>
             <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center justify-center">
               <img src="/images/hero3.svg" alt="導入事例画像" className="" width="200" height="150" />
               <h3 className="text-xl font-semibold mb-4">導入事例</h3>
               <p className="text-gray-700">実際にインターン生を採用した企業の事例をご紹介します。</p>
-              <Link href="/cases" className="text-indigo-600 hover:underline">事例を見る</Link>
+              <Link href="/jobs" className="text-indigo-600 hover:underline">事例を見る</Link>
             </div>
           </div>
           <div className="mt-8 text-center">
