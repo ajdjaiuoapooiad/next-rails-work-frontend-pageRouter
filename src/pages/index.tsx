@@ -35,7 +35,7 @@ export default function Home() {
           <h2 className="text-3xl font-bold text-indigo-600 mb-8">インターン生向け</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center justify-center">
-              <img src="/images/hero.svg" alt="求人画像" className="" width="200" height="150" />
+              <img src="/images/hero2.svg" alt="求人画像" className="" width="200" height="150" />
               <h3 className="text-xl font-bold mb-4">おすすめ求人</h3>
               <p>あなたのスキルを活かせるインターンシップを見つけよう。</p>
               <Link href="/jobs" className="text-indigo-600 hover:underline">求人一覧を見る</Link>
@@ -80,13 +80,13 @@ export default function Home() {
           <h2 className="text-3xl font-bold text-indigo-600 mb-8">企業向け</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center justify-center">
-              <img src="/images/hero.svg" alt="メリット画像" className="" width="200" height="150" />
+              <img src="/images/hero4.svg" alt="メリット画像" className="" width="200" height="150" />
               <h3 className="text-xl font-bold mb-4">求人掲載のメリット</h3>
               <p>優秀なインターン生をスカウトし、企業の成長を加速させましょう。</p>
               <Link href="/merits" className="text-indigo-600 hover:underline">メリットを見る</Link>
             </div>
             <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center justify-center">
-              <img src="/images/hero.svg" alt="導入事例画像" className="" width="200" height="150" />
+              <img src="/images/hero3.svg" alt="導入事例画像" className="" width="200" height="150" />
               <h3 className="text-xl font-bold mb-4">導入事例</h3>
               <p>実際にインターン生を採用した企業の事例をご紹介します。</p>
               <Link href="/cases" className="text-indigo-600 hover:underline">事例を見る</Link>
@@ -125,17 +125,17 @@ export default function Home() {
           <h2 className="text-3xl font-bold text-indigo-600 mb-8 text-center">成功事例</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center justify-center">
-              <img src="/images/hero.svg" alt="成功事例1" className="" width="200" height="150" />
+              <img src="https://info.cookpad.com/assets/images/ogp.jpg" alt="成功事例1" className="" width="200" height="150" />
               <h3 className="text-xl font-bold mb-4">事例1</h3>
               <p>インターンシップを通して、即戦力となる人材を採用できました。</p>
             </div>
             <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center justify-center">
-              <img src="/images/hero.svg" alt="成功事例2" className="" width="200" height="150" />
+              <img src="https://dena.com/images/common/ogp.png" alt="成功事例2" className="" width="200" height="150" />
               <h3 className="text-xl font-bold mb-4">事例2</h3>
               <p>インターン生が企業の活性化に貢献してくれました。</p>
             </div>
             <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center justify-center">
-              <img src="/images/hero.svg" alt="成功事例3" className="" width="200" height="150" />
+              <img src="https://www.cyberagent.co.jp/files/user/img/common/ogp/ogimage.png" alt="成功事例3" className="" width="200" height="150" />
               <h3 className="text-xl font-bold mb-4">事例3</h3>
               <p>インターンシップがきっかけで、新卒採用に繋がりました。</p>
             </div>
