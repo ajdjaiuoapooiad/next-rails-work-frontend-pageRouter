@@ -17,8 +17,12 @@ export default function JobCreate() {
 
     try {
       const token = localStorage.getItem('authToken');
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      if (!apiUrl) {
+        throw new Error('API URLが設定されていません。');
+      }
 
-      const response = await fetch('http://localhost:3001/api/v1/jobs', {
+      const response = await fetch(`${apiUrl}/jobs`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -48,14 +52,13 @@ export default function JobCreate() {
 
   return (
     <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
-      <div className="relative py-3 lg:w-3/5 md:w-4/5 sm:w-full sm:mx-auto"> {/* lg:w-3/5 を追加 */}
+      <div className="relative py-3 lg:w-3/5 md:w-4/5 sm:w-full sm:mx-auto">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-300 to-blue-600 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
         <div className="relative px-4 py-10 bg-gray-300 shadow-lg sm:rounded-3xl sm:p-20">
           <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">求人作成</h1>
           {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* ... 他のフォーム要素 ... */}
-             <div>
+            <div>
               <label className="block text-sm font-medium text-gray-700">タイトル</label>
               <input
                 type="text"
@@ -87,7 +90,7 @@ export default function JobCreate() {
                 type="number"
                 value={salary}
                 onChange={(e) => setSalary(e.target.value)}
-                className="mt-1  pb-5 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                className="mt-1 pb-5 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               />
             </div>
             <div>

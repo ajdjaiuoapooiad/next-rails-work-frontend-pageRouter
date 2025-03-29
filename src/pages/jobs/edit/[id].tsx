@@ -31,7 +31,11 @@ export default function JobEdit() {
     const fetchJob = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const response = await fetch(`http://localhost:3001/api/v1/jobs/${id}`, {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        if (!apiUrl) {
+          throw new Error('API URLが設定されていません。');
+        }
+        const response = await fetch(`${apiUrl}/jobs/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -64,7 +68,11 @@ export default function JobEdit() {
 
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch(`http://localhost:3001/api/v1/jobs/${id}`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      if (!apiUrl) {
+        throw new Error('API URLが設定されていません。');
+      }
+      const response = await fetch(`${apiUrl}/jobs/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -101,7 +109,7 @@ export default function JobEdit() {
       <h1 className="text-2xl font-bold mb-4">求人編集</h1>
       {error && <p className="text-red-500 mb-4">{error}</p>}
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4"> {/* grid レイアウトを適用 */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700">タイトル</label>
             <input
@@ -117,7 +125,7 @@ export default function JobEdit() {
               type="text"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              className="mt-1 py-3  block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="mt-1 py-3 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             />
           </div>
           <div>
@@ -135,7 +143,7 @@ export default function JobEdit() {
               type="text"
               value={employmentType}
               onChange={(e) => setEmploymentType(e.target.value)}
-              className="mt-1 py-3  block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="mt-1 py-3 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             />
           </div>
         </div>
