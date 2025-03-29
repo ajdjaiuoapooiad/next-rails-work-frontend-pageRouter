@@ -9,10 +9,6 @@ interface Slide {
   description: string;
 }
 
-
-
-
-
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const slides: Slide[] = [
@@ -22,12 +18,12 @@ export default function Home() {
       description: 'Webエンジニア募集',
     },
     {
-      image: '/images/slide2.jpg',
+      image: 'https://images.wantedly.com/i/5HHeGHt?w=1960&format=jpeg',
       title: '株式会社B',
       description: 'マーケティングインターン',
     },
     {
-      image: '/images/slide3.jpg',
+      image: 'https://images.wantedly.com/i/5HHeGHt?w=1960&format=jpeg',
       title: '株式会社C',
       description: '営業アシスタント募集',
     },
@@ -72,20 +68,23 @@ export default function Home() {
       <section className="py-16">
         <div className="container mx-auto px-6">
           <h2 className="text-3xl font-bold text-indigo-600 mb-8 text-center">注目のインターンシップ</h2>
-          <div className="flex overflow-x-auto space-x-4">
-            {/* スライドアイテム */}
-            {slides.map((slide, index) => (
-              <div
-                key={index}
-                className={`bg-white rounded-lg shadow-md p-6 w-80 flex-shrink-0 ${
-                  index === currentSlide ? 'block' : 'hidden'
-                }`}
-              >
-                <img src={slide.image} alt={`スライド${index + 1}`} className="w-full h-48 object-cover mb-4" />
-                <h3 className="text-xl font-bold mb-2">{slide.title}</h3>
-                <p className="text-gray-600">{slide.description}</p>
-              </div>
-            ))}
+          <div className="relative overflow-hidden">
+            <div className="flex transition-transform duration-500" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
+              {/* スライドアイテム */}
+              {slides.map((slide, index) => (
+                <div
+                  key={index}
+                  className="w-full flex-shrink-0 flex justify-center items-center"
+                  style={{ width: '100%' }} // スライドの幅を親要素の幅に設定
+                >
+                  <div className="w-4/5 bg-white rounded-lg shadow-md p-6">
+                    <img src={slide.image} alt={`スライド${index + 1}`} className="w-full h-96 object-cover mb-4" />
+                    <h3 className="text-xl font-bold mb-2">{slide.title}</h3>
+                    <p className="text-gray-600">{slide.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
