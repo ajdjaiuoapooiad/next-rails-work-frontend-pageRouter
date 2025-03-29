@@ -61,7 +61,7 @@ export default function Jobs() {
     <div className="container mx-auto p-4">
       <Head>
         <title>求人一覧ページ</title>
-        <link rel="icon" href="/images/logo2.svg" className="w-10 h-10"  />
+        <link rel="icon" href="/images/logo2.svg"  />
       </Head>
 
 
