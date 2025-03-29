@@ -1,7 +1,46 @@
 import Head from 'next/head';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+
+// スライドの型定義
+interface Slide {
+  image: string;
+  title: string;
+  description: string;
+}
+
+
+
+
 
 export default function Home() {
+  const [currentSlide, setCurrentSlide] = useState<number>(0);
+  const slides: Slide[] = [
+    {
+      image: 'https://images.wantedly.com/i/5HHeGHt?w=1960&format=jpeg',
+      title: '株式会社A',
+      description: 'Webエンジニア募集',
+    },
+    {
+      image: '/images/slide2.jpg',
+      title: '株式会社B',
+      description: 'マーケティングインターン',
+    },
+    {
+      image: '/images/slide3.jpg',
+      title: '株式会社C',
+      description: '営業アシスタント募集',
+    },
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
+    }, 3000); // 3秒ごとにスライドを切り替え
+
+    return () => clearInterval(interval); // コンポーネントのアンマウント時にintervalをクリア
+  }, [slides.length]);
+
   return (
     <div>
       <Head>
@@ -25,6 +64,28 @@ export default function Home() {
           <div className="flex justify-center space-x-4">
             <Link href="/users/register" className="bg-indigo-600 text-white py-3 px-6 rounded hover:bg-indigo-700">インターン生の方はこちら</Link>
             <Link href="/users/register" className="bg-teal-500 text-white py-3 px-6 rounded hover:bg-teal-600">企業の方はこちら</Link>
+          </div>
+        </div>
+      </section>
+
+      {/* スライドセクション */}
+      <section className="py-16">
+        <div className="container mx-auto px-6">
+          <h2 className="text-3xl font-bold text-indigo-600 mb-8 text-center">注目のインターンシップ</h2>
+          <div className="flex overflow-x-auto space-x-4">
+            {/* スライドアイテム */}
+            {slides.map((slide, index) => (
+              <div
+                key={index}
+                className={`bg-white rounded-lg shadow-md p-6 w-80 flex-shrink-0 ${
+                  index === currentSlide ? 'block' : 'hidden'
+                }`}
+              >
+                <img src={slide.image} alt={`スライド${index + 1}`} className="w-full h-48 object-cover mb-4" />
+                <h3 className="text-xl font-bold mb-2">{slide.title}</h3>
+                <p className="text-gray-600">{slide.description}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -119,27 +180,60 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 成功事例セクション */}
+      {/* Q&Aセクション */}
       <section className="py-16 bg-gray-100">
         <div className="container mx-auto px-6">
-          <h2 className="text-3xl font-bold text-indigo-600 mb-8 text-center">成功事例</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center justify-center">
-              <img src="https://info.cookpad.com/assets/images/ogp.jpg" alt="成功事例1" className="" width="200" height="150" />
-              <h3 className="text-xl font-bold mb-4">事例1</h3>
-              <p>インターンシップを通して、即戦力となる人材を採用できました。</p>
+          <h2 className="text-3xl font-bold text-indigo-600 mb-8 text-center">よくある質問</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <h3 className="text-xl font-bold mb-2">Q. インターンシップの期間は？</h3>
+              <p>A. 企業によって異なりますが、1週間〜3ヶ月程度が多いです。</p>
             </div>
-            <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center justify-center">
-              <img src="https://dena.com/images/common/ogp.png" alt="成功事例2" className="" width="200" height="150" />
-              <h3 className="text-xl font-bold mb-4">事例2</h3>
-              <p>インターン生が企業の活性化に貢献してくれました。</p>
+            <div>
+              <h3 className="text-xl font-bold mb-2">Q. 応募に必要なスキルは？</h3>
+              <p>A. 企業や職種によって異なります。求人情報をよくご確認ください。</p>
             </div>
-            <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center justify-center">
-              <img src="https://www.cyberagent.co.jp/files/user/img/common/ogp/ogimage.png" alt="成功事例3" className="" width="200" height="150" />
-              <h3 className="text-xl font-bold mb-4">事例3</h3>
-              <p>インターンシップがきっかけで、新卒採用に繋がりました。</p>
+            <div>
+              <h3 className="text-xl font-bold mb-2">Q. インターンシップの給与は？</h3>
+              <p>A. 無給の場合と有給の場合があります。求人情報をよくご確認ください。</p>
+            </div>
+            <div>
+              <h3 className="text-xl font-bold mb-2">Q. 応募後の流れは？</h3>
+              <p>A. 書類選考、面接、インターンシップ開始という流れが一般的です。</p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* 問い合わせセクション */}
+      <section className="py-16">
+        <div className="container mx-auto px-6">
+          <h2 className="text-3xl font-bold text-indigo-600 mb-8 text-center">お問い合わせ</h2>
+          <form className="max-w-md mx-auto">
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
+                お名前
+              </label>
+              <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" placeholder="お名前" />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+                メールアドレス
+              </label>
+              <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="email" placeholder="メールアドレス" />
+            </div>
+            <div className="mb-6">
+              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="message">
+                お問い合わせ内容
+              </label>
+              <textarea className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="message" placeholder="お問い合わせ内容"></textarea>
+            </div>
+            <div className="flex items-center justify-between">
+              <button className="bg-indigo-600 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                送信
+              </button>
+            </div>
+          </form>
         </div>
       </section>
 
