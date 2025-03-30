@@ -1,33 +1,11 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 
-interface LoginResponseSuccess {
-  token: string;
-  user: { id: number };
-}
-
-interface LoginResponseError {
+interface LoginResponse {
+  token?: string;
   message: string;
+  user?: { id: number };
 }
-
-type LoginResponse = LoginResponseSuccess | LoginResponseError;
-
-const getApiUrl = (): string => {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  if (!apiUrl) {
-    throw new Error('API URLが設定されていません。');
-  }
-  return apiUrl;
-};
-
-const apiRequest = async (url: string, options: RequestInit = {}) => {
-  const response = await fetch(url, options);
-  if (!response.ok) {
-    const errorData: LoginResponseError = await response.json();
-    throw new Error(errorData.message || 'ログインに失敗しました。');
-  }
-  return response.json();
-};
 
 export default function Login() {
   const [email, setEmail] = useState<string>('');
@@ -40,22 +18,29 @@ export default function Login() {
     setError(null);
 
     try {
-      const apiUrl = getApiUrl();
-      const data: LoginResponse = await apiRequest(`${apiUrl}/login`, {
+      const response = await fetch('/api/login', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({ email, password }),
       });
 
-      if ('token' in data) {
-        localStorage.setItem('authToken', data.token);
-        localStorage.setItem('userId', data.user.id.toString());
+      if (response.ok) {
+        const data: LoginResponse = await response.json();
+        if (data.token) {
+          localStorage.setItem('authToken', data.token);
+          if (data.user && data.user.id) {
+            localStorage.setItem('userId', data.user.id.toString());
+          }
+        }
         router.push('/jobs');
       } else {
-        setError(data.message || 'ログインに失敗しました。');
+        const errorData: LoginResponse = await response.json();
+        setError(errorData.message || 'ログインに失敗しました');
       }
     } catch (err: any) {
-      setError('ログイン中にエラーが発生しました。');
+      setError('ログイン中にエラーが発生しました');
       console.error('ログインエラー:', err);
     }
   };
