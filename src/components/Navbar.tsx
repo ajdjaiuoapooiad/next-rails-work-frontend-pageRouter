@@ -28,8 +28,12 @@ const Navbar = () => {
 
   useEffect(() => {
     if (userId) {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      if (!apiUrl) {
+        throw new Error('API URLが設定されていません。');
+      }
       axios
-        .get(`http://localhost:3001/api/v1/users/show_by_id/${userId}`)
+        .get(`${apiUrl}/users/show_by_id/${userId}`)
         .then((response) => {
           setUsername(response.data.name);
           setUserType(response.data.user_type);
