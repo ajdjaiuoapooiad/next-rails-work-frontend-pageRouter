@@ -9,6 +9,14 @@ interface User {
   name: string;
 }
 
+const getApiUrl = (): string => {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (!apiUrl) {
+    throw new Error('API URLが設定されていません。');
+  }
+  return apiUrl;
+};
+
 export default function Messages() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -29,11 +37,10 @@ export default function Messages() {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
+        const apiUrl = getApiUrl();
         const token = localStorage.getItem('authToken');
-        const response = await axios.get<Message[]>('http://localhost:3001/api/v1/messages', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        const response = await axios.get<Message[]>(`${apiUrl}/messages`, {
+          headers: { Authorization: `Bearer ${token}` },
         });
         setMessages(response.data);
       } catch (err) {
@@ -66,11 +73,10 @@ export default function Messages() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
+        const apiUrl = getApiUrl();
         const token = localStorage.getItem('authToken');
-        const response = await axios.get<User[]>('http://localhost:3001/api/v1/users', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        const response = await axios.get<User[]>(`${apiUrl}/users`, {
+          headers: { Authorization: `Bearer ${token}` },
         });
         const usersMap: {[key: number]: string} = {};
         response.data.forEach(user => {
@@ -144,7 +150,7 @@ export default function Messages() {
                   <div key={message.createdAt} className={`flex ${message.isCurrentUser ? 'justify-end' : 'justify-start'}`}>
                     <div className={`p-4 rounded-lg ${message.isCurrentUser ? 'bg-blue-100' : 'bg-gray-50'} w-1/2`}>
                       {isFirstMessage && <p className="text-sm font-semibold">{message.isCurrentUser ? 'あなた' : users[message.senderId] || '不明なユーザー'}</p>}
-                      <p className="text-base leading-relaxed">{message.content}</p> {/* text-base に変更、leading-relaxed を追加 */}
+                      <p className="text-base leading-relaxed">{message.content}</p>
                       <p className="text-xs text-gray-400">{new Date(message.createdAt).toLocaleString()}</p>
                     </div>
                   </div>
