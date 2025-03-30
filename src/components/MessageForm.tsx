@@ -4,7 +4,7 @@ import { Button } from './ui/button';
 
 interface MessageFormProps {
   onMessageSent: () => void;
-  receiverId: number | null | undefined; // receiverId をプロパティとして追加
+  receiverId: number | null | undefined;
 }
 
 interface ErrorResponse {
@@ -24,14 +24,28 @@ export default function MessageForm({ onMessageSent, receiverId }: MessageFormPr
 
     try {
       const token = localStorage.getItem('authToken');
-      await axios.post('http://localhost:3001/api/v1/messages', {
-        receiver_id: receiverId,
-        content,
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      if (!token) {
+        setError('認証トークンがありません。ログインしてください。');
+        return;
+      }
+
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      if (!apiUrl) {
+        throw new Error('API URLが設定されていません。');
+      }
+
+      await axios.post(
+        `${apiUrl}/messages`,
+        {
+          receiver_id: receiverId,
+          content,
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setContent('');
       setError(null);
       onMessageSent();
