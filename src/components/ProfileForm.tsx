@@ -25,12 +25,12 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialProfile, onSubmit, onE
       return;
     }
     setError(null);
-    onSubmit({ introduction, skills, company_name, industry }); // 修正: company_nameを使用
+    onSubmit({ introduction, skills, company_name, industry });
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
+    <form onSubmit={handleSubmit} className="space-y-6"> {/* space-y-4 を space-y-6 に変更 */}
+      <div className="mb-12"> {/* 各要素に mb-4 を追加 */}
         <label htmlFor="introduction" className="block text-sm font-medium text-gray-700">
           自己紹介
         </label>
@@ -42,7 +42,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialProfile, onSubmit, onE
           className="mt-1 block w-full pb-96 py-5 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
         />
       </div>
-      <div >
+      <div className="mb-12"> {/* 各要素に mb-4 を追加 */}
         <label htmlFor="skills" className="block text-sm font-medium text-gray-700">
           スキル
         </label>
@@ -54,7 +54,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialProfile, onSubmit, onE
           className="mt-1 block w-full pb-52 py-5 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
         />
       </div>
-      <div>
+      <div className="mb-12"> {/* 各要素に mb-4 を追加 */}
         <label htmlFor="company_name" className="block text-sm font-medium text-gray-700">
           会社名
         </label>
@@ -67,7 +67,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialProfile, onSubmit, onE
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
         />
       </div>
-      <div>
+      <div className="mb-12"> {/* 各要素に mb-4 を追加 */}
         <label htmlFor="industry" className="block text-sm font-medium text-gray-700">
           業界
         </label>
