@@ -13,10 +13,10 @@ https://next-rails-work-frontend-page-router.vercel.app
 ## テスト用アカウント（ログイン用）
 学生  
 メール: aaa@a.com  
-パスワード password  
+パスワード:  password  
 企業  
 メール: test@example.com  
-パスワード password  
+パスワード:  password  
 
 
 # テスト方法 (面接官向け)  
