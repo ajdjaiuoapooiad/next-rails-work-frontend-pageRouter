@@ -1,8 +1,14 @@
 # Wantedly 長期インターン管理アプリ
 
 ## デモ動画
+<p align="center">
+  <img src="https://github.com/ajdjaiuoapooiad/next-port5-frontend-pageRouter/blob/main/public/images/GIF/_-GoogleChrome2025-03-2019-23-08-ezgif.com-video-to-gif-converter%20(1).gif" alt="デモ動画" width="600" style="border-radius: 10px;">
+</p>
+
+
 
 ## URL
+https://next-rails-work-frontend-page-router.vercel.app  
 
 # テスト方法 (面接官向け)  
 全体的な動作確認  
