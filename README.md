@@ -1,4 +1,4 @@
-# Wantedly 長期インターン管理アプリ
+# インターンマッチングアプリ
 
 ## デモ動画
 <p align="center">
@@ -7,7 +7,7 @@
 
 
 
-## URL
+## URL（API側のインフラにRenderを使用しているため初回Fetch時にしばらく時間かかります。）
 https://next-rails-work-frontend-page-router.vercel.app  
 
 ## テスト用アカウント（ログイン用）
