@@ -86,6 +86,9 @@ export default function UserDetail() {
 
   return (
     <div className="container mx-auto p-4">
+      <Head>
+        <title>ユーザー情報ページ</title>
+      </Head>
       <h1 className="text-3xl font-bold mb-6">ユーザー詳細</h1>
       <div className="border p-4 rounded-md shadow-sm">
         <p>

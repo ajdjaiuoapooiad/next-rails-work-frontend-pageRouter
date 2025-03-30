@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import ProfileForm from '@/components/ProfileForm';
+import Head from 'next/head';
 
 interface Profile {
   id: number;
@@ -112,6 +113,9 @@ export default function UserProfile() {
 
   return (
     <div className="container mx-auto p-4">
+      <Head>
+        <title>プロフィールページ</title>
+      </Head>
       <div className="relative h-64 bg-cover bg-center rounded-lg shadow-md mb-6" style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8JUU5JUEyJUE4JUU2JTk5JUFGJUU4JTgzJThDJUU2JTk5JUFGfGVufDB8fDB8fHww)' }}>
         <div className="absolute bottom-0 left-0 p-4 flex items-center">
           <div className="h-24 w-24 rounded-full bg-white flex items-center justify-center overflow-hidden mr-4">

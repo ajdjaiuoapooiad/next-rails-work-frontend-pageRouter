@@ -3,6 +3,7 @@ import axios, { AxiosError } from 'axios';
 
 import MessageForm from '../../components/MessageForm';
 import { Message } from '@/utils/types';
+import Head from 'next/head';
 
 interface User {
   id: number;
@@ -111,6 +112,11 @@ export default function Messages() {
 
   return (
     <div className="flex h-screen bg-gray-100">
+
+
+      <Head>
+        <title>メッセージ一覧ページ</title>
+      </Head>
       <aside className="w-1/4 border-r p-4 bg-white shadow-md">
         <h2 className="text-lg font-semibold mb-4">会話一覧</h2>
         <ul className="space-y-2">

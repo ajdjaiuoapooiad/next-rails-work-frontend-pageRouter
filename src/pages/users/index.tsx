@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { useState, useEffect } from 'react';
 
 interface User {
@@ -60,6 +61,9 @@ export default function UserList() {
 
   return (
     <div className="container mx-auto p-4">
+      <Head>
+        <title>ユーザー一覧ページ</title>
+      </Head>
       <h1 className="text-3xl font-bold mb-6">ユーザー一覧</h1>
       <ul className="space-y-4">
         {users.map((user) => (
