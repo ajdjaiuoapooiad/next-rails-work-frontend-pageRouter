@@ -22,7 +22,11 @@ export default function UserDetail() {
     const fetchUser = async () => {
       try {
         const token = localStorage.getItem('authToken');
-        const response = await fetch(`http://localhost:3001/api/v1/users/${id}`, {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        if (!apiUrl) {
+          throw new Error('API URLが設定されていません。');
+        }
+        const response = await fetch(`${apiUrl}/users/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -45,7 +49,11 @@ export default function UserDetail() {
   const handleDelete = async () => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch(`http://localhost:3001/api/v1/users/${id}`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      if (!apiUrl) {
+        throw new Error('API URLが設定されていません。');
+      }
+      const response = await fetch(`${apiUrl}/users/${id}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,

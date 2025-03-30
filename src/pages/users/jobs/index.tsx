@@ -34,7 +34,11 @@ const CompanyJobs = () => {
 
     const fetchJobs = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/api/v1/jobs?company_id=${userId}`);
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        if (!apiUrl) {
+          throw new Error('API URLが設定されていません。');
+        }
+        const response = await axios.get(`${apiUrl}/jobs?company_id=${userId}`);
         setJobs(response.data);
       } catch (err: any) {
         setError(err.message || '求人情報の取得に失敗しました');
@@ -45,6 +49,21 @@ const CompanyJobs = () => {
 
     fetchJobs();
   }, [userId]);
+
+  const handleDelete = async (jobId: number) => {
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      if (!apiUrl) {
+        throw new Error('API URLが設定されていません。');
+      }
+      await axios.delete(`${apiUrl}/jobs/${jobId}`);
+      setJobs(jobs.filter((job) => job.id !== jobId));
+      alert('求人を削除しました。');
+    } catch (err: any) {
+      setError(err.message || '求人情報の削除に失敗しました');
+      alert('求人削除中にエラーが発生しました。');
+    }
+  };
 
   if (loading) {
     return (
@@ -106,7 +125,7 @@ const CompanyJobs = () => {
                 編集
               </Link>
               <button
-                onClick={() => handleDelete(job.id)} // handleDelete 関数は必要に応じて実装
+                onClick={() => handleDelete(job.id)}
                 className="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded-md text-sm"
               >
                 削除

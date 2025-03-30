@@ -1,6 +1,27 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+interface RegisterResponseError {
+  errors: string[];
+}
+
+const getApiUrl = (): string => {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (!apiUrl) {
+    throw new Error('API URLが設定されていません。');
+  }
+  return apiUrl;
+};
+
+const apiRequest = async (url: string, options: RequestInit = {}) => {
+  const response = await fetch(url, options);
+  if (!response.ok) {
+    const errorData: RegisterResponseError = await response.json();
+    throw new Error(errorData.errors.join(', ') || '登録に失敗しました。');
+  }
+  return response.json();
+};
+
 export default function Register() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -15,11 +36,10 @@ export default function Register() {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:3001/api/v1/users', {
+      const apiUrl = getApiUrl();
+      await apiRequest(`${apiUrl}/users`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name,
           email,
@@ -29,15 +49,9 @@ export default function Register() {
         }),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        setError(errorData.errors.join(', ') || '登録に失敗しました');
-        return;
-      }
-
       router.push('/users/login');
-    } catch (err) {
-      setError('登録中にエラーが発生しました');
+    } catch (err: any) {
+      setError('登録中にエラーが発生しました。');
     }
   };
 

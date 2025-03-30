@@ -8,7 +8,21 @@ interface User {
   icon?: string;
 }
 
-const defaultIcon = 'https://via.placeholder.com/150';
+const getApiUrl = (): string => {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (!apiUrl) {
+    throw new Error('API URLが設定されていません。');
+  }
+  return apiUrl;
+};
+
+const apiRequest = async (url: string, options: RequestInit = {}) => {
+  const response = await fetch(url, options);
+  if (!response.ok) {
+    throw new Error('ユーザー情報の取得に失敗しました。');
+  }
+  return response.json();
+};
 
 export default function UserList() {
   const [users, setUsers] = useState<User[]>([]);
@@ -18,16 +32,11 @@ export default function UserList() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
+        const apiUrl = getApiUrl();
         const token = localStorage.getItem('authToken');
-        const response = await fetch('http://localhost:3001/api/v1/users', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        const data: User[] = await apiRequest(`${apiUrl}/users`, {
+          headers: { Authorization: `Bearer ${token}` },
         });
-        if (!response.ok) {
-          throw new Error('ユーザー情報の取得に失敗しました');
-        }
-        const data: User[] = await response.json();
         setUsers(data);
       } catch (err: any) {
         setError(err.message);
@@ -47,6 +56,8 @@ export default function UserList() {
     return <p className="text-center mt-8 text-red-500">エラー: {error}</p>;
   }
 
+  const defaultIcon = process.env.NEXT_PUBLIC_DEFAULT_ICON_URL || 'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png';
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-3xl font-bold mb-6">ユーザー一覧</h1>
@@ -55,10 +66,10 @@ export default function UserList() {
           <li
             key={user.id}
             className="border p-4 rounded-md shadow-sm flex items-center"
-            style={{ minHeight: '100px' }} // heightを調整
+            style={{ minHeight: '100px' }}
           >
             <img
-              src={'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png'}
+              src={user.icon || defaultIcon}
               alt={`${user.name}のアイコン`}
               className="w-14 h-14 rounded-full mr-4"
             />

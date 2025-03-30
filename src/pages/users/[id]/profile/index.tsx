@@ -11,6 +11,22 @@ interface Profile {
   industry: string;
 }
 
+const getApiUrl = (): string => {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (!apiUrl) {
+    throw new Error('API URLが設定されていません。');
+  }
+  return apiUrl;
+};
+
+const apiRequest = async (url: string, options: RequestInit = {}) => {
+  const response = await fetch(url, options);
+  if (!response.ok) {
+    throw new Error('APIリクエストに失敗しました。');
+  }
+  return response.json();
+};
+
 export default function UserProfile() {
   const router = useRouter();
   const { id } = router.query;
@@ -26,24 +42,16 @@ export default function UserProfile() {
 
     const fetchProfile = async () => {
       try {
+        const apiUrl = getApiUrl();
         const token = localStorage.getItem('authToken');
-        const response = await fetch(`http://localhost:3001/api/v1/users/${id}/profiles/1`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        const profileData: Profile = await apiRequest(`${apiUrl}/users/${id}/profiles/1`, {
+          headers: { Authorization: `Bearer ${token}` },
         });
-        if (!response.ok) {
-          throw new Error('プロフィール情報の取得に失敗しました');
-        }
-        const data: Profile = await response.json();
-        setProfile(data);
+        setProfile(profileData);
 
-        const userResponse = await fetch(`http://localhost:3001/api/v1/users/show_by_id/${id}`);
-        if (userResponse.ok) {
-          const userData = await userResponse.json();
-          setUsername(userData.name);
-          setCurrentUserId(userData.id);
-        }
+        const userData = await apiRequest(`${apiUrl}/users/show_by_id/${id}`);
+        setUsername(userData.name);
+        setCurrentUserId(userData.id);
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -56,19 +64,13 @@ export default function UserProfile() {
 
   const handleCreateProfile = async (profileData: { introduction: string; skills: string; company_name: string; industry: string }) => {
     try {
+      const apiUrl = getApiUrl();
       const token = localStorage.getItem('authToken');
-      const response = await fetch(`http://localhost:3001/api/v1/users/${id}/profiles`, {
+      const newProfile: Profile = await apiRequest(`${apiUrl}/users/${id}/profiles`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify(profileData),
       });
-      if (!response.ok) {
-        throw new Error('プロフィールの作成に失敗しました');
-      }
-      const newProfile: Profile = await response.json();
       setProfile(newProfile);
       setEditing(false);
     } catch (err: any) {
@@ -78,30 +80,21 @@ export default function UserProfile() {
 
   const handleUpdateProfile = async (profileData: { introduction: string; skills: string; company_name: string; industry: string }) => {
     try {
+      const apiUrl = getApiUrl();
       const token = localStorage.getItem('authToken');
-      const response = await fetch(
-        `http://localhost:3001/api/v1/users/${id}/profiles/1`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            introduction: profileData.introduction || ' ',
-            skills: profileData.skills || ' ',
-            company_name: profileData.company_name || ' ',
-            industry: profileData.industry || ' ',
-          }),
-        }
-      );
-      if (!response.ok) {
-        throw new Error('プロフィールの更新に失敗しました');
-      }
-      const updatedProfile: Profile = await response.json();
+      const updatedProfile: Profile = await apiRequest(`${apiUrl}/users/${id}/profiles/1`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({
+          introduction: profileData.introduction || ' ',
+          skills: profileData.skills || ' ',
+          company_name: profileData.company_name || ' ',
+          industry: profileData.industry || ' ',
+        }),
+      });
       setProfile(updatedProfile);
       setEditing(false);
-    } catch (err) {
+    } catch (err: any) {
       setError(err.message);
     }
   };
@@ -115,13 +108,14 @@ export default function UserProfile() {
   }
 
   const showEditButton = currentUserId && currentUserId === parseInt(id as string);
+  const profileImageUrl = process.env.NEXT_PUBLIC_PROFILE_IMAGE_URL || 'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png';
 
   return (
     <div className="container mx-auto p-4">
       <div className="relative h-64 bg-cover bg-center rounded-lg shadow-md mb-6" style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8JUU5JUEyJUE4JUU2JTk5JUFGJUU4JTgzJThDJUU2JTk5JUFGfGVufDB8fDB8fHww)' }}>
         <div className="absolute bottom-0 left-0 p-4 flex items-center">
           <div className="h-24 w-24 rounded-full bg-white flex items-center justify-center overflow-hidden mr-4">
-            <img src={'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png'} alt="プロフィール画像" className="h-full w-full object-cover" />
+            <img src={profileImageUrl} alt="プロフィール画像" className="h-full w-full object-cover" />
           </div>
           {username && <h1 className="text-3xl font-bold text-white">{username}</h1>}
         </div>
