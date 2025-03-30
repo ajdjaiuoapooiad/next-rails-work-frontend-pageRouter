@@ -1,4 +1,4 @@
-import { useState, React, ChangeEvent, FormEvent } from 'react';
+import { useState, ChangeEvent, FormEvent } from 'react';
 
 interface ProfileFormProps {
   initialProfile?: { introduction: string; skills: string; company_name: string; industry: string };
@@ -9,7 +9,7 @@ interface ProfileFormProps {
 const ProfileForm: React.FC<ProfileFormProps> = ({ initialProfile, onSubmit, onError }) => {
   const [introduction, setIntroduction] = useState(initialProfile?.introduction || '');
   const [skills, setSkills] = useState(initialProfile?.skills || '');
-  const [companyName, setCompanyName] = useState(initialProfile?.company_name || '');
+  const [company_name, setCompanyName] = useState(initialProfile?.company_name || '');
   const [industry, setIndustry] = useState(initialProfile?.industry || '');
   const [error, setError] = useState<string | null>(null);
 
@@ -19,13 +19,13 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialProfile, onSubmit, onE
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (!introduction || !skills || !companyName || !industry) {
+    if (!introduction || !skills || !company_name || !industry) {
       setError('すべてのフィールドを入力してください。');
       if (onError) onError('すべてのフィールドを入力してください。');
       return;
     }
     setError(null);
-    onSubmit({ introduction, skills, companyName, industry });
+    onSubmit({ introduction, skills, company_name, industry }); // 修正: company_nameを使用
   };
 
   return (
@@ -55,14 +55,14 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialProfile, onSubmit, onE
         />
       </div>
       <div>
-        <label htmlFor="companyName" className="block text-sm font-medium text-gray-700">
+        <label htmlFor="company_name" className="block text-sm font-medium text-gray-700">
           会社名
         </label>
         <input
           type="text"
-          id="companyName"
-          value={companyName}
-          onChange={handleCompanyNameChange} // 修正: 専用のハンドラを使用
+          id="company_name"
+          value={company_name}
+          onChange={handleCompanyNameChange}
           placeholder="会社名"
           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
         />

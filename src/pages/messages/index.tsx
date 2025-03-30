@@ -9,6 +9,11 @@ interface User {
   name: string;
 }
 
+interface ErrorResponse {
+  error: string;
+}
+
+
 const getApiUrl = (): string => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   if (!apiUrl) {
@@ -45,7 +50,7 @@ export default function Messages() {
         setMessages(response.data);
       } catch (err) {
         if (axios.isAxiosError(err)) {
-          const axiosError = err as AxiosError;
+          const axiosError = err as AxiosError<ErrorResponse>;
           setError(axiosError.response?.data?.error || 'メッセージの取得に失敗しました。');
         } else {
           setError('メッセージの取得中に予期しないエラーが発生しました。');
@@ -66,7 +71,7 @@ export default function Messages() {
       }
       acc[conversationId].push(message);
       return acc;
-    }, {});
+    }, {} as {[key: string]: Message[]}); // 初期値を型アサーションで指定
     setGroupedMessages(grouped);
   }, [messages]);
 

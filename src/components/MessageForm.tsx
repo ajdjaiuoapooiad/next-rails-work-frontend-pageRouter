@@ -4,7 +4,11 @@ import { Button } from './ui/button';
 
 interface MessageFormProps {
   onMessageSent: () => void;
-  receiverId: number | null; // receiverId をプロパティとして追加
+  receiverId: number | null | undefined; // receiverId をプロパティとして追加
+}
+
+interface ErrorResponse {
+  errors: string[];
 }
 
 export default function MessageForm({ onMessageSent, receiverId }: MessageFormProps) {
@@ -33,8 +37,12 @@ export default function MessageForm({ onMessageSent, receiverId }: MessageFormPr
       onMessageSent();
     } catch (err) {
       if (axios.isAxiosError(err)) {
-        const axiosError = err as AxiosError;
-        setError(axiosError.response?.data?.errors?.join(', ') || 'メッセージの送信に失敗しました。');
+        const axiosError = err as AxiosError<ErrorResponse>;
+        if (axiosError.response?.data && axiosError.response.data.errors) {
+          setError(axiosError.response.data.errors.join(', '));
+        } else {
+          setError('メッセージの送信に失敗しました。');
+        }
       } else {
         setError('メッセージの送信中に予期しないエラーが発生しました。');
       }
