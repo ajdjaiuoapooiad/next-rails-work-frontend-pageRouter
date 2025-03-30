@@ -39,10 +39,10 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialProfile, onSubmit, onE
           value={introduction}
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setIntroduction(e.target.value)}
           placeholder="自己紹介"
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+          className="mt-1 block w-full pb-96 py-5 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
         />
       </div>
-      <div>
+      <div >
         <label htmlFor="skills" className="block text-sm font-medium text-gray-700">
           スキル
         </label>
@@ -51,7 +51,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ initialProfile, onSubmit, onE
           value={skills}
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setSkills(e.target.value)}
           placeholder="スキル"
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+          className="mt-1 block w-full pb-52 py-5 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
         />
       </div>
       <div>
