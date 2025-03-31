@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Head from 'next/head';
+import Sidebar from '@/components/Sidebar';
+// Sidebarコンポーネントをインポート
 
 interface Job {
   id: number;
@@ -19,6 +21,7 @@ interface Job {
       user_icon: string;
     };
   };
+  created_at: string;
 }
 
 export default function Jobs() {
@@ -45,7 +48,8 @@ export default function Jobs() {
           const errorData = await response.json();
           throw new Error(errorData.message || '求人情報の取得に失敗しました');
         }
-        const data: Job[] = await response.json();
+        let data: Job[] = await response.json();
+        data.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
         setJobs(data);
       } catch (err: any) {
         setError(err.message || '求人情報の取得中にエラーが発生しました');
@@ -81,114 +85,24 @@ export default function Jobs() {
       </Head>
 
       <div className="grid grid-cols-4 gap-4 max-w-7xl mx-auto px-[150px]">
-        {/* サイドバー */}
-        <aside className="col-span-1">
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">
-              キーワード検索
-            </label>
-            <input
-              type="text"
-              placeholder="キーワードで検索"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-            />
-          </div>
-          <h2 className="text-lg font-semibold mb-4">フィルタ</h2>
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">場所</label>
-            <div className="flex flex-col">
-              <label className="inline-flex items-center">
-                <input type="checkbox" className="form-checkbox" />
-                <span className="ml-2">東京</span>
-              </label>
-              <label className="inline-flex items-center">
-                <input type="checkbox" className="form-checkbox" />
-                <span className="ml-2">大阪</span>
-              </label>
-              <label className="inline-flex items-center">
-                <input type="checkbox" className="form-checkbox" />
-                <span className="ml-2">福岡</span>
-              </label>
-            </div>
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">業界</label>
-            <select
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-              value={selectedIndustry}
-              onChange={(e) => setSelectedIndustry(e.target.value)}
-            >
-              <option value="">全て</option>
-              <option value="IT">IT</option>
-              <option value="Finance">金融</option>
-              <option value="Manufacturing">製造業</option>
-            </select>
-          </div>
-          {selectedIndustry && (
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">
-                カテゴリ
-              </label>
-              <div className="flex flex-col">
-                {industryCategories[selectedIndustry].map((category) => (
-                  <label key={category} className="inline-flex items-center">
-                    <input type="checkbox" className="form-checkbox" />
-                    <span className="ml-2">{category}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-          )}
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">
-              雇用形態
-            </label>
-            <select className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-              <option>全て</option>
-              <option>正社員</option>
-              <option>アルバイト</option>
-              <option>インターン</option>
-            </select>
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">特徴</label>
-            <div className="flex flex-col">
-              <label className="inline-flex items-center">
-                <input type="checkbox" className="form-checkbox" />
-                <span className="ml-2">学生さん歓迎</span>
-              </label>
-              <label className="inline-flex items-center">
-                <input type="checkbox" className="form-checkbox" />
-                <span className="ml-2">昼食おごります</span>
-              </label>
-              <label className="inline-flex items-center">
-                <input type="checkbox" className="form-checkbox" />
-                <span className="ml-2">服装自由</span>
-              </label>
-            </div>
-          </div>
-        </aside>
+        <Sidebar
+          selectedIndustry={selectedIndustry}
+          setSelectedIndustry={setSelectedIndustry}
+          industryCategories={industryCategories}
+        />
 
-         {/* 求人情報リスト */}
-         <div className="col-span-3">
+        <div className="col-span-3">
           <h1 className="text-3xl font-bold mb-6 text-gray-800">求人一覧</h1>
           {jobs.map((job) => {
-            const defaultUserIcon = 'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png'; // デフォルト画像のURL
-
+            const defaultUserIcon = 'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png';
             const user = job.user || { name: 'デフォルトユーザー' };
 
             return (
-              <div
-                key={job.id}
-                className="bg-white rounded-lg shadow-md p-4 mb-4"
-              >
+              <div key={job.id} className="bg-white rounded-lg shadow-md p-4 mb-4">
                 <Link href={`/jobs/${job.id}`}>
                   <div>
                     <img
-                      src={
-                        job.image_url ||
-                        'https://images.wantedly.com/i/fzq897n?w=1960&format=jpeg'
-                      }
+                      src={job.image_url || 'https://images.wantedly.com/i/fzq897n?w=1960&format=jpeg'}
                       alt={job.title}
                       className="w-full h-[250px] object-cover rounded-md mb-2"
                     />
@@ -196,9 +110,7 @@ export default function Jobs() {
                       {job.title}
                     </h2>
                     <p className="text-gray-800 text-sm">
-                      {job.description.length > 150
-                        ? `${job.description.substring(0, 150)}...`
-                        : job.description}
+                      {job.description.length > 150 ? `${job.description.substring(0, 150)}...` : job.description}
                     </p>
                     <div className="flex items-center mt-2">
                       <img
