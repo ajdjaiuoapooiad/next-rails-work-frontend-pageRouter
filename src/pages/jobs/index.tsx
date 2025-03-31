@@ -3,7 +3,6 @@ import Link from 'next/link';
 import Head from 'next/head';
 import Sidebar from '@/components/Sidebar';
 
-
 interface Job {
   id: number;
   title: string;
@@ -84,16 +83,16 @@ export default function Jobs() {
         <link rel="icon" href="/images/logo2.svg" />
       </Head>
 
-      <div className="grid grid-cols-4 gap-4 max-w-7xl mx-auto px-[150px]">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 max-w-7xl mx-auto px-4 md:px-[150px]">
         <Sidebar
           selectedIndustry={selectedIndustry}
           setSelectedIndustry={setSelectedIndustry}
           industryCategories={industryCategories}
         />
 
-        <div className="col-span-3">
+        <div className="md:col-span-3">
           <h1 className="text-3xl font-bold mb-6 text-gray-800">求人一覧</h1>
-          <p className="text-sm text-gray-600 mb-4">{jobs.length}件の求人</p> {/* 件数を表示 */}
+          <p className="text-sm text-gray-600 mb-4">{jobs.length}件の求人</p>
           {jobs.map((job) => {
             const defaultUserIcon = 'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png';
             const user = job.user || { name: 'デフォルトユーザー' };
@@ -105,7 +104,7 @@ export default function Jobs() {
                     <img
                       src={job.image_url || 'https://images.wantedly.com/i/fzq897n?w=1960&format=jpeg'}
                       alt={job.title}
-                      className="w-full h-[250px] object-cover rounded-md mb-2"
+                      className="w-full h-64 object-cover rounded-md mb-2"
                     />
                     <h2 className="text-lg font-semibold mb-1 text-blue-600 hover:underline cursor-pointer">
                       {job.title}
