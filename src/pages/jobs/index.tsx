@@ -19,6 +19,13 @@ export default function Jobs() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedIndustry, setSelectedIndustry] = useState('');
+
+  const industryCategories = {
+    IT: ['エンジニア', 'デザイナー', 'マーケター', 'プロジェクトマネージャー'],
+    Finance: ['アナリスト', 'トレーダー', 'コンサルタント', '会計士'],
+    Manufacturing: ['生産管理', '品質管理', '研究開発', '設計'],
+  };
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -67,11 +74,69 @@ export default function Jobs() {
         <link rel="icon" href="/images/logo2.svg" />
       </Head>
 
-      <div className="grid grid-cols-4 gap-4 max-w-7xl mx-auto px-[150px]"> {/* 左右の余白を調整 */}
+      <div className="grid grid-cols-4 gap-4 max-w-7xl mx-auto px-[150px]">
         {/* サイドバー */}
         <aside className="col-span-1">
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">キーワード検索</label>
+            <input
+              type="text"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+            />
+          </div>
           <h2 className="text-lg font-semibold mb-4">フィルタ</h2>
-          {/* フィルタリング機能などを追加 */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">場所</label>
+            <div className="flex flex-col">
+              <label className="inline-flex items-center">
+                <input type="checkbox" className="form-checkbox" />
+                <span className="ml-2">東京</span>
+              </label>
+              <label className="inline-flex items-center">
+                <input type="checkbox" className="form-checkbox" />
+                <span className="ml-2">大阪</span>
+              </label>
+              <label className="inline-flex items-center">
+                <input type="checkbox" className="form-checkbox" />
+                <span className="ml-2">福岡</span>
+              </label>
+            </div>
+          </div>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">業界</label>
+            <select
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+              value={selectedIndustry}
+              onChange={(e) => setSelectedIndustry(e.target.value)}
+            >
+              <option value="">全て</option>
+              <option value="IT">IT</option>
+              <option value="Finance">金融</option>
+              <option value="Manufacturing">製造業</option>
+            </select>
+          </div>
+          {selectedIndustry && (
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700">カテゴリ</label>
+              <div className="flex flex-col">
+                {industryCategories[selectedIndustry].map((category) => (
+                  <label key={category} className="inline-flex items-center">
+                    <input type="checkbox" className="form-checkbox" />
+                    <span className="ml-2">{category}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">雇用形態</label>
+            <select className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+              <option>全て</option>
+              <option>正社員</option>
+              <option>アルバイト</option>
+              <option>インターン</option>
+            </select>
+          </div>
         </aside>
 
         {/* 求人情報リスト */}
@@ -93,7 +158,7 @@ export default function Jobs() {
                     {job.title}
                   </h2>
                   <p className="text-gray-800 text-sm">
-                    {job.description.length > 50
+                    {job.description.length > 150
                       ? `${job.description.substring(0, 150)}...`
                       : job.description}
                   </p>
