@@ -2,7 +2,6 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
-// スライドの型定義
 interface Slide {
   image: string;
   title: string;
@@ -38,9 +37,8 @@ export default function Home() {
   };
 
   useEffect(() => {
-    const interval = setInterval(nextSlide, 5000); // 5秒ごとにスライドを切り替え
-
-    return () => clearInterval(interval); // コンポーネントのアンマウント時にintervalをクリア
+    const interval = setInterval(nextSlide, 5000);
+    return () => clearInterval(interval);
   }, [slides.length]);
 
   return (
@@ -49,10 +47,6 @@ export default function Home() {
         <title>インターンマッチングアプリ</title>
         <link rel="icon" href="/images/logo2.svg" />
       </Head>
-
-
-
-
 
       {/* ヒーローセクション */}
       <section
@@ -63,32 +57,28 @@ export default function Home() {
           backgroundPosition: 'center',
         }}
       >
-        <div className="absolute inset-0 bg-black opacity-50"></div> {/* 背景画像のオーバーレイ */}
-        <div className="relative z-10 p-6"> {/* z-index を使用してテキストを前面に表示 */}
-          <h1 className="text-4xl font-bold mb-4">
-            未来を切り拓く、インターンシップ
-          </h1>
-          <p className="text-lg text-gray-200 mb-8">
-            インターン生と企業を繋ぎ、新たな可能性を広げます。
-          </p>
-          <div className="flex justify-center mb-8">
+        <div className="absolute inset-0 bg-black opacity-50"></div>
+        <div className="relative z-10 p-6">
+          <h1 className="text-4xl font-bold mb-4">未来を切り拓く、インターンシップ</h1>
+          <p className="text-lg text-gray-200 mb-8">インターン生と企業を繋ぎ、新たな可能性を広げます。</p>
+          <div className="flex flex-col sm:flex-row justify-center mb-8">
             <input
               type="text"
               placeholder="キーワードで検索"
-              className="border border-gray-300 rounded-l-md py-3 px-4 w-full md:w-1/2 focus:ring focus:ring-indigo-200 text-black" // テキストの色を黒に変更
+              className="border border-gray-300 rounded-l-md py-3 px-4 w-full sm:w-1/2 focus:ring focus:ring-indigo-200 text-black"
             />
-            <button className="bg-indigo-600 text-white py-3 px-6 rounded-r-md hover:bg-indigo-700">検索</button>
+            <button className="bg-indigo-600 text-white py-3 px-6 rounded-r-md hover:bg-indigo-700 w-full sm:w-auto mt-2 sm:mt-0">検索</button>
           </div>
-          <div className="flex justify-center space-x-4">
+          <div className="flex flex-col sm:flex-row justify-center space-x-4">
             <Link
               href="/users/register"
-              className="bg-indigo-600 text-white py-3 px-6 rounded hover:bg-indigo-700 transition duration-300"
+              className="bg-indigo-600 text-white py-3 px-6 rounded hover:bg-indigo-700 transition duration-300 w-full sm:w-auto mb-2 sm:mb-0"
             >
               インターン生の方はこちら
             </Link>
             <Link
               href="/users/register"
-              className="bg-teal-500 text-white py-3 px-6 rounded hover:bg-teal-600 transition duration-300"
+              className="bg-teal-500 text-white py-3 px-6 rounded hover:bg-teal-600 transition duration-300 w-full sm:w-auto"
             >
               企業の方はこちら
             </Link>
@@ -102,22 +92,20 @@ export default function Home() {
           <h2 className="text-3xl font-bold text-indigo-700 mb-8 text-center">注目のインターンシップ</h2>
           <div className="relative overflow-hidden">
             <div className="flex transition-transform duration-500" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
-              {/* スライドアイテム */}
               {slides.map((slide, index) => (
                 <div
                   key={index}
                   className="w-full flex-shrink-0 flex justify-center items-center"
                   style={{ width: '100%' }}
                 >
-                  <div className="w-4/5 bg-white rounded-lg shadow-md p-6" style={{ maxWidth: '800px' }}>
-                    <img src={slide.image} alt={`スライド${index + 1}`} className="w-full h-96 object-cover rounded-md mb-4" />
+                  <div className="w-full sm:w-4/5 bg-white rounded-lg shadow-md p-6" style={{ maxWidth: '800px' }}>
+                    <img src={slide.image} alt={`スライド${index + 1}`} className="w-full h-64 object-cover rounded-md mb-4" />
                     <h3 className="text-xl font-semibold mb-2">{slide.description}</h3>
                     <p className="text-gray-700">{slide.title}</p>
                   </div>
                 </div>
               ))}
             </div>
-            {/* スライドの点表示 */}
             <div className="flex justify-center mt-4">
               {slides.map((_, index) => (
                 <button
@@ -129,7 +117,6 @@ export default function Home() {
                 />
               ))}
             </div>
-            {/* スライドの横ボタン */}
             <div className="absolute top-1/2 transform -translate-y-1/2 w-full flex justify-between px-4">
               <button className="bg-gray-200 rounded-full p-2 hover:bg-gray-300" onClick={prevSlide}>＜</button>
               <button className="bg-gray-200 rounded-full p-2 hover:bg-gray-300" onClick={nextSlide}>＞</button>
@@ -144,13 +131,13 @@ export default function Home() {
           <h2 className="text-3xl font-bold text-indigo-700 mb-8">インターン生向け</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center justify-center">
-              <img src="/images/hero2.svg" alt="求人画像" className="" width="200" height="150" />
+              <img src="/images/hero2.svg" alt="求人画像" className="h-48" />
               <h3 className="text-xl font-semibold mb-4">おすすめ求人</h3>
               <p className="text-gray-700">あなたのスキルを活かせるインターンシップを見つけよう。</p>
               <Link href="/jobs" className="text-indigo-600 hover:underline">求人一覧を見る</Link>
             </div>
             <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center justify-center">
-              <img src="/images/hero.svg" alt="体験談画像" className="" width="200" height="150" />
+              <img src="/images/hero.svg" alt="体験談画像" className="h-48" />
               <h3 className="text-xl font-semibold mb-4">インターン体験談</h3>
               <p className="text-gray-700">実際にインターンシップに参加した先輩の声を聞いてみよう。</p>
               <Link href="/jobs" className="text-indigo-600 hover:underline">体験談を読む</Link>
@@ -159,7 +146,6 @@ export default function Home() {
           <div className="mt-8 text-center">
             <Link href="/register" className="bg-indigo-600 text-white py-3 px-6 rounded hover:bg-indigo-700 transition duration-300">今すぐ登録</Link>
           </div>
-          {/* インターンシップのメリットセクション */}
           <div className="mt-16">
             <h3 className="text-2xl font-bold text-indigo-700 mb-4">インターンシップのメリット</h3>
             <ul className="list-disc list-inside text-gray-700">
@@ -169,7 +155,6 @@ export default function Home() {
               <li>人脈が広がる</li>
             </ul>
           </div>
-          {/* インターンシップ参加の流れセクション */}
           <div className="mt-16">
             <h3 className="text-2xl font-bold text-indigo-700 mb-4">インターンシップ参加の流れ</h3>
             <ol className="list-decimal list-inside text-gray-700">
@@ -189,13 +174,13 @@ export default function Home() {
           <h2 className="text-3xl font-bold text-indigo-700 mb-8">企業向け</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center justify-center">
-              <img src="/images/hero4.svg" alt="メリット画像" className="" width="200" height="150" />
+              <img src="/images/hero4.svg" alt="メリット画像" className="h-48" />
               <h3 className="text-xl font-semibold mb-4">求人掲載のメリット</h3>
               <p className="text-gray-700">優秀なインターン生をスカウトし、企業の成長を加速させましょう。</p>
               <Link href="/jobs" className="text-indigo-600 hover:underline">メリットを見る</Link>
             </div>
             <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center justify-center">
-              <img src="/images/hero3.svg" alt="導入事例画像" className="" width="200" height="150" />
+              <img src="/images/hero3.svg" alt="導入事例画像" className="h-48" />
               <h3 className="text-xl font-semibold mb-4">導入事例</h3>
               <p className="text-gray-700">実際にインターン生を採用した企業の事例をご紹介します。</p>
               <Link href="/jobs" className="text-indigo-600 hover:underline">事例を見る</Link>
@@ -204,7 +189,6 @@ export default function Home() {
           <div className="mt-8 text-center">
             <Link href="/register" className="bg-teal-500 text-white py-3 px-6 rounded hover:bg-teal-600 transition duration-300">求人を掲載する</Link>
           </div>
-          {/* インターンシップ受け入れのメリットセクション */}
           <div className="mt-16">
             <h3 className="text-2xl font-bold text-indigo-700 mb-4">インターンシップ受け入れのメリット</h3>
             <ul className="list-disc list-inside text-gray-700">
@@ -214,7 +198,6 @@ export default function Home() {
               <li>社員の育成につながる</li>
             </ul>
           </div>
-          {/* インターンシップ受け入れの流れセクション */}
           <div className="mt-16">
             <h3 className="text-2xl font-bold text-indigo-700 mb-4">インターンシップ受け入れの流れ</h3>
             <ol className="list-decimal list-inside text-gray-700">
