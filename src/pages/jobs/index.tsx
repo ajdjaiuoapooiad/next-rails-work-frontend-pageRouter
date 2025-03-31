@@ -81,6 +81,7 @@ export default function Jobs() {
             <label className="block text-sm font-medium text-gray-700">キーワード検索</label>
             <input
               type="text"
+              placeholder="キーワードで検索"
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             />
           </div>
@@ -136,6 +137,23 @@ export default function Jobs() {
               <option>アルバイト</option>
               <option>インターン</option>
             </select>
+          </div>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">特徴</label>
+            <div className="flex flex-col">
+              <label className="inline-flex items-center">
+                <input type="checkbox" className="form-checkbox" />
+                <span className="ml-2">学生さん歓迎</span>
+              </label>
+              <label className="inline-flex items-center">
+                <input type="checkbox" className="form-checkbox" />
+                <span className="ml-2">昼食おごります</span>
+              </label>
+              <label className="inline-flex items-center">
+                <input type="checkbox" className="form-checkbox" />
+                <span className="ml-2">服装自由</span>
+              </label>
+            </div>
           </div>
         </aside>
 
