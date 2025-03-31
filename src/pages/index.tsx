@@ -99,7 +99,7 @@ export default function Home() {
                   style={{ width: '100%' }}
                 >
                   <div className="w-full sm:w-4/5 bg-white rounded-lg shadow-md p-6" style={{ maxWidth: '800px' }}>
-                    <img src={slide.image} alt={`スライド${index + 1}`} className="w-full h-64 object-cover rounded-md mb-4" />
+                    <img src={slide.image} alt={`スライド${index + 1}`} className="w-full md:h-96 h-64 object-cover rounded-md mb-4" />
                     <h3 className="text-xl font-semibold mb-2">{slide.description}</h3>
                     <p className="text-gray-700">{slide.title}</p>
                   </div>
@@ -131,13 +131,13 @@ export default function Home() {
           <h2 className="text-3xl font-bold text-indigo-700 mb-8">インターン生向け</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center justify-center">
-              <img src="/images/hero2.svg" alt="求人画像" className="h-48" />
+              <img src="/images/hero2.svg" alt="求人画像" className="md:h-48 h-32" />
               <h3 className="text-xl font-semibold mb-4">おすすめ求人</h3>
               <p className="text-gray-700">あなたのスキルを活かせるインターンシップを見つけよう。</p>
               <Link href="/jobs" className="text-indigo-600 hover:underline">求人一覧を見る</Link>
             </div>
             <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center justify-center">
-              <img src="/images/hero.svg" alt="体験談画像" className="h-48" />
+              <img src="/images/hero.svg" alt="体験談画像" className="md:h-48 h-32" />
               <h3 className="text-xl font-semibold mb-4">インターン体験談</h3>
               <p className="text-gray-700">実際にインターンシップに参加した先輩の声を聞いてみよう。</p>
               <Link href="/jobs" className="text-indigo-600 hover:underline">体験談を読む</Link>
@@ -174,13 +174,13 @@ export default function Home() {
           <h2 className="text-3xl font-bold text-indigo-700 mb-8">企業向け</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center justify-center">
-              <img src="/images/hero4.svg" alt="メリット画像" className="h-48" />
+              <img src="/images/hero4.svg" alt="メリット画像" className="md:h-48 h-32" />
               <h3 className="text-xl font-semibold mb-4">求人掲載のメリット</h3>
               <p className="text-gray-700">優秀なインターン生をスカウトし、企業の成長を加速させましょう。</p>
               <Link href="/jobs" className="text-indigo-600 hover:underline">メリットを見る</Link>
             </div>
             <div className="bg-white rounded-lg shadow-md p-6 flex flex-col items-center justify-center">
-              <img src="/images/hero3.svg" alt="導入事例画像" className="h-48" />
+              <img src="/images/hero3.svg" alt="導入事例画像" className="md:h-48 h-32" />
               <h3 className="text-xl font-semibold mb-4">導入事例</h3>
               <p className="text-gray-700">実際にインターン生を採用した企業の事例をご紹介します。</p>
               <Link href="/jobs" className="text-indigo-600 hover:underline">事例を見る</Link>
