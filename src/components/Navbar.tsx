@@ -1,15 +1,16 @@
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { ChevronDownIcon } from '@heroicons/react/solid';
 import { useRouter } from 'next/router';
+import { FaPlus, FaEnvelope, FaListAlt } from 'react-icons/fa';
 
 interface User {
   id: number;
   user_type: string;
   profile?: {
     user_icon_url?: string;
-    bg_image_url?: string; // 背景画像URLを追加
+    bg_image_url?: string;
   };
 }
 
@@ -20,8 +21,9 @@ const Navbar = () => {
   const [userType, setUserType] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [userIconUrl, setUserIconUrl] = useState<string | null>(null);
-  const [bgImageUrl, setBgImageUrl] = useState<string | null>(null); // 背景画像URLの状態を追加
+  const [bgImageUrl, setBgImageUrl] = useState<string | null>(null);
   const router = useRouter();
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -44,15 +46,28 @@ const Navbar = () => {
           setUsername(response.data.name);
           setUserType(response.data.user_type);
           setUserIconUrl(response.data.profile?.user_icon_url || 'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png');
-          setBgImageUrl(response.data.profile?.bg_image_url || null); // 背景画像URLを設定
+          setBgImageUrl(response.data.profile?.bg_image_url || null);
         })
         .catch((error) => {
           console.error('ユーザー情報の取得に失敗しました:', error);
           setUserIconUrl('https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png');
-          setBgImageUrl(null); // 背景画像URLをnullに設定
+          setBgImageUrl(null);
         });
     }
   }, [userId]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('authToken');
@@ -79,23 +94,30 @@ const Navbar = () => {
           {isLoggedIn ? (
             <>
               {userType === 'company' && (
-                <Link href="/jobs/create" className="text-gray-200 hover:text-white transition-colors duration-300">
-                  求人作成
+                <Link href="/jobs/create" className="text-gray-200 hover:text-white transition-colors duration-300 flex items-center">
+                  <FaPlus className="mr-1" /> 求人作成
                 </Link>
               )}
-              <Link href="/messages" className="text-gray-200 hover:text-white transition-colors duration-300">
-                通知
+              <Link href="/messages" className="text-gray-200 hover:text-white transition-colors duration-300 flex items-center">
+                <FaEnvelope className="mr-1" /> 通知
               </Link>
-              <div className="relative">
+              <div className="relative" ref={dropdownRef}>
                 <button
                   className="flex items-center space-x-2 text-gray-200 hover:text-white transition-colors duration-300"
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 >
-                  {username && (
-                    <p className="text-white">
-                      {username.length > 5 ? `${username.substring(0, 5)}...` : username}
-                    </p>
-                  )}
+                  <div className="flex flex-col items-center">
+                    {userType && (
+                      <span className="text-xs text-gray-300">
+                        {userType === 'company' ? '企業' : '学生'}
+                      </span>
+                    )}
+                    {username && (
+                      <p className="text-white">
+                        {username.length > 5 ? `${username.substring(0, 5)}...` : username}
+                      </p>
+                    )}
+                  </div>
                   <div className="rounded-full h-10 w-10 bg-gray-300 flex items-center justify-center overflow-hidden">
                     <img
                       src={userIconUrl}
