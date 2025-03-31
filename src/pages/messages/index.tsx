@@ -116,7 +116,7 @@ export default function Messages() {
       <Head>
         <title>メッセージ一覧ページ</title>
       </Head>
-      <aside className="w-1/4 border-r p-4 bg-white shadow-md hidden sm:block"> {/* sm:blockで中サイズ以上の画面で表示 */}
+      <aside className="w-1/4 border-r p-4 bg-white shadow-md sm:block pd:w-full pd:block">
         <h2 className="text-lg font-semibold mb-4">会話一覧</h2>
         <ul className="space-y-2">
           {Object.keys(groupedMessages).map((conversationId) => {
@@ -151,7 +151,7 @@ export default function Messages() {
         </ul>
       </aside>
 
-      <main className="flex-1 p-4"> {/* flex-1で残りの領域を使用 */}
+      <main className={`flex-1 p-4 ${selectedConversation ? 'block' : 'hidden'}`}>
         {selectedConversation ? (
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-lg font-semibold mb-4">メッセージ詳細</h2>
@@ -160,7 +160,7 @@ export default function Messages() {
                 const isFirstMessage = index === 0 || array[index - 1].senderId !== message.senderId;
                 return (
                   <div key={message.createdAt} className={`flex ${message.isCurrentUser ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`p-4 rounded-lg ${message.isCurrentUser ? 'bg-blue-100' : 'bg-gray-50'} max-w-2/3`}> {/* max-w-2/3で最大幅を制限 */}
+                    <div className={`p-4 rounded-lg ${message.isCurrentUser ? 'bg-blue-100' : 'bg-gray-50'} max-w-2/3`}>
                       {isFirstMessage && <p className="text-sm font-semibold">{message.isCurrentUser ? 'あなた' : users[message.senderId]?.name || '不明なユーザー'}</p>}
                       <p className="text-base leading-relaxed">{message.content}</p>
                       <p className="text-xs text-gray-400">{new Date(message.createdAt).toLocaleString()}</p>
