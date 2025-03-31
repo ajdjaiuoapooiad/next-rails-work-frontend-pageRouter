@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
+import { FaHeart, FaRegHeart } from 'react-icons/fa';
 
 interface Job {
   id: number;
@@ -21,6 +22,7 @@ export default function JobDetail() {
   const [job, setJob] = useState<Job | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isLiked, setIsLiked] = useState<boolean>(false);
 
   useEffect(() => {
     if (!id) return;
@@ -83,6 +85,10 @@ export default function JobDetail() {
     }
   };
 
+  const handleLike = () => {
+    setIsLiked(!isLiked);
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -107,9 +113,14 @@ export default function JobDetail() {
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded shadow-md w-9/10 max-w-6xl">
         <h1 className="text-3xl font-bold mb-6 text-center">{job.title}</h1>
+        <div className="flex justify-end mb-4">
+          <button onClick={handleLike} className="text-2xl text-red-500">
+            {isLiked ? <FaHeart /> : <FaRegHeart />}
+          </button>
+        </div>
         <div className="flex justify-center mb-8">
           <img
-            src={'https://images.wantedly.com/i/jtLvrG6?w=800&format=jpeg'}
+            src={job.image_url || 'https://images.wantedly.com/i/jtLvrG6?w=800&format=jpeg'}
             alt="Job Image"
             className="rounded-md w-full"
             style={{ height: '400px', objectFit: 'cover' }}
