@@ -9,6 +9,7 @@ interface User {
   user_type: string;
   profile?: {
     user_icon_url?: string;
+    bg_image_url?: string; // 背景画像URLを追加
   };
 }
 
@@ -19,6 +20,7 @@ const Navbar = () => {
   const [userType, setUserType] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [userIconUrl, setUserIconUrl] = useState<string | null>(null);
+  const [bgImageUrl, setBgImageUrl] = useState<string | null>(null); // 背景画像URLの状態を追加
   const router = useRouter();
 
   useEffect(() => {
@@ -41,10 +43,13 @@ const Navbar = () => {
         .then((response) => {
           setUsername(response.data.name);
           setUserType(response.data.user_type);
-          setUserIconUrl(response.data.profile?.user_icon_url || null);
+          setUserIconUrl(response.data.profile?.user_icon_url || 'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png');
+          setBgImageUrl(response.data.profile?.bg_image_url || null); // 背景画像URLを設定
         })
         .catch((error) => {
           console.error('ユーザー情報の取得に失敗しました:', error);
+          setUserIconUrl('https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png');
+          setBgImageUrl(null); // 背景画像URLをnullに設定
         });
     }
   }, [userId]);
@@ -93,7 +98,7 @@ const Navbar = () => {
                   )}
                   <div className="rounded-full h-10 w-10 bg-gray-300 flex items-center justify-center overflow-hidden">
                     <img
-                      src={userIconUrl || 'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png'}
+                      src={userIconUrl}
                       alt="User Icon"
                       className="h-full w-full object-cover"
                     />
