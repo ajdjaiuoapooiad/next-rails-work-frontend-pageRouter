@@ -10,6 +10,7 @@ interface Job {
   requirements: string;
   benefits: string;
   employment_type: string;
+  image: string | null;
 }
 
 export default function JobEdit() {
@@ -24,6 +25,8 @@ export default function JobEdit() {
   const [employmentType, setEmploymentType] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [image, setImage] = useState<File | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -53,6 +56,7 @@ export default function JobEdit() {
         setRequirements(data.requirements);
         setBenefits(data.benefits);
         setEmploymentType(data.employment_type);
+        setPreviewImage(data.image);
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -63,30 +67,46 @@ export default function JobEdit() {
     fetchJob();
   }, [id]);
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    setLoading(true);
+    setError(null);
     try {
       const token = localStorage.getItem('authToken');
       const apiUrl = process.env.NEXT_PUBLIC_API_URL;
       if (!apiUrl) {
         throw new Error('API URLが設定されていません。');
       }
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('description', description);
+      formData.append('location', location);
+      formData.append('salary', salary !== null ? salary.toString() : '');
+      formData.append('requirements', requirements);
+      formData.append('benefits', benefits);
+      formData.append('employment_type', employmentType);
+      if (image) {
+        formData.append('image', image);
+      }
+
       const response = await fetch(`${apiUrl}/jobs/${id}`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          title,
-          description,
-          location,
-          salary,
-          requirements,
-          benefits,
-          employment_type: employmentType,
-        }),
+        body: formData,
       });
 
       if (!response.ok) {
@@ -97,6 +117,8 @@ export default function JobEdit() {
       router.push('/jobs');
     } catch (err: any) {
       setError(err.message || '求人情報の更新中にエラーが発生しました');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -111,21 +133,23 @@ export default function JobEdit() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">タイトル</label>
+            <label className="block text-sm font-medium text-gray-700">タイトル<span className="text-red-500">*</span></label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className="mt-1 py-3 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">場所</label>
+            <label className="block text-sm font-medium text-gray-700">場所<span className="text-red-500">*</span></label>
             <input
               type="text"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
               className="mt-1 py-3 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              required
             />
           </div>
           <div>
@@ -138,22 +162,24 @@ export default function JobEdit() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">雇用形態</label>
+            <label className="block text-sm font-medium text-gray-700">雇用形態<span className="text-red-500">*</span></label>
             <input
               type="text"
               value={employmentType}
               onChange={(e) => setEmploymentType(e.target.value)}
               className="mt-1 py-3 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              required
             />
           </div>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700">説明</label>
+          <label className="block text-sm font-medium text-gray-700">説明<span className="text-red-500">*</span></label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             rows={8}
+            required
           />
         </div>
         <div>
@@ -173,6 +199,18 @@ export default function JobEdit() {
             className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             rows={5}
           />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">画像</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="mt-1 block w-full"
+          />
+          {previewImage && (
+            <img src={previewImage} alt="Preview" className="mt-2 max-w-full max-h-48" />
+          )}
         </div>
         <button
           type="submit"
