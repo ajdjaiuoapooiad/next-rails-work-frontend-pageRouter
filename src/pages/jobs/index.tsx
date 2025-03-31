@@ -28,6 +28,10 @@ export default function Jobs() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedIndustry, setSelectedIndustry] = useState('');
+  const [selectedLocation, setSelectedLocation] = useState<string[]>([]);
+  const [selectedEmploymentType, setSelectedEmploymentType] = useState('');
+  const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
+  const [keyword, setKeyword] = useState('');
 
   const industryCategories = {
     IT: ['エンジニア', 'デザイナー', 'マーケター', 'プロジェクトマネージャー'],
@@ -60,6 +64,16 @@ export default function Jobs() {
     fetchJobs();
   }, []);
 
+  const filteredJobs = jobs.filter((job) => {
+    const locationMatch = selectedLocation.length === 0 || selectedLocation.includes(job.location);
+    const industryMatch = !selectedIndustry || industryCategories[selectedIndustry].includes(job.title);
+    const employmentTypeMatch = !selectedEmploymentType || job.employment_type === selectedEmploymentType;
+    const featuresMatch = selectedFeatures.length === 0 || selectedFeatures.every((feature) => job.benefits.includes(feature));
+    const keywordMatch = !keyword || job.title.toLowerCase().includes(keyword.toLowerCase()) || job.description.toLowerCase().includes(keyword.toLowerCase());
+
+    return locationMatch && industryMatch && employmentTypeMatch && featuresMatch && keywordMatch;
+  });
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -83,17 +97,25 @@ export default function Jobs() {
         <link rel="icon" href="/images/logo2.svg" />
       </Head>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 max-w-7xl mx-auto px-4 md:px-[150px]">
+      <div className="grid grid-cols-4 gap-4 max-w-7xl mx-auto px-[150px]">
         <Sidebar
           selectedIndustry={selectedIndustry}
           setSelectedIndustry={setSelectedIndustry}
           industryCategories={industryCategories}
+          selectedLocation={selectedLocation}
+          setSelectedLocation={setSelectedLocation}
+          selectedEmploymentType={selectedEmploymentType}
+          setSelectedEmploymentType={setSelectedEmploymentType}
+          selectedFeatures={selectedFeatures}
+          setSelectedFeatures={setSelectedFeatures}
+          keyword={keyword}
+          setKeyword={setKeyword}
         />
 
-        <div className="md:col-span-3">
+        <div className="col-span-3">
           <h1 className="text-3xl font-bold mb-6 text-gray-800">求人一覧</h1>
-          <p className="text-sm text-gray-600 mb-4">{jobs.length}件の求人</p>
-          {jobs.map((job) => {
+          <p className="text-sm text-gray-600 mb-4">{filteredJobs.length}件の求人</p>
+          {filteredJobs.map((job) => {
             const defaultUserIcon = 'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png';
             const user = job.user || { name: 'デフォルトユーザー' };
 
@@ -104,7 +126,7 @@ export default function Jobs() {
                     <img
                       src={job.image_url || 'https://images.wantedly.com/i/fzq897n?w=1960&format=jpeg'}
                       alt={job.title}
-                      className="w-full h-64 object-cover rounded-md mb-2"
+                      className="w-full h-[250px] object-cover rounded-md mb-2"
                     />
                     <h2 className="text-lg font-semibold mb-1 text-blue-600 hover:underline cursor-pointer">
                       {job.title}
