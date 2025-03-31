@@ -85,7 +85,7 @@ export default function Jobs() {
               <Link href={`/jobs/${job.id}`}>
                 <div>
                   <img
-                    src={job.image_url || 'https://images.wantedly.com/i/icmkDj4?w=1960&format=jpeg'}
+                    src={job.image_url || 'https://images.wantedly.com/i/fzq897n?w=1960&format=jpeg'}
                     alt={job.title}
                     className="w-full h-[250px] object-cover rounded-md mb-2"
                   />
