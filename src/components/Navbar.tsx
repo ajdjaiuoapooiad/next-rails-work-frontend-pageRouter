@@ -7,6 +7,9 @@ import { useRouter } from 'next/router';
 interface User {
   id: number;
   user_type: string;
+  profile?: {
+    user_icon_url?: string;
+  };
 }
 
 const Navbar = () => {
@@ -15,6 +18,7 @@ const Navbar = () => {
   const [username, setUsername] = useState<string | null>(null);
   const [userType, setUserType] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
+  const [userIconUrl, setUserIconUrl] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -33,10 +37,11 @@ const Navbar = () => {
         throw new Error('API URLが設定されていません。');
       }
       axios
-        .get(`${apiUrl}/users/show_by_id/${userId}`)
+        .get<User>(`${apiUrl}/users/show_by_id/${userId}`)
         .then((response) => {
           setUsername(response.data.name);
           setUserType(response.data.user_type);
+          setUserIconUrl(response.data.profile?.user_icon_url || null);
         })
         .catch((error) => {
           console.error('ユーザー情報の取得に失敗しました:', error);
@@ -58,8 +63,8 @@ const Navbar = () => {
   return (
     <nav className="bg-gradient-to-r from-cyan-500 to-indigo-600 shadow-md">
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-        <Link href="/jobs" className="text-2xl font-extrabold text-white tracking-wide flex items-center"> {/* flexを追加 */}
-          <img src="/images/logo2.svg" className="w-10 h-10 mr-2" alt="ロゴ" /> {/* mr-2でアイコンと文字の間にスペースを追加 */}
+        <Link href="/jobs" className="text-2xl font-extrabold text-white tracking-wide flex items-center">
+          <img src="/images/logo2.svg" className="w-10 h-10 mr-2" alt="ロゴ" />
           インターンマッチングアプリ
         </Link>
         <div className="flex items-center space-x-6">
@@ -88,7 +93,7 @@ const Navbar = () => {
                   )}
                   <div className="rounded-full h-10 w-10 bg-gray-300 flex items-center justify-center overflow-hidden">
                     <img
-                      src={'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png'}
+                      src={userIconUrl || 'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png'}
                       alt="User Icon"
                       className="h-full w-full object-cover"
                     />
