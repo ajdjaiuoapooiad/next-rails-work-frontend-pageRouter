@@ -5,7 +5,7 @@ interface User {
   id: number;
   name: string;
   email: string;
-  user_type: string; // user_type を文字列で受け取る
+  user_type: string;
 }
 
 export default function UserEdit() {
@@ -16,7 +16,7 @@ export default function UserEdit() {
   const [error, setError] = useState<string | null>(null);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [userType, setUserType] = useState<string>('student'); // userType を文字列で管理
+  const [userType, setUserType] = useState<string>('student');
 
   useEffect(() => {
     if (!id) return;
@@ -68,7 +68,7 @@ export default function UserEdit() {
         body: JSON.stringify({
           name,
           email,
-          user_type: userType === 'student' ? 0 : 1, // 数値に変換して送信
+          user_type: userType === 'student' ? 0 : 1,
         }),
       });
       if (!response.ok) {
@@ -93,11 +93,11 @@ export default function UserEdit() {
   }
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 max-w-3xl">
       <h1 className="text-3xl font-bold mb-6">ユーザー編集</h1>
       {error && <p className="text-red-500">{error}</p>}
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
+        <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">名前</label>
           <input
             type="text"
@@ -106,7 +106,7 @@ export default function UserEdit() {
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
           />
         </div>
-        <div>
+        <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">メールアドレス</label>
           <input
             type="email"
@@ -115,10 +115,10 @@ export default function UserEdit() {
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
           />
         </div>
-        <div>
+        <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">ユーザータイプ</label>
           <select
-            value={userType} // 文字列で管理
+            value={userType}
             onChange={(e) => setUserType(e.target.value)}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
           >
@@ -128,7 +128,7 @@ export default function UserEdit() {
         </div>
         <button
           type="submit"
-          className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 w-full sm:w-auto"
         >
           更新
         </button>
