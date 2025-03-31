@@ -67,47 +67,41 @@ export default function Jobs() {
         <link rel="icon" href="/images/logo2.svg" />
       </Head>
 
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">求人一覧</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {jobs.map((job) => (
-          <div
-            key={job.id}
-            className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300"
-          >
-            <Link href={`/jobs/${job.id}`}>
-              <div className="mb-4">
-                <img
-                  src={job.image_url || 'https://images.wantedly.com/i/icmkDj4?w=1960&format=jpeg'} // デフォルト画像を設定
-                  alt={job.title}
-                  className="w-full h-48 object-cover rounded-md mb-2"
-                />
-                <h2 className="text-xl font-semibold mb-1 text-blue-600 hover:underline cursor-pointer">
-                  {job.title}
-                </h2>
-                <p className="text-gray-800 text-sm">
-                  {job.description.length > 50
-                    ? `${job.description.substring(0, 50)}...`
-                    : job.description}
-                </p>
-              </div>
-            </Link>
-            {job.location && (
-              <p className="text-gray-700 mb-2">
-                <span className="font-semibold">場所:</span> {job.location}
-              </p>
-            )}
-            {job.salary && (
-              <p className="text-gray-700 mb-2">
-                <span className="font-semibold">時給:</span> {job.salary} 円
-              </p>
-            )}
-            {job.employment_type && (
-              <p className="text-gray-700 mb-2">
-                <span className="font-semibold">雇用形態:</span> {job.employment_type}
-              </p>
-            )}
-          </div>
-        ))}
+      <div className="grid grid-cols-4 gap-4 max-w-7xl mx-auto px-[150px]"> {/* 左右の余白を調整 */}
+        {/* サイドバー */}
+        <aside className="col-span-1">
+          <h2 className="text-lg font-semibold mb-4">フィルタ</h2>
+          {/* フィルタリング機能などを追加 */}
+        </aside>
+
+        {/* 求人情報リスト */}
+        <div className="col-span-3">
+          <h1 className="text-3xl font-bold mb-6 text-gray-800">求人一覧</h1>
+          {jobs.map((job) => (
+            <div
+              key={job.id}
+              className="bg-white rounded-lg shadow-md p-4 mb-4"
+            >
+              <Link href={`/jobs/${job.id}`}>
+                <div>
+                  <img
+                    src={job.image_url || 'https://images.wantedly.com/i/icmkDj4?w=1960&format=jpeg'}
+                    alt={job.title}
+                    className="w-full h-[250px] object-cover rounded-md mb-2"
+                  />
+                  <h2 className="text-lg font-semibold mb-1 text-blue-600 hover:underline cursor-pointer">
+                    {job.title}
+                  </h2>
+                  <p className="text-gray-800 text-sm">
+                    {job.description.length > 50
+                      ? `${job.description.substring(0, 50)}...`
+                      : job.description}
+                  </p>
+                </div>
+              </Link>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
