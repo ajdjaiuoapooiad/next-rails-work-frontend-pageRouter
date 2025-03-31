@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import Head from 'next/head';
 
 interface Job {
@@ -13,13 +12,13 @@ interface Job {
   requirements: string;
   benefits: string;
   employment_type: string;
+  image_url?: string;
 }
 
 export default function Jobs() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -76,9 +75,21 @@ export default function Jobs() {
             className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300"
           >
             <Link href={`/jobs/${job.id}`}>
-              <h2 className="text-xl font-semibold mb-3 text-blue-600 hover:underline cursor-pointer">
-                {job.title}
-              </h2>
+              <div className="mb-4">
+                <img
+                  src={job.image_url || '/images/default-job.png'} // デフォルト画像を設定
+                  alt={job.title}
+                  className="w-full h-48 object-cover rounded-md mb-2"
+                />
+                <h2 className="text-xl font-semibold mb-1 text-blue-600 hover:underline cursor-pointer">
+                  {job.title}
+                </h2>
+                <p className="text-gray-800 text-sm">
+                  {job.description.length > 50
+                    ? `${job.description.substring(0, 50)}...`
+                    : job.description}
+                </p>
+              </div>
             </Link>
             {job.location && (
               <p className="text-gray-700 mb-2">
@@ -93,13 +104,6 @@ export default function Jobs() {
             {job.employment_type && (
               <p className="text-gray-700 mb-2">
                 <span className="font-semibold">雇用形態:</span> {job.employment_type}
-              </p>
-            )}
-            {job.description && (
-              <p className="text-gray-800 text-sm">
-                {job.description.length > 120
-                  ? `${job.description.substring(0, 120)}...`
-                  : job.description}
               </p>
             )}
           </div>
