@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Head from 'next/head';
 import Sidebar from '@/components/Sidebar';
-// Sidebarコンポーネントをインポート
+
 
 interface Job {
   id: number;
@@ -93,6 +93,7 @@ export default function Jobs() {
 
         <div className="col-span-3">
           <h1 className="text-3xl font-bold mb-6 text-gray-800">求人一覧</h1>
+          <p className="text-sm text-gray-600 mb-4">{jobs.length}件の求人</p> {/* 件数を表示 */}
           {jobs.map((job) => {
             const defaultUserIcon = 'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png';
             const user = job.user || { name: 'デフォルトユーザー' };
