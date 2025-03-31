@@ -94,7 +94,7 @@ export default function Jobs() {
                   </h2>
                   <p className="text-gray-800 text-sm">
                     {job.description.length > 50
-                      ? `${job.description.substring(0, 50)}...`
+                      ? `${job.description.substring(0, 150)}...`
                       : job.description}
                   </p>
                 </div>
