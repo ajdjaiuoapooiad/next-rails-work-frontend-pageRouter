@@ -77,7 +77,7 @@ export default function Jobs() {
             <Link href={`/jobs/${job.id}`}>
               <div className="mb-4">
                 <img
-                  src={job.image_url || '/images/default-job.png'} // デフォルト画像を設定
+                  src={job.image_url || 'https://images.wantedly.com/i/icmkDj4?w=1960&format=jpeg'} // デフォルト画像を設定
                   alt={job.title}
                   className="w-full h-48 object-cover rounded-md mb-2"
                 />
