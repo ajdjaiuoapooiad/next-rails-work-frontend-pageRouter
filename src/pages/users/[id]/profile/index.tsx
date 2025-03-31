@@ -10,6 +10,8 @@ interface Profile {
   skills: string;
   company_name: string;
   industry: string;
+  user_icon_url: string; // アイコン画像URLを追加
+  bg_image_url: string; // 背景画像URLを追加
 }
 
 const getApiUrl = (): string => {
@@ -109,17 +111,16 @@ export default function UserProfile() {
   }
 
   const showEditButton = currentUserId && currentUserId === parseInt(id as string);
-  const profileImageUrl = process.env.NEXT_PUBLIC_PROFILE_IMAGE_URL || 'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png';
 
   return (
     <div className="container mx-auto p-4">
       <Head>
         <title>プロフィールページ</title>
       </Head>
-      <div className="relative h-64 bg-cover bg-center rounded-lg shadow-md mb-6" style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8JUU5JUEyJUE4JUU2JTk5JUFGJUU4JTgzJThDJUU2JTk5JUFGfGVufDB8fDB8fHww)' }}>
+      <div className="relative h-64 bg-cover bg-center rounded-lg shadow-md mb-6" style={{ backgroundImage: `url(${profile?.bg_image_url || 'https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8JUU5JUEyJUE4JUU2JTk5JUFGJUU4JTgzJThDJUU2JTk5JUFGfGVufDB8fDB8fHww)'})` }}>
         <div className="absolute bottom-0 left-0 p-4 flex items-center">
           <div className="h-24 w-24 rounded-full bg-white flex items-center justify-center overflow-hidden mr-4">
-            <img src={profileImageUrl} alt="プロフィール画像" className="h-full w-full object-cover" />
+            <img src={profile?.user_icon_url || 'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png'} alt="プロフィール画像" className="h-full w-full object-cover" />
           </div>
           {username && <h1 className="text-3xl font-bold text-white">{username}</h1>}
         </div>

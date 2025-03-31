@@ -8,12 +8,14 @@ import Head from 'next/head';
 interface User {
   id: number;
   name: string;
+  profile?: {
+    user_icon_url?: string; // アイコン画像URLを追加
+  };
 }
 
 interface ErrorResponse {
   error: string;
 }
-
 
 const getApiUrl = (): string => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -31,7 +33,7 @@ export default function Messages() {
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
   const [refresh, setRefresh] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<{ id: number | null }>({ id: null });
-  const [users, setUsers] = useState<{[key: number]: string}>({});
+  const [users, setUsers] = useState<{[key: number]: User}>({}); // Userオブジェクトを格納
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -72,7 +74,7 @@ export default function Messages() {
       }
       acc[conversationId].push(message);
       return acc;
-    }, {} as {[key: string]: Message[]}); // 初期値を型アサーションで指定
+    }, {} as {[key: string]: Message[]});
     setGroupedMessages(grouped);
   }, [messages]);
 
@@ -84,9 +86,9 @@ export default function Messages() {
         const response = await axios.get<User[]>(`${apiUrl}/users`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        const usersMap: {[key: number]: string} = {};
+        const usersMap: {[key: number]: User} = {}; // Userオブジェクトを格納
         response.data.forEach(user => {
-          usersMap[user.id] = user.name;
+          usersMap[user.id] = user;
         });
         setUsers(usersMap);
       } catch (err) {
@@ -112,8 +114,6 @@ export default function Messages() {
 
   return (
     <div className="flex h-screen bg-gray-100">
-
-
       <Head>
         <title>メッセージ一覧ページ</title>
       </Head>
@@ -123,7 +123,9 @@ export default function Messages() {
           {Object.keys(groupedMessages).map((conversationId) => {
             const conversationMessages = groupedMessages[conversationId];
             const otherUserId = conversationMessages[0].sender_id === currentUser.id ? conversationMessages[0].receiver_id : conversationMessages[0].sender_id;
-            const otherUserName = users[otherUserId] || '不明なユーザー';
+            const otherUser = users[otherUserId]; // Userオブジェクトを取得
+            const otherUserName = otherUser?.name || '不明なユーザー';
+            const otherUserIcon = otherUser?.profile?.user_icon_url || 'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png'; // アイコン画像URLを取得
 
             return (
               <li
@@ -134,7 +136,7 @@ export default function Messages() {
                 <div className="flex items-center space-x-3">
                   <div className="flex-shrink-0 h-12 w-12 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden">
                     <img
-                      src={'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png'} // otherUserIconが存在しない場合はデフォルトのアイコンを表示
+                      src={otherUserIcon} // アイコン画像URLを設定
                       alt={`${otherUserName}のアイコン`}
                       className="h-full w-full object-cover"
                     />
@@ -160,7 +162,7 @@ export default function Messages() {
                 return (
                   <div key={message.createdAt} className={`flex ${message.isCurrentUser ? 'justify-end' : 'justify-start'}`}>
                     <div className={`p-4 rounded-lg ${message.isCurrentUser ? 'bg-blue-100' : 'bg-gray-50'} w-1/2`}>
-                      {isFirstMessage && <p className="text-sm font-semibold">{message.isCurrentUser ? 'あなた' : users[message.senderId] || '不明なユーザー'}</p>}
+                      {isFirstMessage && <p className="text-sm font-semibold">{message.isCurrentUser ? 'あなた' : users[message.senderId]?.name || '不明なユーザー'}</p>}
                       <p className="text-base leading-relaxed">{message.content}</p>
                       <p className="text-xs text-gray-400">{new Date(message.createdAt).toLocaleString()}</p>
                     </div>
