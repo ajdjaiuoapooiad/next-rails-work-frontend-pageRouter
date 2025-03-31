@@ -65,14 +65,26 @@ export default function UserProfile() {
     fetchProfile();
   }, [id]);
 
-  const handleCreateProfile = async (profileData: { introduction: string; skills: string; company_name: string; industry: string }) => {
+  const handleCreateProfile = async (profileData: { introduction: string; skills: string; company_name: string; industry: string; user_icon: File | null; bg_image: File | null }) => {
     try {
       const apiUrl = getApiUrl();
       const token = localStorage.getItem('authToken');
+      const formData = new FormData();
+      formData.append('introduction', profileData.introduction);
+      formData.append('skills', profileData.skills);
+      formData.append('company_name', profileData.company_name);
+      formData.append('industry', profileData.industry);
+      if (profileData.user_icon) {
+        formData.append('user_icon', profileData.user_icon);
+      }
+      if (profileData.bg_image) {
+        formData.append('bg_image', profileData.bg_image);
+      }
+
       const newProfile: Profile = await apiRequest(`${apiUrl}/users/${id}/profiles`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(profileData),
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
       });
       setProfile(newProfile);
       setEditing(false);
@@ -81,19 +93,26 @@ export default function UserProfile() {
     }
   };
 
-  const handleUpdateProfile = async (profileData: { introduction: string; skills: string; company_name: string; industry: string }) => {
+  const handleUpdateProfile = async (profileData: { introduction: string; skills: string; company_name: string; industry: string; user_icon: File | null; bg_image: File | null }) => {
     try {
       const apiUrl = getApiUrl();
       const token = localStorage.getItem('authToken');
+      const formData = new FormData();
+      formData.append('introduction', profileData.introduction || ' ');
+      formData.append('skills', profileData.skills || ' ');
+      formData.append('company_name', profileData.company_name || ' ');
+      formData.append('industry', profileData.industry || ' ');
+      if (profileData.user_icon) {
+        formData.append('user_icon', profileData.user_icon);
+      }
+      if (profileData.bg_image) {
+        formData.append('bg_image', profileData.bg_image);
+      }
+
       const updatedProfile: Profile = await apiRequest(`${apiUrl}/users/${id}/profiles/1`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({
-          introduction: profileData.introduction || ' ',
-          skills: profileData.skills || ' ',
-          company_name: profileData.company_name || ' ',
-          industry: profileData.industry || ' ',
-        }),
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
       });
       setProfile(updatedProfile);
       setEditing(false);
@@ -101,7 +120,6 @@ export default function UserProfile() {
       setError(err.message);
     }
   };
-
   if (loading) {
     return <p className="text-center mt-8">ロード中...</p>;
   }

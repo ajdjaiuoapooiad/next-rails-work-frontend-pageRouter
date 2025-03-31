@@ -1,90 +1,96 @@
-import { useState, ChangeEvent, FormEvent } from 'react';
+import { useState, useEffect } from 'react';
 
-interface ProfileFormProps {
-  initialProfile?: { introduction: string; skills: string; company_name: string; industry: string };
-  onSubmit: (profile: { introduction: string; skills: string; company_name: string; industry: string }) => void;
-  onError?: (error: string) => void;
+interface Profile {
+  id?: number;
+  user_id?: number;
+  introduction: string;
+  skills: string;
+  company_name: string;
+  industry: string;
+  user_icon_url?: string;
+  bg_image_url?: string;
 }
 
-const ProfileForm: React.FC<ProfileFormProps> = ({ initialProfile, onSubmit, onError }) => {
+interface ProfileFormProps {
+  initialProfile?: Profile | null;
+  onSubmit: (profileData: {
+    introduction: string;
+    skills: string;
+    company_name: string;
+    industry: string;
+    user_icon?: File | null;
+    bg_image?: File | null;
+  }) => void;
+}
+
+const ProfileForm: React.FC<ProfileFormProps> = ({ initialProfile, onSubmit }) => {
   const [introduction, setIntroduction] = useState(initialProfile?.introduction || '');
   const [skills, setSkills] = useState(initialProfile?.skills || '');
-  const [company_name, setCompanyName] = useState(initialProfile?.company_name || '');
+  const [companyName, setCompanyName] = useState(initialProfile?.company_name || '');
   const [industry, setIndustry] = useState(initialProfile?.industry || '');
-  const [error, setError] = useState<string | null>(null);
+  const [userIcon, setUserIcon] = useState<File | null>(null);
+  const [bgImage, setBgImage] = useState<File | null>(null);
+  const [userIconPreview, setUserIconPreview] = useState<string | null>(initialProfile?.user_icon_url || null);
+  const [bgImagePreview, setBgImagePreview] = useState<string | null>(initialProfile?.bg_image_url || null);
 
-  const handleCompanyNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setCompanyName(e.target.value);
+  const handleUserIconChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setUserIcon(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setUserIconPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    if (!introduction || !skills || !company_name || !industry) {
-      setError('すべてのフィールドを入力してください。');
-      if (onError) onError('すべてのフィールドを入力してください。');
-      return;
+  const handleBgImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setBgImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setBgImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
-    setError(null);
-    onSubmit({ introduction, skills, company_name, industry });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit({ introduction, skills, company_name: companyName, industry, user_icon: userIcon, bg_image: bgImage });
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6"> {/* space-y-4 を space-y-6 に変更 */}
-      <div className="mb-12"> {/* 各要素に mb-4 を追加 */}
-        <label htmlFor="introduction" className="block text-sm font-medium text-gray-700">
-          自己紹介
-        </label>
-        <textarea
-          id="introduction"
-          value={introduction}
-          onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setIntroduction(e.target.value)}
-          placeholder="自己紹介"
-          className="mt-1 block w-full pb-96 py-5 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-        />
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <label className="block text-sm font-medium text-gray-700">自己紹介</label>
+        <textarea value={introduction} onChange={(e) => setIntroduction(e.target.value)} className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" rows={4} />
       </div>
-      <div className="mb-12"> {/* 各要素に mb-4 を追加 */}
-        <label htmlFor="skills" className="block text-sm font-medium text-gray-700">
-          スキル
-        </label>
-        <textarea
-          id="skills"
-          value={skills}
-          onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setSkills(e.target.value)}
-          placeholder="スキル"
-          className="mt-1 block w-full pb-52 py-5 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-        />
+      <div>
+        <label className="block text-sm font-medium text-gray-700">スキル</label>
+        <textarea value={skills} onChange={(e) => setSkills(e.target.value)} className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" rows={4} />
       </div>
-      <div className="mb-12"> {/* 各要素に mb-4 を追加 */}
-        <label htmlFor="company_name" className="block text-sm font-medium text-gray-700">
-          会社名
-        </label>
-        <input
-          type="text"
-          id="company_name"
-          value={company_name}
-          onChange={handleCompanyNameChange}
-          placeholder="会社名"
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-        />
+      <div>
+        <label className="block text-sm font-medium text-gray-700">会社名</label>
+        <input type="text" value={companyName} onChange={(e) => setCompanyName(e.target.value)} className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" />
       </div>
-      <div className="mb-12"> {/* 各要素に mb-4 を追加 */}
-        <label htmlFor="industry" className="block text-sm font-medium text-gray-700">
-          業界
-        </label>
-        <input
-          type="text"
-          id="industry"
-          value={industry}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => setIndustry(e.target.value)}
-          placeholder="業界"
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-        />
+      <div>
+        <label className="block text-sm font-medium text-gray-700">業界</label>
+        <input type="text" value={industry} onChange={(e) => setIndustry(e.target.value)} className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" />
       </div>
-      {error && <p className="text-red-500">{error}</p>}
-      <button
-        type="submit"
-        className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-      >
+      <div>
+        <label className="block text-sm font-medium text-gray-700">アイコン画像</label>
+        <input type="file" accept="image/*" onChange={handleUserIconChange} className="mt-1 block w-full" />
+        {userIconPreview && <img src={userIconPreview} alt="アイコンプレビュー" className="mt-2 max-w-full max-h-48" />}
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-700">背景画像</label>
+        <input type="file" accept="image/*" onChange={handleBgImageChange} className="mt-1 block w-full" />
+        {bgImagePreview && <img src={bgImagePreview} alt="背景プレビュー" className="mt-2 max-w-full max-h-48" />}
+      </div>
+      <button type="submit" className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
         保存
       </button>
     </form>
