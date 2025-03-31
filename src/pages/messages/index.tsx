@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import axios, { AxiosError } from 'axios';
-
 import MessageForm from '../../components/MessageForm';
 import { Message } from '@/utils/types';
 import Head from 'next/head';
@@ -9,7 +8,7 @@ interface User {
   id: number;
   name: string;
   profile?: {
-    user_icon_url?: string; // アイコン画像URLを追加
+    user_icon_url?: string;
   };
 }
 
@@ -33,7 +32,7 @@ export default function Messages() {
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
   const [refresh, setRefresh] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<{ id: number | null }>({ id: null });
-  const [users, setUsers] = useState<{[key: number]: User}>({}); // Userオブジェクトを格納
+  const [users, setUsers] = useState<{[key: number]: User}>({});
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -86,7 +85,7 @@ export default function Messages() {
         const response = await axios.get<User[]>(`${apiUrl}/users`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        const usersMap: {[key: number]: User} = {}; // Userオブジェクトを格納
+        const usersMap: {[key: number]: User} = {};
         response.data.forEach(user => {
           usersMap[user.id] = user;
         });
@@ -117,15 +116,15 @@ export default function Messages() {
       <Head>
         <title>メッセージ一覧ページ</title>
       </Head>
-      <aside className="w-1/4 border-r p-4 bg-white shadow-md">
+      <aside className="w-1/4 border-r p-4 bg-white shadow-md hidden sm:block"> {/* sm:blockで中サイズ以上の画面で表示 */}
         <h2 className="text-lg font-semibold mb-4">会話一覧</h2>
         <ul className="space-y-2">
           {Object.keys(groupedMessages).map((conversationId) => {
             const conversationMessages = groupedMessages[conversationId];
             const otherUserId = conversationMessages[0].sender_id === currentUser.id ? conversationMessages[0].receiver_id : conversationMessages[0].sender_id;
-            const otherUser = users[otherUserId]; // Userオブジェクトを取得
+            const otherUser = users[otherUserId];
             const otherUserName = otherUser?.name || '不明なユーザー';
-            const otherUserIcon = otherUser?.profile?.user_icon_url || 'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png'; // アイコン画像URLを取得
+            const otherUserIcon = otherUser?.profile?.user_icon_url || 'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png';
 
             return (
               <li
@@ -136,7 +135,7 @@ export default function Messages() {
                 <div className="flex items-center space-x-3">
                   <div className="flex-shrink-0 h-12 w-12 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden">
                     <img
-                      src={otherUserIcon} // アイコン画像URLを設定
+                      src={otherUserIcon}
                       alt={`${otherUserName}のアイコン`}
                       className="h-full w-full object-cover"
                     />
@@ -152,7 +151,7 @@ export default function Messages() {
         </ul>
       </aside>
 
-      <main className="w-3/4 p-4">
+      <main className="flex-1 p-4"> {/* flex-1で残りの領域を使用 */}
         {selectedConversation ? (
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-lg font-semibold mb-4">メッセージ詳細</h2>
@@ -161,7 +160,7 @@ export default function Messages() {
                 const isFirstMessage = index === 0 || array[index - 1].senderId !== message.senderId;
                 return (
                   <div key={message.createdAt} className={`flex ${message.isCurrentUser ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`p-4 rounded-lg ${message.isCurrentUser ? 'bg-blue-100' : 'bg-gray-50'} w-1/2`}>
+                    <div className={`p-4 rounded-lg ${message.isCurrentUser ? 'bg-blue-100' : 'bg-gray-50'} max-w-2/3`}> {/* max-w-2/3で最大幅を制限 */}
                       {isFirstMessage && <p className="text-sm font-semibold">{message.isCurrentUser ? 'あなた' : users[message.senderId]?.name || '不明なユーザー'}</p>}
                       <p className="text-base leading-relaxed">{message.content}</p>
                       <p className="text-xs text-gray-400">{new Date(message.createdAt).toLocaleString()}</p>

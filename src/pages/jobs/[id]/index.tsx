@@ -110,8 +110,8 @@ export default function JobDetail() {
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded shadow-md w-9/10 max-w-6xl">
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 py-6 sm:py-12">
+      <div className="bg-white p-6 sm:p-8 rounded shadow-md w-full max-w-4xl">
         <h1 className="text-3xl font-bold mb-6 text-center">{job.title}</h1>
         <div className="flex justify-end mb-4">
           <button onClick={handleLike} className="text-2xl text-red-500">
@@ -122,8 +122,8 @@ export default function JobDetail() {
           <img
             src={job.image_url || 'https://images.wantedly.com/i/jtLvrG6?w=800&format=jpeg'}
             alt="Job Image"
-            className="rounded-md w-full"
-            style={{ height: '400px', objectFit: 'cover' }}
+            className="rounded-md w-full object-cover" // 画像をカバーするように表示
+            style={{ height: '300px' }} // 高さを固定
           />
         </div>
         <div className="mb-8">

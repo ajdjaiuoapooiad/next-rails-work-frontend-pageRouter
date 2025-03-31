@@ -13,7 +13,7 @@ export default function JobCreate() {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  const requiredFields = ['タイトル', '説明', '場所', '雇用形態']; // 必須項目を定義
+  const requiredFields = ['タイトル', '説明', '場所', '雇用形態'];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,9 +60,9 @@ export default function JobCreate() {
 
   return (
     <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
-      <div className="relative py-3 lg:w-3/5 md:w-4/5 sm:w-full sm:mx-auto">
+      <div className="relative py-3 w-full max-w-3xl mx-auto"> {/* コンテナの最大幅を調整 */}
         <div className="absolute inset-0 bg-gradient-to-r from-blue-300 to-blue-600 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
-        <div className="relative px-4 py-10 bg-gray-300 shadow-lg sm:rounded-3xl sm:p-20">
+        <div className="relative px-4 py-10 bg-gray-300 shadow-lg rounded-3xl sm:p-20"> {/* paddingを調整 */}
           <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">求人作成</h1>
           {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -75,7 +75,7 @@ export default function JobCreate() {
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="mt-1 pb-5 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               />
             </div>
             <div>
@@ -86,7 +86,8 @@ export default function JobCreate() {
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="mt-1 block pb-56 w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                rows={6} // テキストエリアの行数を調整
               />
             </div>
             <div>
@@ -98,7 +99,7 @@ export default function JobCreate() {
                 type="text"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
-                className="mt-1 pb-5 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               />
             </div>
             <div>
@@ -107,7 +108,7 @@ export default function JobCreate() {
                 type="number"
                 value={salary}
                 onChange={(e) => setSalary(e.target.value)}
-                className="mt-1 pb-5 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               />
             </div>
             <div>
@@ -116,6 +117,7 @@ export default function JobCreate() {
                 value={requirements}
                 onChange={(e) => setRequirements(e.target.value)}
                 className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                rows={4} // テキストエリアの行数を調整
               />
             </div>
             <div>
@@ -124,6 +126,7 @@ export default function JobCreate() {
                 value={benefits}
                 onChange={(e) => setBenefits(e.target.value)}
                 className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                rows={4} // テキストエリアの行数を調整
               />
             </div>
             <div>
@@ -135,7 +138,7 @@ export default function JobCreate() {
                 type="text"
                 value={employmentType}
                 onChange={(e) => setEmploymentType(e.target.value)}
-                className="mt-1 pb-5 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               />
             </div>
             <div>
