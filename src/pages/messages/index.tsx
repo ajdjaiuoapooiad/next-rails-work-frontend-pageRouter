@@ -178,7 +178,8 @@ export default function Messages() {
           })}
         </ul>
       </aside>
-
+      
+      
       <main className={`flex-1 p-4 ${selectedConversation ? 'block' : 'hidden'}`}>
         {selectedConversation ? (
           <div className="bg-white rounded-lg shadow-md p-6">
