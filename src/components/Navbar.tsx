@@ -9,6 +9,8 @@ import {
   PlusCircleIcon,
 } from '@heroicons/react/solid';
 import { useRouter } from 'next/router';
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 interface User {
   id: number;
@@ -98,6 +100,12 @@ const Navbar = () => {
     setIsDropdownOpen(false);
     setIsMobileMenuOpen(false);
     router.push('/jobs');
+    Swal.fire({
+      icon: 'success',
+      title: 'ログアウトしました。',
+      showConfirmButton: false,
+      timer: 1500,
+    });
   };
 
   const closeDropdown = () => {
