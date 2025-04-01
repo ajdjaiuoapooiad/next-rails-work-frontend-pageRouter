@@ -176,6 +176,11 @@ const Navbar = () => {
                   </button>
                   {isDropdownOpen && (
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
+                      <div className="flex justify-end p-2">
+                        <button onClick={closeDropdown}>
+                          <XIcon className="h-5 w-5 text-gray-500" />
+                        </button>
+                      </div>
                       <Link
                         href={`/users/${userId}/profile`}
                         className="block px-4 py-3 text-sm  text-indigo-600 hover:bg-gray-100"
@@ -326,13 +331,21 @@ const Navbar = () => {
                   </>
                 )}
                 {userType === 'company' && (
+                  <>
                   <Link
-                    href={'/users/jobs'}
+                    href="/jobs/create"
                     className=" text-indigo-600 hover:bg-gray-100 p-2 rounded-md transition-colors duration-300 w-full text-center flex items-center justify-center"
                   >
                     <PlusCircleIcon className="h-5 w-5 mr-1" />
+                    求人作成
+                  </Link>
+                  <Link
+                    href="/users/jobs"
+                    className=" text-indigo-600 hover:bg-gray-100 p-2 rounded-md transition-colors duration-300 w-full text-center"
+                  >
                     募集した求人
                   </Link>
+                  </>
                 )}
                 <button
                   onClick={handleLogout}
