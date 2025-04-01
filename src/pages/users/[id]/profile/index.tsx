@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import ProfileForm from '@/components/ProfileForm';
+import ProfileForm from '@/components/ProfileForm'; // ProfileForm コンポーネントをインポート
 import Head from 'next/head';
 
 interface Profile {
@@ -10,8 +10,8 @@ interface Profile {
   skills: string;
   company_name: string;
   industry: string;
-  user_icon_url: string; // アイコン画像URLを追加
-  bg_image_url: string; // 背景画像URLを追加
+  user_icon_url: string;
+  bg_image_url: string;
 }
 
 const getApiUrl = (): string => {
@@ -39,6 +39,7 @@ export default function UserProfile() {
   const [editing, setEditing] = useState<boolean>(false);
   const [username, setUsername] = useState<string | null>(null);
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
+  const [isCreating, setIsCreating] = useState<boolean>(false); // プロフィール作成フォームの表示状態
 
   useEffect(() => {
     if (!id) return;
@@ -97,6 +98,7 @@ export default function UserProfile() {
       });
       setProfile(newProfile);
       setEditing(false);
+      setIsCreating(false); // プロフィール作成後にフォームを非表示にする
     } catch (err: any) {
       setError(err.message);
     }
@@ -129,6 +131,7 @@ export default function UserProfile() {
       setError(err.message);
     }
   };
+
   if (loading) {
     return <p className="text-center mt-8">ロード中...</p>;
   }
@@ -194,14 +197,18 @@ export default function UserProfile() {
             </div>
           )
         ) : (
-          <div className="text-center">
-            <p className="text-gray-600 mb-4">プロフィールがまだ作成されていません。</p>
-            {showEditButton && (
-              <button onClick={() => setEditing(true)} className="px-6 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                プロフィールを作成する
-              </button>
-            )}
-          </div>
+          isCreating ? (
+            <ProfileForm onSubmit={handleCreateProfile} />
+          ) : (
+            <div className="text-center">
+              <p className="text-gray-600 mb-4">プロフィールがまだ作成されていません。</p>
+              {showEditButton && (
+                <button onClick={() => setIsCreating(true)} className="px-6 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                  プロフィールを作成する
+                </button>
+              )}
+            </div>
+          )
         )}
       </div>
     </div>
