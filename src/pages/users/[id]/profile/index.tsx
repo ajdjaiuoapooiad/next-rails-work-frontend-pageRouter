@@ -40,40 +40,39 @@ export default function UserProfile() {
   const [username, setUsername] = useState<string | null>(null);
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
 
- 
-useEffect(() => {
-  if (!id) return;
+  useEffect(() => {
+    if (!id) return;
 
-  const fetchProfile = async () => {
-    try {
-      const apiUrl = getApiUrl();
-      const token = localStorage.getItem('authToken');
-      const response = await fetch(`${apiUrl}/users/${id}/profiles/1`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+    const fetchProfile = async () => {
+      try {
+        const apiUrl = getApiUrl();
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(`${apiUrl}/users/${id}/profiles/1`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
-      if (response.ok) {
-        const profileData: Profile = await response.json();
-        setProfile(profileData);
-      } else if (response.status === 404) {
-        // プロフィールが存在しない場合
-        setProfile(null);
-      } else {
-        throw new Error('APIリクエストに失敗しました。');
+        if (response.ok) {
+          const profileData: Profile = await response.json();
+          setProfile(profileData);
+        } else if (response.status === 404) {
+          // プロフィールが存在しない場合
+          setProfile(null);
+        } else {
+          throw new Error('APIリクエストに失敗しました。');
+        }
+
+        const userData = await apiRequest(`${apiUrl}/users/show_by_id/${id}`);
+        setUsername(userData.name);
+        setCurrentUserId(userData.id);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
       }
+    };
 
-      const userData = await apiRequest(`${apiUrl}/users/show_by_id/${id}`);
-      setUsername(userData.name);
-      setCurrentUserId(userData.id);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  fetchProfile();
-}, [id]);
+    fetchProfile();
+  }, [id]);
 
   const handleCreateProfile = async (profileData: { introduction: string; skills: string; company_name: string; industry: string; user_icon: File | null; bg_image: File | null }) => {
     try {
@@ -145,12 +144,14 @@ useEffect(() => {
       <Head>
         <title>プロフィールページ</title>
       </Head>
-      <div className="relative h-64 bg-cover bg-center rounded-lg shadow-md mb-6" style={{ backgroundImage: `url(${profile?.bg_image_url || 'https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8JUU5JUEyJUE4JUU2JTk5JUFGJUU4JTgzJThDJUU2JTk5JUFGfGVufDB8fDB8fHww)'})` }}>
-        <div className="absolute bottom-0 left-0 p-4 flex items-center">
-          <div className="h-24 w-24 rounded-full bg-white flex items-center justify-center overflow-hidden mr-4">
-            <img src={profile?.user_icon_url || 'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png'} alt="プロフィール画像" className="h-full w-full object-cover" />
+      <div className="relative h-64 bg-cover bg-center rounded-lg shadow-md mb-6">
+        <div style={{ backgroundImage: `url(${profile?.bg_image_url || process.env.NEXT_PUBLIC_DEFAULT_BG_IMAGE_URL || 'https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8JUU5JUEyJUE4JUU2JTk5JUFGJUU4JTgzJThDJUU2JTk5JUFGfGVufDB8fDB8fHww)'})` }} className="relative h-64 bg-cover bg-center rounded-lg shadow-md mb-6">
+          <div className="absolute bottom-0 left-0 p-4 flex items-center">
+            <div className="h-24 w-24 rounded-full bg-white flex items-center justify-center overflow-hidden mr-4">
+              <img src={profile?.user_icon_url || process.env.NEXT_PUBLIC_DEFAULT_USER_ICON_URL || 'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png'} alt="プロフィール画像" className="h-full w-full object-cover" />
+            </div>
+            {username && <h1 className="text-3xl font-bold text-white">{username}</h1>}
           </div>
-          {username && <h1 className="text-3xl font-bold text-white">{username}</h1>}
         </div>
       </div>
       <div className="max-w-3xl mx-auto">
