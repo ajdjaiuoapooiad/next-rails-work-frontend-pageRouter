@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import { FaHeart, FaRegHeart } from 'react-icons/fa';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+import { FaHeart, FaRegHeart, FaCheckCircle } from 'react-icons/fa';
 
 interface Job {
   id: number;
@@ -14,9 +16,11 @@ interface Job {
   benefits: string;
   employment_type: string;
   image_url: string;
-  user_name: string; // 追加
-  user_icon_url: string; // 追加
+  user_name: string;
+  user_icon_url: string;
 }
+
+const MySwal = withReactContent(Swal);
 
 export default function JobDetail() {
   const router = useRouter();
@@ -81,9 +85,21 @@ export default function JobDetail() {
           },
         }
       );
-      alert('メッセージを送信しました');
+      MySwal.fire({
+        icon: 'success',
+        title: (
+          <div>
+            <FaCheckCircle className="mr-2 inline-block" />
+            メッセージを送信しました！
+          </div>
+        ),
+      });
     } catch (err: any) {
       setError(err.response?.data?.message || 'メッセージの送信に失敗しました');
+      MySwal.fire({
+        icon: 'error',
+        title: 'メッセージの送信に失敗しました',
+      });
     }
   };
 
@@ -128,7 +144,7 @@ export default function JobDetail() {
             style={{ height: '300px' }}
           />
         </div>
-        <div className="flex items-center mb-4"> {/* 追加 */}
+        <div className="flex items-center mb-4">
           <img
             src={job.user_icon_url}
             alt={`${job.user_name}のアイコン`}
@@ -139,7 +155,6 @@ export default function JobDetail() {
         <div className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">私たちのストーリー</h2>
           <p className="text-gray-700 leading-relaxed" style={{ whiteSpace: 'pre-line' }}>
-            {/* 企業のストーリーや社員の想いを記述 */}
           </p>
         </div>
         <div className="mb-8">
@@ -167,7 +182,7 @@ export default function JobDetail() {
         <div className="flex justify-center">
           <button
             onClick={handleInquiry}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full text-lg"
+            className="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-3 px-6 rounded-full text-lg"
           >
             話を聞いてみる
           </button>
