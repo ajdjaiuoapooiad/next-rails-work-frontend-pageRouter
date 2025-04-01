@@ -3,7 +3,6 @@ import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { ChevronDownIcon, MenuIcon, XIcon } from '@heroicons/react/solid';
 import { useRouter } from 'next/router';
-import { FaPlus, FaEnvelope } from 'react-icons/fa';
 
 interface User {
   id: number;
@@ -103,57 +102,67 @@ const Navbar = () => {
               求人一覧
             </Link>
             {isLoggedIn && (
-              <div className="relative" ref={dropdownRef}>
-                <button
-                  className="flex items-center space-x-2 text-gray-200 hover:text-white transition-colors duration-300 p-2 rounded-md"
-                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                >
-                  <div className="flex flex-col items-center">
-                    {userType && <span className="text-xs text-gray-300">{userType === 'company' ? '企業' : '学生'}</span>}
-                    {username && <p className="text-white">{username.length > 5 ? `${username.substring(0, 5)}...` : username}</p>}
-                  </div>
-                  <div className="rounded-full h-10 w-10 bg-gray-300 flex items-center justify-center overflow-hidden">
-                    <img src={userIconUrl} alt="User Icon" className="h-full w-full object-cover" />
-                  </div>
-                  {isDropdownOpen ? <XIcon className="h-5 w-5" /> : <ChevronDownIcon className="h-5 w-5" />}
-                </button>
-                {isDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
-                    <div className="flex justify-end p-2">
-                      <button onClick={closeDropdown}>
-                        <XIcon className="h-5 w-5 text-gray-500" />
+              <>
+                <Link href="/messages" className=" text-indigo-600 hover:text-white transition-colors duration-300">
+                  メッセージ
+                </Link>
+                {userType === 'company' && (
+                  <Link href="/jobs/new" className=" text-indigo-600 hover:text-white transition-colors duration-300">
+                    求人作成
+                  </Link>
+                )}
+                <div className="relative" ref={dropdownRef}>
+                  <button
+                    className="flex items-center space-x-2 text-gray-200 hover:text-white transition-colors duration-300 p-2 rounded-md"
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  >
+                    <div className="flex flex-col items-center">
+                      {userType && <span className="text-xs text-gray-300">{userType === 'company' ? '企業' : '学生'}</span>}
+                      {username && <p className="text-white">{username.length > 5 ? `${username.substring(0, 5)}...` : username}</p>}
+                    </div>
+                    <div className="rounded-full h-10 w-10 bg-gray-300 flex items-center justify-center overflow-hidden">
+                      <img src={userIconUrl} alt="User Icon" className="h-full w-full object-cover" />
+                    </div>
+                    {isDropdownOpen ? <XIcon className="h-5 w-5" /> : <ChevronDownIcon className="h-5 w-5" />}
+                  </button>
+                  {isDropdownOpen && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
+                      <div className="flex justify-end p-2">
+                        <button onClick={closeDropdown}>
+                          <XIcon className="h-5 w-5 text-gray-500" />
+                        </button>
+                      </div>
+                      <Link href={`/users/${userId}/profile`} className="block px-4 py-3 text-sm  text-indigo-600 hover:bg-gray-100" onClick={() => { closeDropdown(); }}>
+                        プロフィール
+                      </Link>
+                      <Link href={`/users/${userId}`} className="block px-4 py-3 text-sm  text-indigo-600 hover:bg-gray-100" onClick={() => { closeDropdown(); }}>
+                        ユーザー情報
+                      </Link>
+                      <Link href={`/messages`} className="block px-4 py-3 text-sm  text-indigo-600 hover:bg-gray-100" onClick={() => { closeDropdown(); }}>
+                        メッセージ
+                      </Link>
+                      {userType === 'student' && (
+                        <>
+                          <Link href={`/users/${userId}/profile`} className="block px-4 py-3 text-sm  text-indigo-600 hover:bg-gray-100" onClick={() => { closeDropdown(); }}>
+                            応募した企業
+                          </Link>
+                          <Link href={`/users/${userId}/profile`} className="block px-4 py-3 text-sm  text-indigo-600 hover:bg-gray-100" onClick={() => { closeDropdown(); }}>
+                            いいねした求人
+                          </Link>
+                        </>
+                      )}
+                      {userType === 'company' && (
+                        <Link href={'/users/jobs'} className="block px-4 py-3 text-sm  text-indigo-600 hover:bg-gray-100" onClick={() => { closeDropdown(); }}>
+                          募集した求人
+                        </Link>
+                      )}
+                      <button onClick={handleLogout} className="block w-full text-left px-4 py-3 text-sm text-red-700 hover:bg-gray-100">
+                        ログアウト
                       </button>
                     </div>
-                    <Link href={`/users/${userId}/profile`} className="block px-4 py-3 text-sm  text-indigo-600 hover:bg-gray-100" onClick={() => { closeDropdown(); }}>
-                      プロフィール
-                    </Link>
-                    <Link href={`/users/${userId}`} className="block px-4 py-3 text-sm  text-indigo-600 hover:bg-gray-100" onClick={() => { closeDropdown(); }}>
-                      ユーザー情報
-                    </Link>
-                    <Link href={`/messages`} className="block px-4 py-3 text-sm  text-indigo-600 hover:bg-gray-100" onClick={() => { closeDropdown(); }}>
-                      メッセージ
-                    </Link>
-                    {userType === 'student' && (
-                      <>
-                        <Link href={`/users/${userId}/profile`} className="block px-4 py-3 text-sm  text-indigo-600 hover:bg-gray-100" onClick={() => { closeDropdown(); }}>
-                          応募した企業
-                        </Link>
-                        <Link href={`/users/${userId}/profile`} className="block px-4 py-3 text-sm  text-indigo-600 hover:bg-gray-100" onClick={() => { closeDropdown(); }}>
-                          いいねした求人
-                        </Link>
-                      </>
-                    )}
-                    {userType === 'company' && (
-                      <Link href={'/users/jobs'} className="block px-4 py-3 text-sm  text-indigo-600 hover:bg-gray-100" onClick={() => { closeDropdown(); }}>
-                        募集した求人
-                      </Link>
-                    )}
-                    <button onClick={handleLogout} className="block w-full text-left px-4 py-3 text-sm text-red-700 hover:bg-gray-100">
-                      ログアウト
-                    </button>
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
+              </>
             )}
             {!isLoggedIn && (
               <div>

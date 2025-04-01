@@ -212,10 +212,12 @@ export default function Messages() {
               ))}
               <div ref={messagesEndRef} />
             </div>
-            <MessageForm
-              onMessageSent={() => setRefresh(true)}
-              receiverId={selectedConversation ? groupedMessages[selectedConversation].find(message => message.sender_id !== currentUser.id)?.sender_id : null}
-            />
+            {groupedMessages[selectedConversation].find(message => message.sender_id !== currentUser.id)?.sender_id !== currentUser.id && (
+              <MessageForm
+                onMessageSent={() => setRefresh(true)}
+                receiverId={groupedMessages[selectedConversation].find(message => message.sender_id !== currentUser.id)?.sender_id}
+              />
+            )}
           </div>
         ) : (
           <div className="bg-white rounded-lg shadow-md p-6">

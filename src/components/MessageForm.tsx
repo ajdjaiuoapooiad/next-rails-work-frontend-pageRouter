@@ -14,6 +14,7 @@ interface ErrorResponse {
 export default function MessageForm({ onMessageSent, receiverId }: MessageFormProps) {
   const [content, setContent] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,6 +22,13 @@ export default function MessageForm({ onMessageSent, receiverId }: MessageFormPr
       setError('送信相手を選択してください。');
       return;
     }
+    if (!content.trim()) {
+      setError('メッセージを入力してください。');
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
 
     try {
       const token = localStorage.getItem('authToken');
@@ -47,7 +55,6 @@ export default function MessageForm({ onMessageSent, receiverId }: MessageFormPr
         }
       );
       setContent('');
-      setError(null);
       onMessageSent();
     } catch (err) {
       if (axios.isAxiosError(err)) {
@@ -60,6 +67,8 @@ export default function MessageForm({ onMessageSent, receiverId }: MessageFormPr
       } else {
         setError('メッセージの送信中に予期しないエラーが発生しました。');
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -74,8 +83,8 @@ export default function MessageForm({ onMessageSent, receiverId }: MessageFormPr
           className="border p-2 w-full"
         />
       </div>
-      <Button type="submit" className="bg-blue-500 text-white p-2">
-        送信
+      <Button type="submit" className="bg-blue-500 text-white p-2" disabled={isLoading}>
+        {isLoading ? '送信中...' : '送信'}
       </Button>
     </form>
   );
