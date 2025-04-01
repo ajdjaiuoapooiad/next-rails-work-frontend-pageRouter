@@ -130,6 +130,9 @@ const Navbar = () => {
                     <Link href={`/users/${userId}`} className="block px-4 py-3 text-sm  text-indigo-600 hover:bg-gray-100" onClick={() => { closeDropdown(); }}>
                       ユーザー情報
                     </Link>
+                    <Link href={`/messages`} className="block px-4 py-3 text-sm  text-indigo-600 hover:bg-gray-100" onClick={() => { closeDropdown(); }}>
+                      メッセージ
+                    </Link>
                     {userType === 'student' && (
                       <>
                         <Link href={`/users/${userId}/profile`} className="block px-4 py-3 text-sm  text-indigo-600 hover:bg-gray-100" onClick={() => { closeDropdown(); }}>
@@ -181,6 +184,9 @@ const Navbar = () => {
                 </Link>
                 <Link href={`/users/${userId}`} className=" text-indigo-600 hover:bg-gray-100 p-2 rounded-md transition-colors duration-300 w-full text-center">
                   ユーザー情報
+                </Link>
+                <Link href={`/messages`} className=" text-indigo-600 hover:bg-gray-100 p-2 rounded-md transition-colors duration-300 w-full text-center">
+                  メッセージ
                 </Link>
                 {userType === 'student' && (
                   <>
