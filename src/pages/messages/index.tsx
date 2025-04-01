@@ -120,7 +120,6 @@ export default function Messages() {
         content: message.content,
         createdAt: message.created_at,
         isCurrentUser: message.sender_id === currentUser.id,
-        isFirstMessage: false,
         senderName: message.sender_name,
         senderIcon: message.sender_icon,
       };
@@ -137,11 +136,11 @@ export default function Messages() {
   if (error) return <p>エラー: {error}</p>;
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex flex-col md:flex-row h-screen bg-gray-100">
       <Head>
         <title>メッセージ一覧ページ</title>
       </Head>
-      <aside className="w-1/4 border-r p-4 bg-white shadow-md sm:block pd:w-full pd:block">
+      <aside className="w-full md:w-1/4 border-r p-4 bg-white shadow-md">
         <h2 className="text-lg font-semibold mb-4">会話一覧</h2>
         <ul className="space-y-2">
           {Object.keys(groupedMessages).map((conversationId) => {
@@ -178,46 +177,39 @@ export default function Messages() {
           })}
         </ul>
       </aside>
-      
-      
       <main className={`flex-1 p-4 ${selectedConversation ? 'block' : 'hidden'}`}>
         {selectedConversation ? (
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-lg font-semibold mb-4">メッセージ詳細</h2>
             <div className="space-y-4">
-              {formatMessagesForConversation(groupedMessages[selectedConversation]).map((message, index) => {
-                return (
-                  <div key={message.createdAt} className={`flex ${message.isCurrentUser ? 'justify-end' : 'justify-start'} items-start`}>
-                    {!message.isCurrentUser && (
-                      <div className="flex flex-col items-start">
-                        <p className="text-sm font-semibold mb-1">{message.senderName}</p> {/* ユーザー名をメッセージの上に表示 */}
-                        <div className="flex items-start">
-                          <div className="flex-shrink-0 h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden mr-2">
-                            <img
-                              src={message.senderIcon || DEFAULT_ICON}
-                              alt={`${message.senderName}のアイコン`}
-                              className="h-full w-full object-cover"
-                              onError={(e) => {
-                                (e.target as HTMLImageElement).src = DEFAULT_ICON;
-                              }}
-                            />
-                          </div>
-                          <div className={`p-4 rounded-lg bg-gray-50 max-w-2/3`}>
-                            <p className="text-base leading-relaxed">{message.content}</p>
-                            <p className="text-xs text-gray-400">{new Date(message.createdAt).toLocaleString()}</p>
-                          </div>
-                        </div>
+              {formatMessagesForConversation(groupedMessages[selectedConversation]).map((message) => (
+                <div key={message.createdAt} className={`flex ${message.isCurrentUser ? 'justify-end' : 'justify-start'} items-start`}>
+                  {!message.isCurrentUser && (
+                    <div className="flex items-start">
+                      <div className="flex-shrink-0 h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden mr-2">
+                        <img
+                          src={message.senderIcon || DEFAULT_ICON}
+                          alt={`${message.senderName}のアイコン`}
+                          className="h-full w-full object-cover"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = DEFAULT_ICON;
+                          }}
+                        />
                       </div>
-                    )}
-                    {message.isCurrentUser && (
-                      <div className={`p-4 rounded-lg bg-blue-100 max-w-2/3`}>
+                      <div className={`p-4 rounded-lg bg-gray-50 max-w-2/3`}>
                         <p className="text-base leading-relaxed">{message.content}</p>
                         <p className="text-xs text-gray-400">{new Date(message.createdAt).toLocaleString()}</p>
                       </div>
-                    )}
-                  </div>
-                );
-              })}
+                    </div>
+                  )}
+                  {message.isCurrentUser && (
+                    <div className={`p-4 rounded-lg bg-blue-100 max-w-2/3`}>
+                      <p className="text-base leading-relaxed">{message.content}</p>
+                      <p className="text-xs text-gray-400">{new Date(message.createdAt).toLocaleString()}</p>
+                    </div>
+                  )}
+                </div>
+              ))}
               <div ref={messagesEndRef} />
             </div>
             <MessageForm
