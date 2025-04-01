@@ -7,11 +7,12 @@ import { FaPlus, FaEnvelope } from 'react-icons/fa';
 
 interface User {
   id: number;
+  name: string;
   user_type: string;
-  profile?: {
-    user_icon_url?: string;
-    bg_image_url?: string;
-  };
+  profile: {
+    user_icon_url: string | null;
+    bg_image_url: string | null;
+  } | null;
 }
 
 const Navbar = () => {
@@ -21,7 +22,7 @@ const Navbar = () => {
   const [userType, setUserType] = useState<string | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
-  const [userIconUrl, setUserIconUrl] = useState<string | null>(null);
+  const [userIconUrl, setUserIconUrl]: any = useState<string | null>(null);
   const [bgImageUrl, setBgImageUrl] = useState<string | null>(null);
   const router = useRouter();
   const dropdownRef = useRef<HTMLDivElement>(null);

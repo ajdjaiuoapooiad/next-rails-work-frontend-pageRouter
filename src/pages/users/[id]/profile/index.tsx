@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import ProfileForm from '@/components/ProfileForm'; // ProfileForm コンポーネントをインポート
+import ProfileForm from '@/components/ProfileForm';
 import Head from 'next/head';
 
 interface Profile {
@@ -39,7 +39,7 @@ export default function UserProfile() {
   const [editing, setEditing] = useState<boolean>(false);
   const [username, setUsername] = useState<string | null>(null);
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
-  const [isCreating, setIsCreating] = useState<boolean>(false); // プロフィール作成フォームの表示状態
+  const [isCreating, setIsCreating] = useState<boolean>(false);
 
   useEffect(() => {
     if (!id) return;
@@ -56,7 +56,6 @@ export default function UserProfile() {
           const profileData: Profile = await response.json();
           setProfile(profileData);
         } else if (response.status === 404) {
-          // プロフィールが存在しない場合
           setProfile(null);
         } else {
           throw new Error('APIリクエストに失敗しました。');
@@ -75,7 +74,14 @@ export default function UserProfile() {
     fetchProfile();
   }, [id]);
 
-  const handleCreateProfile = async (profileData: { introduction: string; skills: string; company_name: string; industry: string; user_icon: File | null; bg_image: File | null }) => {
+  const handleCreateProfile = async (profileData: {
+    introduction: string;
+    skills: string;
+    company_name: string;
+    industry: string;
+    user_icon?: File | null | undefined;
+    bg_image?: File | null | undefined;
+  }) => {
     try {
       const apiUrl = getApiUrl();
       const token = localStorage.getItem('authToken');
@@ -98,13 +104,20 @@ export default function UserProfile() {
       });
       setProfile(newProfile);
       setEditing(false);
-      setIsCreating(false); // プロフィール作成後にフォームを非表示にする
+      setIsCreating(false);
     } catch (err: any) {
       setError(err.message);
     }
   };
 
-  const handleUpdateProfile = async (profileData: { introduction: string; skills: string; company_name: string; industry: string; user_icon: File | null; bg_image: File | null }) => {
+  const handleUpdateProfile = async (profileData: {
+    introduction: string;
+    skills: string;
+    company_name: string;
+    industry: string;
+    user_icon?: File | null | undefined;
+    bg_image?: File | null | undefined;
+  }) => {
     try {
       const apiUrl = getApiUrl();
       const token = localStorage.getItem('authToken');

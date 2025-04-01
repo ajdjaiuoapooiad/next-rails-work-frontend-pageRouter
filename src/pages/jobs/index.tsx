@@ -30,7 +30,7 @@ export default function Jobs() {
   const [keyword, setKeyword] = useState('');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const industryCategories = {
+  const industryCategories: any = {
     IT: ['エンジニア', 'デザイナー', 'マーケター', 'プロジェクトマネージャー'],
     Finance: ['アナリスト', 'トレーダー', 'コンサルタント', '会計士'],
     Manufacturing: ['生産管理', '品質管理', '研究開発', '設計'],
