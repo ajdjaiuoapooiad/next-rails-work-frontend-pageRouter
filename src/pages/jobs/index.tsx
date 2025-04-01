@@ -140,9 +140,13 @@ export default function Jobs() {
                     <p className="text-gray-800 text-sm">
                       {job.description.length > 150 ? `${job.description.substring(0, 150)}...` : job.description}
                     </p>
+                    <div className="mt-2">
+                      <p className="text-sm text-gray-600">場所: {job.location}</p>
+                      <p className="text-sm text-gray-600">雇用形態: {job.employment_type}</p>
+                    </div>
                     <div className="flex items-center mt-2">
                       <img
-                        src={job.user_icon_url || defaultUserIcon} // 修正箇所
+                        src={job.user_icon_url || defaultUserIcon}
                         alt={job.user_name}
                         className="w-8 h-8 rounded-full mr-2"
                       />
