@@ -99,7 +99,7 @@ const Navbar = () => {
         </div>
         <div className="flex items-center space-x-6">
           <div className="hidden md:flex items-center space-x-6">
-            <Link href="/jobs" className="text-gray-200 hover:text-white transition-colors duration-300">
+            <Link href="/jobs" className=" text-indigo-600 hover:text-white transition-colors duration-300">
               求人一覧
             </Link>
             {isLoggedIn && (
@@ -124,24 +124,24 @@ const Navbar = () => {
                         <XIcon className="h-5 w-5 text-gray-500" />
                       </button>
                     </div>
-                    <Link href={`/users/${userId}/profile`} className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100" onClick={closeDropdown}>
+                    <Link href={`/users/${userId}/profile`} className="block px-4 py-3 text-sm  text-indigo-600 hover:bg-gray-100" onClick={() => { closeDropdown(); }}>
                       プロフィール
                     </Link>
-                    <Link href={`/users/${userId}`} className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100" onClick={closeDropdown}>
+                    <Link href={`/users/${userId}`} className="block px-4 py-3 text-sm  text-indigo-600 hover:bg-gray-100" onClick={() => { closeDropdown(); }}>
                       ユーザー情報
                     </Link>
                     {userType === 'student' && (
                       <>
-                        <Link href={`/users/${userId}/profile`} className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100" onClick={closeDropdown}>
+                        <Link href={`/users/${userId}/profile`} className="block px-4 py-3 text-sm  text-indigo-600 hover:bg-gray-100" onClick={() => { closeDropdown(); }}>
                           応募した企業
                         </Link>
-                        <Link href={`/users/${userId}/profile`} className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100" onClick={closeDropdown}>
+                        <Link href={`/users/${userId}/profile`} className="block px-4 py-3 text-sm  text-indigo-600 hover:bg-gray-100" onClick={() => { closeDropdown(); }}>
                           いいねした求人
                         </Link>
                       </>
                     )}
                     {userType === 'company' && (
-                      <Link href={'/users/jobs'} className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100" onClick={closeDropdown}>
+                      <Link href={'/users/jobs'} className="block px-4 py-3 text-sm  text-indigo-600 hover:bg-gray-100" onClick={() => { closeDropdown(); }}>
                         募集した求人
                       </Link>
                     )}
@@ -171,29 +171,29 @@ const Navbar = () => {
       {isMobileMenuOpen && (
         <div ref={mobileMenuRef} className="md:hidden bg-white shadow-md rounded-md p-4 mt-2">
           <div className="flex flex-col items-center space-y-4">
-            <Link href="/jobs" className="text-gray-700 hover:bg-gray-100 p-2 rounded-md transition-colors duration-300 w-full text-center">
+            <Link href="/jobs" className=" text-indigo-600 hover:bg-gray-100 p-2 rounded-md transition-colors duration-300 w-full text-center">
               求人一覧
             </Link>
             {isLoggedIn && (
               <>
-                <Link href={`/users/${userId}/profile`} className="text-gray-700 hover:bg-gray-100 p-2 rounded-md transition-colors duration-300 w-full text-center">
+                <Link href={`/users/${userId}/profile`} className=" text-indigo-600 hover:bg-gray-100 p-2 rounded-md transition-colors duration-300 w-full text-center">
                   プロフィール
                 </Link>
-                <Link href={`/users/${userId}`} className="text-gray-700 hover:bg-gray-100 p-2 rounded-md transition-colors duration-300 w-full text-center">
+                <Link href={`/users/${userId}`} className=" text-indigo-600 hover:bg-gray-100 p-2 rounded-md transition-colors duration-300 w-full text-center">
                   ユーザー情報
                 </Link>
                 {userType === 'student' && (
                   <>
-                    <Link href={`/users/${userId}/profile`} className="text-gray-700 hover:bg-gray-100 p-2 rounded-md transition-colors duration-300 w-full text-center">
+                    <Link href={`/users/${userId}/profile`} className=" text-indigo-600 hover:bg-gray-100 p-2 rounded-md transition-colors duration-300 w-full text-center">
                       応募した企業
                     </Link>
-                    <Link href={`/users/${userId}/profile`} className="text-gray-700 hover:bg-gray-100 p-2 rounded-md transition-colors duration-300 w-full text-center">
+                    <Link href={`/users/${userId}/profile`} className=" text-indigo-600 hover:bg-gray-100 p-2 rounded-md transition-colors duration-300 w-full text-center">
                       いいねした求人
                     </Link>
                   </>
                 )}
                 {userType === 'company' && (
-                  <Link href={'/users/jobs'} className="text-gray-700 hover:bg-gray-100 p-2 rounded-md transition-colors duration-300 w-full text-center">
+                  <Link href={'/users/jobs'} className=" text-indigo-600 hover:bg-gray-100 p-2 rounded-md transition-colors duration-300 w-full text-center">
                     募集した求人
                   </Link>
                 )}
