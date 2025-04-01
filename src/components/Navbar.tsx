@@ -176,11 +176,6 @@ const Navbar = () => {
                   </button>
                   {isDropdownOpen && (
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
-                      <div className="flex justify-end p-2">
-                        <button onClick={closeDropdown}>
-                          <XIcon className="h-5 w-5 text-gray-500" />
-                        </button>
-                      </div>
                       <Link
                         href={`/users/${userId}/profile`}
                         className="block px-4 py-3 text-sm  text-indigo-600 hover:bg-gray-100"
@@ -273,7 +268,11 @@ const Navbar = () => {
             className="text-white focus:outline-none md:hidden"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
-            <MenuIcon className="h-6 w-6" />
+            {isMobileMenuOpen ? (
+              <XIcon className="h-6 w-6" />
+            ) : (
+              <MenuIcon className="h-6 w-6" />
+            )}
           </button>
         </div>
       </div>
