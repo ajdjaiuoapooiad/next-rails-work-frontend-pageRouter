@@ -28,11 +28,11 @@ export default function Messages() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [groupedMessages, setGroupedMessages] = useState<{[key: string]: Message[]}>({});
+  const [groupedMessages, setGroupedMessages] = useState<{ [key: string]: Message[] }>({});
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
   const [refresh, setRefresh] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<{ id: number | null }>({ id: null });
-  const [users, setUsers] = useState<{[key: number]: User}>({});
+  const [users, setUsers] = useState<{ [key: number]: User }>({});
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -66,14 +66,14 @@ export default function Messages() {
   }, [refresh]);
 
   useEffect(() => {
-    const grouped: {[key: string]: Message[]} = messages.reduce((acc, message) => {
+    const grouped: { [key: string]: Message[] } = messages.reduce((acc, message) => {
       const conversationId = [Math.min(message.sender_id, message.receiver_id), Math.max(message.sender_id, message.receiver_id)].join('-');
       if (!acc[conversationId]) {
         acc[conversationId] = [];
       }
       acc[conversationId].push(message);
       return acc;
-    }, {} as {[key: string]: Message[]});
+    }, {} as { [key: string]: Message[] });
     setGroupedMessages(grouped);
   }, [messages]);
 
@@ -85,7 +85,7 @@ export default function Messages() {
         const response = await axios.get<User[]>(`${apiUrl}/users`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        const usersMap: {[key: number]: User} = {};
+        const usersMap: { [key: number]: User } = {};
         response.data.forEach(user => {
           usersMap[user.id] = user;
         });
@@ -156,12 +156,21 @@ export default function Messages() {
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-lg font-semibold mb-4">メッセージ詳細</h2>
             <div className="space-y-4">
-              {formatMessagesForConversation(groupedMessages[selectedConversation]).map((message, index, array) => {
-                const isFirstMessage = index === 0 || array[index - 1].senderId !== message.senderId;
+              {formatMessagesForConversation(groupedMessages[selectedConversation]).map((message, index) => {
+                const senderUser = users[message.senderId];
+                const senderUserIcon = senderUser?.profile?.user_icon_url || 'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png';
                 return (
-                  <div key={message.createdAt} className={`flex ${message.isCurrentUser ? 'justify-end' : 'justify-start'}`}>
+                  <div key={message.createdAt} className={`flex ${message.isCurrentUser ? 'justify-end' : 'justify-start'} items-start`}>
+                    {!message.isCurrentUser && (
+                      <div className="flex-shrink-0 h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden mr-2 mt-1">
+                        <img
+                          src={senderUserIcon}
+                          alt={`${senderUser?.name || '不明なユーザー'}のアイコン`}
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                    )}
                     <div className={`p-4 rounded-lg ${message.isCurrentUser ? 'bg-blue-100' : 'bg-gray-50'} max-w-2/3`}>
-                      {isFirstMessage && <p className="text-sm font-semibold">{message.isCurrentUser ? 'あなた' : users[message.senderId]?.name || '不明なユーザー'}</p>}
                       <p className="text-base leading-relaxed">{message.content}</p>
                       <p className="text-xs text-gray-400">{new Date(message.createdAt).toLocaleString()}</p>
                     </div>
