@@ -98,16 +98,16 @@ const Navbar = () => {
         </div>
         <div className="flex items-center space-x-6">
           <div className="hidden md:flex items-center space-x-6">
-            <Link href="/jobs" className=" text-indigo-600 hover:text-white transition-colors duration-300">
+            <Link href="/jobs" className=" text-white hover:text-white transition-colors duration-300">
               求人一覧
             </Link>
             {isLoggedIn && (
               <>
-                <Link href="/messages" className=" text-indigo-600 hover:text-white transition-colors duration-300">
+                <Link href="/messages" className=" text-white hover:text-white transition-colors duration-300">
                   メッセージ
                 </Link>
                 {userType === 'company' && (
-                  <Link href="/jobs/new" className=" text-indigo-600 hover:text-white transition-colors duration-300">
+                  <Link href="/jobs/new" className=" text-white hover:text-white transition-colors duration-300">
                     求人作成
                   </Link>
                 )}
