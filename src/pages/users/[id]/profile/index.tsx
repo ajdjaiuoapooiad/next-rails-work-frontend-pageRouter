@@ -40,30 +40,40 @@ export default function UserProfile() {
   const [username, setUsername] = useState<string | null>(null);
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
 
-  useEffect(() => {
-    if (!id) return;
+ 
+useEffect(() => {
+  if (!id) return;
 
-    const fetchProfile = async () => {
-      try {
-        const apiUrl = getApiUrl();
-        const token = localStorage.getItem('authToken');
-        const profileData: Profile = await apiRequest(`${apiUrl}/users/${id}/profiles/1`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+  const fetchProfile = async () => {
+    try {
+      const apiUrl = getApiUrl();
+      const token = localStorage.getItem('authToken');
+      const response = await fetch(`${apiUrl}/users/${id}/profiles/1`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.ok) {
+        const profileData: Profile = await response.json();
         setProfile(profileData);
-
-        const userData = await apiRequest(`${apiUrl}/users/show_by_id/${id}`);
-        setUsername(userData.name);
-        setCurrentUserId(userData.id);
-      } catch (err: any) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
+      } else if (response.status === 404) {
+        // プロフィールが存在しない場合
+        setProfile(null);
+      } else {
+        throw new Error('APIリクエストに失敗しました。');
       }
-    };
 
-    fetchProfile();
-  }, [id]);
+      const userData = await apiRequest(`${apiUrl}/users/show_by_id/${id}`);
+      setUsername(userData.name);
+      setCurrentUserId(userData.id);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchProfile();
+}, [id]);
 
   const handleCreateProfile = async (profileData: { introduction: string; skills: string; company_name: string; industry: string; user_icon: File | null; bg_image: File | null }) => {
     try {
@@ -183,7 +193,14 @@ export default function UserProfile() {
             </div>
           )
         ) : (
-          <ProfileForm onSubmit={handleCreateProfile} />
+          <div className="text-center">
+            <p className="text-gray-600 mb-4">プロフィールがまだ作成されていません。</p>
+            {showEditButton && (
+              <button onClick={() => setEditing(true)} className="px-6 py-3 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                プロフィールを作成する
+              </button>
+            )}
+          </div>
         )}
       </div>
     </div>
