@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 interface LoginResponse {
   token?: string;
@@ -10,12 +12,10 @@ interface LoginResponse {
 export default function Login() {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
 
     try {
       const response = await fetch('/api/login', {
@@ -33,14 +33,34 @@ export default function Login() {
           if (data.user && data.user.id) {
             localStorage.setItem('userId', data.user.id.toString());
           }
+          Swal.fire({
+            icon: 'success',
+            title: 'ログイン成功',
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          router.push('/jobs');
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'ログイン失敗',
+            text: data.message || 'ログインに失敗しました',
+          });
         }
-        router.push('/jobs');
       } else {
         const errorData: LoginResponse = await response.json();
-        setError(errorData.message || 'ログインに失敗しました');
+        Swal.fire({
+          icon: 'error',
+          title: 'ログイン失敗',
+          text: errorData.message || 'ログインに失敗しました',
+        });
       }
     } catch (err: any) {
-      setError('ログイン中にエラーが発生しました');
+      Swal.fire({
+        icon: 'error',
+        title: 'ログイン中にエラーが発生しました',
+        text: err.message || 'ログイン中にエラーが発生しました',
+      });
       console.error('ログインエラー:', err);
     }
   };
@@ -49,7 +69,6 @@ export default function Login() {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
         <h1 className="text-3xl font-bold mb-6 text-center">ログイン</h1>
-        {error && <p className="text-red-500 mb-4 p-2 border border-red-500 rounded">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700">メールアドレス</label>

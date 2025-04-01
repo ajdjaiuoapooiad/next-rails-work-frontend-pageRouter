@@ -1,5 +1,7 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 interface RegisterResponseError {
   errors: string[];
@@ -28,12 +30,10 @@ export default function Register() {
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [userType, setUserType] = useState(0);
-  const [error, setError] = useState('');
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
 
     try {
       const apiUrl = getApiUrl();
@@ -49,9 +49,20 @@ export default function Register() {
         }),
       });
 
+      Swal.fire({
+        icon: 'success',
+        title: '登録が完了しました。',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+
       router.push('/users/login');
     } catch (err: any) {
-      setError('登録中にエラーが発生しました。');
+      Swal.fire({
+        icon: 'error',
+        title: '登録に失敗しました。',
+        text: err.message,
+      });
     }
   };
 
@@ -59,7 +70,6 @@ export default function Register() {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
         <h1 className="text-3xl font-bold mb-6 text-center">新規登録</h1>
-        {error && <p className="text-red-500 mb-4 p-2 border border-red-500 rounded">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700">名前</label>
