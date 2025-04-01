@@ -6,10 +6,13 @@ interface SidebarProps {
   industryCategories: { [key: string]: string[] };
   selectedLocation: string[];
   setSelectedLocation: (location: string[]) => void;
+  locations: string[];
   selectedEmploymentType: string;
   setSelectedEmploymentType: (employmentType: string) => void;
+  employmentTypes: string[];
   selectedFeatures: string[];
   setSelectedFeatures: (features: string[]) => void;
+  features: string[];
   keyword: string;
   setKeyword: (keyword: string) => void;
 }
@@ -20,10 +23,13 @@ const Sidebar: React.FC<SidebarProps> = ({
   industryCategories,
   selectedLocation,
   setSelectedLocation,
+  locations,
   selectedEmploymentType,
   setSelectedEmploymentType,
+  employmentTypes,
   selectedFeatures,
   setSelectedFeatures,
+  features,
   keyword,
   setKeyword,
 }) => {
@@ -61,33 +67,17 @@ const Sidebar: React.FC<SidebarProps> = ({
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">場所</label>
         <div className="flex flex-col">
-          <label className="inline-flex items-center">
-            <input
-              type="checkbox"
-              className="form-checkbox"
-              checked={selectedLocation.includes('東京')}
-              onChange={() => handleLocationChange('東京')}
-            />
-            <span className="ml-2">東京</span>
-          </label>
-          <label className="inline-flex items-center">
-            <input
-              type="checkbox"
-              className="form-checkbox"
-              checked={selectedLocation.includes('大阪')}
-              onChange={() => handleLocationChange('大阪')}
-            />
-            <span className="ml-2">大阪</span>
-          </label>
-          <label className="inline-flex items-center">
-            <input
-              type="checkbox"
-              className="form-checkbox"
-              checked={selectedLocation.includes('福岡')}
-              onChange={() => handleLocationChange('福岡')}
-            />
-            <span className="ml-2">福岡</span>
-          </label>
+          {locations.map((location) => (
+            <label key={location} className="inline-flex items-center">
+              <input
+                type="checkbox"
+                className="form-checkbox"
+                checked={selectedLocation.includes(location)}
+                onChange={() => handleLocationChange(location)}
+              />
+              <span className="ml-2">{location}</span>
+            </label>
+          ))}
         </div>
       </div>
       <div className="mb-4">
@@ -98,9 +88,11 @@ const Sidebar: React.FC<SidebarProps> = ({
           onChange={(e) => setSelectedIndustry(e.target.value)}
         >
           <option value="">全て</option>
-          <option value="IT">IT</option>
-          <option value="Finance">金融</option>
-          <option value="Manufacturing">製造業</option>
+          {Object.keys(industryCategories).map((industry) => (
+            <option key={industry} value={industry}>
+              {industry}
+            </option>
+          ))}
         </select>
       </div>
       {selectedIndustry && (
@@ -128,41 +120,27 @@ const Sidebar: React.FC<SidebarProps> = ({
           onChange={(e) => setSelectedEmploymentType(e.target.value)}
         >
           <option value="">全て</option>
-          <option value="正社員">正社員</option>
-          <option value="アルバイト">アルバイト</option>
-          <option value="インターン">インターン</option>
+          {employmentTypes.map((type) => (
+            <option key={type} value={type}>
+              {type}
+            </option>
+          ))}
         </select>
       </div>
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">特徴</label>
         <div className="flex flex-col">
-          <label className="inline-flex items-center">
-            <input
-              type="checkbox"
-              className="form-checkbox"
-              checked={selectedFeatures.includes('学生さん歓迎')}
-              onChange={() => handleFeatureChange('学生さん歓迎')}
-            />
-            <span className="ml-2">学生さん歓迎</span>
-          </label>
-          <label className="inline-flex items-center">
-            <input
-              type="checkbox"
-              className="form-checkbox"
-              checked={selectedFeatures.includes('昼食おごります')}
-              onChange={() => handleFeatureChange('昼食おごります')}
-            />
-            <span className="ml-2">昼食おごります</span>
-          </label>
-          <label className="inline-flex items-center">
-            <input
-              type="checkbox"
-              className="form-checkbox"
-              checked={selectedFeatures.includes('服装自由')}
-              onChange={() => handleFeatureChange('服装自由')}
-            />
-            <span className="ml-2">服装自由</span>
-          </label>
+          {features.map((feature) => (
+            <label key={feature} className="inline-flex items-center">
+              <input
+                type="checkbox"
+                className="form-checkbox"
+                checked={selectedFeatures.includes(feature)}
+                onChange={() => handleFeatureChange(feature)}
+              />
+              <span className="ml-2">{feature}</span>
+            </label>
+          ))}
         </div>
       </div>
     </aside>

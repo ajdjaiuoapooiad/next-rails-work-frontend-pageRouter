@@ -31,10 +31,29 @@ export default function Jobs() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const industryCategories: any = {
-    IT: ['エンジニア', 'デザイナー', 'マーケター', 'プロジェクトマネージャー'],
-    Finance: ['アナリスト', 'トレーダー', 'コンサルタント', '会計士'],
-    Manufacturing: ['生産管理', '品質管理', '研究開発', '設計'],
+    IT: ['エンジニア', 'デザイナー', 'マーケター', 'プロジェクトマネージャー', 'データサイエンティスト', 'フロントエンドエンジニア', 'バックエンドエンジニア'],
+    Finance: ['アナリスト', 'トレーダー', 'コンサルタント', '会計士', '金融企画', 'リスク管理', '投資銀行'],
+    Manufacturing: ['生産管理', '品質管理', '研究開発', '設計', '製造技術', 'サプライチェーン', '生産技術'],
+    Sales: ['営業', '企画営業', 'ルート営業', '法人営業', '個人営業', 'セールスエンジニア', 'アカウントマネージャー'],
+    Marketing: ['マーケター', '広報', '広告', 'デジタルマーケティング', 'コンテンツマーケティング', 'ブランドマネージャー', '市場調査'],
+    HumanResources: ['人事', '採用', '労務', '教育', '研修', '組織開発', '人事企画'],
+    Medical: ['医師', '看護師', '薬剤師', '医療事務', '臨床検査技師', '理学療法士', '作業療法士'],
+    Education: ['教師', '講師', '塾講師', '家庭教師', '教材開発', '教育企画', '学校事務'],
+    Service: ['接客', '販売', 'サービス企画', '店舗運営', 'カスタマーサポート', 'ホテルスタッフ', '旅行代理店'],
+    Construction: ['施工管理', '設計', '建築士', '土木技術者', '現場作業員', 'CADオペレーター', '建築企画'],
   };
+
+  const locations = [
+    '東京都',
+    '神奈川県',
+    '愛知県',
+    '京都府',
+    '大阪府',
+    '福岡県',
+  ];
+  const employmentTypes = ['正社員', '契約社員', '派遣社員', 'アルバイト', 'パート', 'インターン', '業務委託', 'フリーランス'];
+
+  const features = ['リモートワーク可', 'フレックスタイム制', '住宅手当', '交通費支給', '社会保険完備', '週休2日制', '土日祝休み', '服装自由', '昇給あり', '賞与あり', '育休・産休制度', '資格取得支援', '社員旅行', '社内イベント', 'ストックオプション'];
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -109,10 +128,13 @@ export default function Jobs() {
               industryCategories={industryCategories}
               selectedLocation={selectedLocation}
               setSelectedLocation={setSelectedLocation}
+              locations={locations}
               selectedEmploymentType={selectedEmploymentType}
               setSelectedEmploymentType={setSelectedEmploymentType}
+              employmentTypes={employmentTypes}
               selectedFeatures={selectedFeatures}
               setSelectedFeatures={setSelectedFeatures}
+              features={features}
               keyword={keyword}
               setKeyword={setKeyword}
             />
