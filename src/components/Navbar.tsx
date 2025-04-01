@@ -168,11 +168,11 @@ const Navbar = () => {
                         className="h-full w-full object-cover"
                       />
                     </div>
-                    {isDropdownOpen ? (
-                      <XIcon className="h-5 w-5" />
-                    ) : (
-                      <ChevronDownIcon className="h-5 w-5" />
-                    )}
+                    <ChevronDownIcon
+                      className={`h-5 w-5 transition-transform duration-300 ${
+                        isDropdownOpen ? 'transform rotate-180' : ''
+                      }`}
+                    />
                   </button>
                   {isDropdownOpen && (
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
