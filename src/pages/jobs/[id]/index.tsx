@@ -14,6 +14,8 @@ interface Job {
   benefits: string;
   employment_type: string;
   image_url: string;
+  user_name: string; // 追加
+  user_icon_url: string; // 追加
 }
 
 export default function JobDetail() {
@@ -122,9 +124,17 @@ export default function JobDetail() {
           <img
             src={job.image_url || 'https://images.wantedly.com/i/jtLvrG6?w=800&format=jpeg'}
             alt="Job Image"
-            className="rounded-md w-full object-cover" // 画像をカバーするように表示
-            style={{ height: '300px' }} // 高さを固定
+            className="rounded-md w-full object-cover"
+            style={{ height: '300px' }}
           />
+        </div>
+        <div className="flex items-center mb-4"> {/* 追加 */}
+          <img
+            src={job.user_icon_url}
+            alt={`${job.user_name}のアイコン`}
+            className="w-8 h-8 rounded-full mr-2"
+          />
+          <span className="text-sm font-semibold">{job.user_name}</span>
         </div>
         <div className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">私たちのストーリー</h2>

@@ -14,12 +14,8 @@ interface Job {
   benefits: string;
   employment_type: string;
   image_url?: string;
-  user: {
-    name: string;
-    profiles: {
-      user_icon: string;
-    };
-  };
+  user_name: string;
+  user_icon_url?: string;
   created_at: string;
 }
 
@@ -128,7 +124,6 @@ export default function Jobs() {
           <p className="text-sm text-gray-600 mb-4">{filteredJobs.length}件の求人</p>
           {filteredJobs.map((job) => {
             const defaultUserIcon = 'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png';
-            const user = job.user || { name: 'デフォルトユーザー' };
 
             return (
               <div key={job.id} className="bg-white rounded-lg shadow-md p-4 mb-4">
@@ -147,11 +142,11 @@ export default function Jobs() {
                     </p>
                     <div className="flex items-center mt-2">
                       <img
-                        src={user.profile?.user_icon || defaultUserIcon}
-                        alt={user.name}
+                        src={job.user_icon_url || defaultUserIcon} // 修正箇所
+                        alt={job.user_name}
                         className="w-8 h-8 rounded-full mr-2"
                       />
-                      <span className="text-sm text-gray-600">{user.name}</span>
+                      <span className="text-sm text-gray-600">{job.user_name}</span>
                     </div>
                   </div>
                 </Link>
