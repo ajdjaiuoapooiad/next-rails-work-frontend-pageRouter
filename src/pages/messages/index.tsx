@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios, { AxiosError } from 'axios';
 import MessageForm from '../../components/MessageForm';
 import { Message } from '@/utils/types';
@@ -16,6 +16,18 @@ interface ErrorResponse {
   error: string;
 }
 
+interface MessageType {
+  id: number;
+  sender_id: number;
+  receiver_id: number;
+  content: string;
+  created_at: string;
+  sender_name: string;
+  sender_icon: string;
+  receiver_name: string;
+  receiver_icon: string;
+}
+
 const getApiUrl = (): string => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   if (!apiUrl) {
@@ -24,15 +36,18 @@ const getApiUrl = (): string => {
   return apiUrl;
 };
 
+const DEFAULT_ICON = 'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png';
+
 export default function Messages() {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<MessageType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [groupedMessages, setGroupedMessages] = useState<{ [key: string]: Message[] }>({});
+  const [groupedMessages, setGroupedMessages] = useState<{ [key: string]: MessageType[] }>({});
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
   const [refresh, setRefresh] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<{ id: number | null }>({ id: null });
   const [users, setUsers] = useState<{ [key: number]: User }>({});
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -46,7 +61,7 @@ export default function Messages() {
       try {
         const apiUrl = getApiUrl();
         const token = localStorage.getItem('authToken');
-        const response = await axios.get<Message[]>(`${apiUrl}/messages`, {
+        const response = await axios.get<MessageType[]>(`${apiUrl}/messages`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setMessages(response.data);
@@ -66,14 +81,14 @@ export default function Messages() {
   }, [refresh]);
 
   useEffect(() => {
-    const grouped: { [key: string]: Message[] } = messages.reduce((acc, message) => {
+    const grouped: { [key: string]: MessageType[] } = messages.reduce((acc, message) => {
       const conversationId = [Math.min(message.sender_id, message.receiver_id), Math.max(message.sender_id, message.receiver_id)].join('-');
       if (!acc[conversationId]) {
         acc[conversationId] = [];
       }
       acc[conversationId].push(message);
       return acc;
-    }, {} as { [key: string]: Message[] });
+    }, {} as { [key: string]: MessageType[] });
     setGroupedMessages(grouped);
   }, [messages]);
 
@@ -97,16 +112,26 @@ export default function Messages() {
     fetchUsers();
   }, []);
 
-  const formatMessagesForConversation = (messages: Message[]) => {
+  const formatMessagesForConversation = (messages: MessageType[]) => {
     const sortedMessages = messages.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
-    return sortedMessages.map((message) => ({
-      senderId: message.sender_id,
-      content: message.content,
-      createdAt: message.created_at,
-      isCurrentUser: message.sender_id === currentUser.id,
-      isFirstMessage: false,
-    }));
+    return sortedMessages.map((message) => {
+      return {
+        senderId: message.sender_id,
+        content: message.content,
+        createdAt: message.created_at,
+        isCurrentUser: message.sender_id === currentUser.id,
+        isFirstMessage: false,
+        senderName: message.sender_name,
+        senderIcon: message.sender_icon,
+      };
+    });
   };
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [groupedMessages[selectedConversation || '']]);
 
   if (loading) return <p>ロード中...</p>;
   if (error) return <p>エラー: {error}</p>;
@@ -124,7 +149,7 @@ export default function Messages() {
             const otherUserId = conversationMessages[0].sender_id === currentUser.id ? conversationMessages[0].receiver_id : conversationMessages[0].sender_id;
             const otherUser = users[otherUserId];
             const otherUserName = otherUser?.name || '不明なユーザー';
-            const otherUserIcon = otherUser?.profile?.user_icon_url || 'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png';
+            const otherUserIcon = otherUser?.profile?.user_icon_url;
 
             return (
               <li
@@ -135,9 +160,12 @@ export default function Messages() {
                 <div className="flex items-center space-x-3">
                   <div className="flex-shrink-0 h-12 w-12 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden">
                     <img
-                      src={otherUserIcon}
+                      src={otherUserIcon || DEFAULT_ICON}
                       alt={`${otherUserName}のアイコン`}
                       className="h-full w-full object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = DEFAULT_ICON;
+                      }}
                     />
                   </div>
                   <div>
@@ -157,26 +185,39 @@ export default function Messages() {
             <h2 className="text-lg font-semibold mb-4">メッセージ詳細</h2>
             <div className="space-y-4">
               {formatMessagesForConversation(groupedMessages[selectedConversation]).map((message, index) => {
-                const senderUser = users[message.senderId];
-                const senderUserIcon = senderUser?.profile?.user_icon_url || 'https://kotonohaworks.com/free-icons/wp-content/uploads/kkrn_icon_user_1.png';
                 return (
                   <div key={message.createdAt} className={`flex ${message.isCurrentUser ? 'justify-end' : 'justify-start'} items-start`}>
                     {!message.isCurrentUser && (
-                      <div className="flex-shrink-0 h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden mr-2 mt-1">
-                        <img
-                          src={senderUserIcon}
-                          alt={`${senderUser?.name || '不明なユーザー'}のアイコン`}
-                          className="h-full w-full object-cover"
-                        />
+                      <div className="flex flex-col items-start">
+                        <p className="text-sm font-semibold mb-1">{message.senderName}</p> {/* ユーザー名をメッセージの上に表示 */}
+                        <div className="flex items-start">
+                          <div className="flex-shrink-0 h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden mr-2">
+                            <img
+                              src={message.senderIcon || DEFAULT_ICON}
+                              alt={`${message.senderName}のアイコン`}
+                              className="h-full w-full object-cover"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).src = DEFAULT_ICON;
+                              }}
+                            />
+                          </div>
+                          <div className={`p-4 rounded-lg bg-gray-50 max-w-2/3`}>
+                            <p className="text-base leading-relaxed">{message.content}</p>
+                            <p className="text-xs text-gray-400">{new Date(message.createdAt).toLocaleString()}</p>
+                          </div>
+                        </div>
                       </div>
                     )}
-                    <div className={`p-4 rounded-lg ${message.isCurrentUser ? 'bg-blue-100' : 'bg-gray-50'} max-w-2/3`}>
-                      <p className="text-base leading-relaxed">{message.content}</p>
-                      <p className="text-xs text-gray-400">{new Date(message.createdAt).toLocaleString()}</p>
-                    </div>
+                    {message.isCurrentUser && (
+                      <div className={`p-4 rounded-lg bg-blue-100 max-w-2/3`}>
+                        <p className="text-base leading-relaxed">{message.content}</p>
+                        <p className="text-xs text-gray-400">{new Date(message.createdAt).toLocaleString()}</p>
+                      </div>
+                    )}
                   </div>
                 );
               })}
+              <div ref={messagesEndRef} />
             </div>
             <MessageForm
               onMessageSent={() => setRefresh(true)}
