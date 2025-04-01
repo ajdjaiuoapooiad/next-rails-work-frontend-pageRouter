@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 interface Job {
   id: number;
@@ -114,8 +116,20 @@ export default function JobEdit() {
         throw new Error(errorData.message || '求人情報の更新に失敗しました');
       }
 
+      Swal.fire({
+        icon: 'success',
+        title: '求人情報を更新しました。',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+
       router.push('/jobs');
     } catch (err: any) {
+      Swal.fire({
+        icon: 'error',
+        title: '求人情報の更新に失敗しました。',
+        text: err.message || '求人情報の更新中にエラーが発生しました',
+      });
       setError(err.message || '求人情報の更新中にエラーが発生しました');
     } finally {
       setLoading(false);

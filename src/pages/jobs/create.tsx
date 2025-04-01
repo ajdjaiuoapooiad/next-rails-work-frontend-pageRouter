@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 export default function JobCreate() {
   const [title, setTitle] = useState<string>('');
@@ -52,17 +54,29 @@ export default function JobCreate() {
         throw new Error(errorData.message || '求人情報の作成に失敗しました');
       }
 
+      Swal.fire({
+        icon: 'success',
+        title: '求人情報を作成しました。',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+
       router.push('/jobs');
     } catch (err: any) {
+      Swal.fire({
+        icon: 'error',
+        title: '求人情報の作成に失敗しました。',
+        text: err.message || '求人情報の作成中にエラーが発生しました',
+      });
       setError(err.message || '求人情報の作成中にエラーが発生しました');
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
-      <div className="relative py-3 w-full max-w-3xl mx-auto"> {/* コンテナの最大幅を調整 */}
+      <div className="relative py-3 w-full max-w-3xl mx-auto">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-300 to-blue-600 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
-        <div className="relative px-4 py-10 bg-gray-300 shadow-lg rounded-3xl sm:p-20"> {/* paddingを調整 */}
+        <div className="relative px-4 py-10 bg-gray-300 shadow-lg rounded-3xl sm:p-20">
           <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">求人作成</h1>
           {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -87,7 +101,7 @@ export default function JobCreate() {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                rows={6} // テキストエリアの行数を調整
+                rows={6}
               />
             </div>
             <div>
@@ -117,7 +131,7 @@ export default function JobCreate() {
                 value={requirements}
                 onChange={(e) => setRequirements(e.target.value)}
                 className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                rows={4} // テキストエリアの行数を調整
+                rows={4}
               />
             </div>
             <div>
@@ -126,7 +140,7 @@ export default function JobCreate() {
                 value={benefits}
                 onChange={(e) => setBenefits(e.target.value)}
                 className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                rows={4} // テキストエリアの行数を調整
+                rows={4}
               />
             </div>
             <div>
