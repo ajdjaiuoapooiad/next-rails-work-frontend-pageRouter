@@ -3,6 +3,8 @@ import axios, { AxiosError } from 'axios';
 import MessageForm from '../../components/MessageForm';
 import { Message } from '@/utils/types';
 import Head from 'next/head';
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 interface User {
   id: number;
@@ -214,7 +216,22 @@ export default function Messages() {
             </div>
             {groupedMessages[selectedConversation].find(message => message.sender_id !== currentUser.id)?.sender_id !== currentUser.id && (
               <MessageForm
-                onMessageSent={() => setRefresh(true)}
+                onMessageSent={() => {
+                  setRefresh(true);
+                  Swal.fire({
+                    icon: 'success',
+                    title: 'メッセージを送信しました。',
+                    showConfirmButton: false,
+                    timer: 1500,
+                  });
+                }}
+                onError={() => {
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'メッセージの送信に失敗しました。',
+                    text: 'メッセージの送信中にエラーが発生しました。',
+                  });
+                }}
                 receiverId={groupedMessages[selectedConversation].find(message => message.sender_id !== currentUser.id)?.sender_id}
               />
             )}

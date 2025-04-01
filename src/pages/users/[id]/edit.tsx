@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 interface User {
   id: number;
@@ -74,8 +76,19 @@ export default function UserEdit() {
       if (!response.ok) {
         throw new Error('ユーザーの更新に失敗しました');
       }
+      Swal.fire({
+        icon: 'success',
+        title: 'ユーザー情報を更新しました。',
+        showConfirmButton: false,
+        timer: 1500,
+      });
       router.push(`/users/${id}`);
     } catch (err: any) {
+      Swal.fire({
+        icon: 'error',
+        title: 'ユーザー情報の更新に失敗しました。',
+        text: err.message,
+      });
       setError(err.message);
     }
   };
