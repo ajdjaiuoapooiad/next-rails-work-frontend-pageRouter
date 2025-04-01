@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import ProfileForm from '@/components/ProfileForm';
 import Head from 'next/head';
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 interface Profile {
   id: number;
@@ -105,8 +107,20 @@ export default function UserProfile() {
       setProfile(newProfile);
       setEditing(false);
       setIsCreating(false);
+
+      Swal.fire({
+        icon: 'success',
+        title: 'プロフィールを作成しました。',
+        showConfirmButton: false,
+        timer: 1500,
+      });
     } catch (err: any) {
       setError(err.message);
+      Swal.fire({
+        icon: 'error',
+        title: 'プロフィールの作成に失敗しました。',
+        text: err.message,
+      });
     }
   };
 
@@ -140,8 +154,20 @@ export default function UserProfile() {
       });
       setProfile(updatedProfile);
       setEditing(false);
+
+      Swal.fire({
+        icon: 'success',
+        title: 'プロフィールを更新しました。',
+        showConfirmButton: false,
+        timer: 1500,
+      });
     } catch (err: any) {
       setError(err.message);
+      Swal.fire({
+        icon: 'error',
+        title: 'プロフィールの更新に失敗しました。',
+        text: err.message,
+      });
     }
   };
 
