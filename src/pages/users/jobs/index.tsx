@@ -39,7 +39,9 @@ const CompanyJobs = () => {
           throw new Error('API URLが設定されていません。');
         }
         const response = await axios.get(`${apiUrl}/jobs?company_id=${userId}`);
-        setJobs(response.data);
+        // ここでソート処理を行います
+        const sortedJobs = response.data.sort((a: Job, b: Job) => b.id - a.id);
+        setJobs(sortedJobs);
       } catch (err: any) {
         setError(err.message || '求人情報の取得に失敗しました');
       } finally {
