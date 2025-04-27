@@ -128,13 +128,10 @@ export default function Jobs() {
               industryCategories={industryCategories}
               selectedLocation={selectedLocation}
               setSelectedLocation={setSelectedLocation}
-              locations={locations}
               selectedEmploymentType={selectedEmploymentType}
               setSelectedEmploymentType={setSelectedEmploymentType}
-              employmentTypes={employmentTypes}
               selectedFeatures={selectedFeatures}
               setSelectedFeatures={setSelectedFeatures}
-              features={features}
               keyword={keyword}
               setKeyword={setKeyword}
             />
