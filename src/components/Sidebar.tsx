@@ -6,13 +6,10 @@ interface SidebarProps {
   industryCategories: { [key: string]: string[] };
   selectedLocation: string[];
   setSelectedLocation: (location: string[]) => void;
-  locations: string[];
   selectedEmploymentType: string;
   setSelectedEmploymentType: (employmentType: string) => void;
-  employmentTypes: string[];
   selectedFeatures: string[];
   setSelectedFeatures: (features: string[]) => void;
-  features: string[];
   keyword: string;
   setKeyword: (keyword: string) => void;
 }
@@ -23,13 +20,10 @@ const Sidebar: React.FC<SidebarProps> = ({
   industryCategories,
   selectedLocation,
   setSelectedLocation,
-  locations,
   selectedEmploymentType,
   setSelectedEmploymentType,
-  employmentTypes,
   selectedFeatures,
   setSelectedFeatures,
-  features,
   keyword,
   setKeyword,
 }) => {
@@ -48,6 +42,26 @@ const Sidebar: React.FC<SidebarProps> = ({
       setSelectedFeatures([...selectedFeatures, feature]);
     }
   };
+
+  const locations = [
+    '東京都',
+    '大阪府',
+    '京都府',
+    '愛知県',
+    '神奈川県',
+    '埼玉県',
+  ];
+
+  const features = [
+    '学生さん歓迎',
+    '昼食おごります',
+    '服装自由',
+    'リモートワーク可',
+    'フレックスタイム制',
+    '未経験歓迎',
+    '第二新卒歓迎',
+    '土日祝休み',
+  ];
 
   return (
     <aside className="col-span-1">
@@ -88,11 +102,9 @@ const Sidebar: React.FC<SidebarProps> = ({
           onChange={(e) => setSelectedIndustry(e.target.value)}
         >
           <option value="">全て</option>
-          {Object.keys(industryCategories).map((industry) => (
-            <option key={industry} value={industry}>
-              {industry}
-            </option>
-          ))}
+          <option value="IT">IT</option>
+          <option value="Finance">金融</option>
+          <option value="Manufacturing">製造業</option>
         </select>
       </div>
       {selectedIndustry && (
@@ -120,11 +132,9 @@ const Sidebar: React.FC<SidebarProps> = ({
           onChange={(e) => setSelectedEmploymentType(e.target.value)}
         >
           <option value="">全て</option>
-          {employmentTypes.map((type) => (
-            <option key={type} value={type}>
-              {type}
-            </option>
-          ))}
+          <option value="正社員">正社員</option>
+          <option value="アルバイト">アルバイト</option>
+          <option value="インターン">インターン</option>
         </select>
       </div>
       <div className="mb-4">
