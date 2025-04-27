@@ -225,13 +225,6 @@ export default function Messages() {
                     timer: 1500,
                   });
                 }}
-                onError={() => {
-                  Swal.fire({
-                    icon: 'error',
-                    title: 'メッセージの送信に失敗しました。',
-                    text: 'メッセージの送信中にエラーが発生しました。',
-                  });
-                }}
                 receiverId={groupedMessages[selectedConversation].find(message => message.sender_id !== currentUser.id)?.sender_id}
               />
             )}
