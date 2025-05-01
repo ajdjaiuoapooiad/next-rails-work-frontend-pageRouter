@@ -6,7 +6,7 @@
 </p>
 
 ## URL
-https://next-rails-work-frontend-submit.vercel.app
+[https://next-rails-work-frontend-submit.vercel.app](https://next-rails-work-frontend-page-router.vercel.app/)
 
 **重要:** API側のインフラにRenderを使用しているため、初回アクセス時や操作によってはデータの取得に時間がかかる場合があります。しばらくお待ちいただくか、再試行してください。
 
