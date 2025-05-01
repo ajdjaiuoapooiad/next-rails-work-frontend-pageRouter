@@ -14,7 +14,7 @@ https://next-rails-work-frontend-page-router.vercel.app
 
 | アカウント種別 | メールアドレス | パスワード |
 |---|---|---|
-| 企業 (株式会社DeNa) | aaa4@a.com | password |
+| 企業 (株式会社DeNa) | aaa@a.com | password |
 | 学生 (学生yukito) | aaa2@a.com | password |
 
 ## テスト方法 (面接官向け)
